@@ -15,6 +15,36 @@ import { links, campaign, event, topBlokes, ui } from '../data/campaign';
           Planned start {campaign.plannedStart}. Fundraising target of{' '}
           {campaign.fundraisingTarget} for {campaign.beneficiary}.
         </p>
+
+        {/*
+          Text only, deliberately. Neither mark could be confirmed as licensed
+          for this use: Strava publishes logo licences only for their OAuth
+          button and for apps displaying Strava API content, and directs every
+          other link to plain text. Approximating or recolouring either logo is
+          forbidden by both companies, so no icon and no empty icon slot is
+          rendered here.
+        */}
+        <nav class="social" aria-label="Social media">
+          <ul>
+            <li>
+              <a href={links.instagram} target="_blank" rel="noopener noreferrer">
+                <span class="visually-hidden">Lachlan Stuart on </span>Instagram<span
+                  class="visually-hidden">, {ui.newTab}</span>
+              </a>
+            </li>
+            <li>
+              {/*
+                The visible phrase stays contiguous in the accessible name, so a
+                speech-input user saying "View on Strava" matches the control.
+                Splitting the label around the club name failed WCAG 2.5.3, so
+                every extra word now follows the visible text instead.
+              */}
+              <a href={links.strava} target="_blank" rel="noopener noreferrer">
+                View on Strava<span class="visually-hidden">, Lachlan Stuart | Capable of More, {ui.newTab}</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
 
       <nav aria-label="Related sites">
@@ -26,10 +56,10 @@ import { links, campaign, event, topBlokes, ui } from '../data/campaign';
       </nav>
 
       {/*
-        Approved order: tickets, donate, partnership, Instagram, Strava, privacy.
-        The two outbound campaign actions open in a new tab and say so, matching
-        the ticket link. Privacy lives in the footer only, never in the campaign
-        navigation.
+        Approved order: tickets, donate, partnership, privacy. Instagram and
+        Strava are no longer campaign actions and live in the brand column as
+        quiet social links. Privacy lives in the footer only, never in the
+        campaign navigation.
       */}
       <nav aria-label="Campaign">
         <ul>
@@ -40,12 +70,6 @@ import { links, campaign, event, topBlokes, ui } from '../data/campaign';
             </a>
           </li>
           <li><a href={links.partnerEmail}>Partnership enquiries</a></li>
-          <li><a href={links.instagram} rel="noopener">Instagram</a></li>
-          <li>
-            <a href={links.strava} target="_blank" rel="noopener noreferrer">
-              Strava club<span class="visually-hidden">, {ui.newTab}</span>
-            </a>
-          </li>
           <li><a href={links.privacy}>Privacy</a></li>
         </ul>
       </nav>
@@ -79,6 +103,36 @@ import { links, campaign, event, topBlokes, ui } from '../data/campaign';
     font-size: 0.9375rem; padding: var(--space-1) 0;
   }
   .site-footer :global(a:hover), .site-footer :global(a:focus-visible) { color: var(--gold); }
+
+  /* Quiet social links. Small, in the secondary footer colour, at the footer's
+     own size, so they are findable without competing with the email form above
+     them or the donation link beside them. The 44px minimum height is a
+     comfortable target, not a button. */
+  .social { margin-top: var(--space-5); }
+  .social ul { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
+  /* inline-block, NOT inline-flex. A flex container turns each run of text into
+     an anonymous flex item and discards the whitespace between them, which
+     rendered the Strava label as "Viewon Strava" because its accessible-name
+     span sits mid-label. line-height gives the 44px target height and centres
+     the label inside it without touching the inline text flow. */
+  .site-footer nav.social a {
+    display: inline-block;
+    line-height: 44px;
+    min-height: 44px;
+    padding: 0;
+    font-size: 0.9375rem;
+    color: var(--on-dark-2);
+    text-decoration: none;
+  }
+  /* Hover and keyboard focus lift the label to full Road White and underline
+     it. Deliberately not gold: gold belongs to the donation action. The global
+     focus-visible ring still applies on top of this. */
+  .site-footer nav.social a:hover,
+  .site-footer nav.social a:focus-visible {
+    color: var(--on-dark-1);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
 
   .footer-bottom {
     margin-top: var(--space-7); padding-top: var(--space-5);

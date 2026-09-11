@@ -304,21 +304,12 @@ export const partnership = {
   buttonLabel: 'Email Jason Greenhalgh',
 } as const;
 
-/* ------------------------------------------------------------- strava */
-
-/**
- * A secondary action in the Follow section. Email signup stays the primary
- * one, so this sits after the form in the source order and is styled as an
- * outline action, never as gold.
+/*
+ * The Strava copy block that lived here described the Strava invitation in the
+ * Follow section. That section is email only now, and the club is reached from
+ * a plain text link in the footer, so the copy has no renderer and is removed
+ * rather than left to drift. The destination itself is kept in links.strava.
  */
-export const strava = {
-  heading: 'Join me on Strava',
-  body:
-    "I've created Capable of More for people who want to follow the training, take part in challenges and community runs, and see what they're capable of.",
-  buttonLabel: 'Join the Strava club',
-  /** The club's own name on Strava, shown so the destination is recognisable. */
-  clubName: 'Lachlan Stuart | Capable of More',
-} as const;
 
 /* ------------------------------------------------------------ destinations */
 

@@ -1,5 +1,5 @@
 ---
-import { newsletter, privacy, links, strava, ui } from '../data/campaign';
+import { newsletter, privacy, links } from '../data/campaign';
 
 /**
  * The supplied MailerLite embed, used exactly as provided.
@@ -10,16 +10,13 @@ import { newsletter, privacy, links, strava, ui } from '../data/campaign';
  * from the account configuration. Nothing here overrides any of that, and no
  * submission endpoint is invented or rebuilt.
  *
- * Email signup is the primary action here and the Strava club is secondary, so
- * the club is an outline action and never gold.
+ * Email signup is the ONLY action in this section. The Strava invitation that
+ * used to sit beside it has moved to the footer as a quiet text link, so
+ * nothing here competes with the form for a reader's attention.
  *
  * SOURCE ORDER IS THE READING ORDER: heading and introduction, then the form
- * and its collection notice, then the Strava invitation. All three are direct
- * children of the layout, so a screen reader is told what the section is before
- * it reaches the form, and keyboard focus reaches the form before the Strava
- * button. The stacked layout uses this order as it stands, with no CSS order
- * values. Only the wider layout places the columns, and it does so without
- * changing the sequence.
+ * and its collection notice. That is also the stacked visual order, so no CSS
+ * order values are used anywhere in this component.
  */
 ---
 <section id="follow" class="section surface-light" aria-labelledby="follow-title">
@@ -51,16 +48,6 @@ import { newsletter, privacy, links, strava, ui } from '../data/campaign';
           <a href={links.privacy}>{privacy.collectionNoticeLink}</a>{' '}
           {privacy.collectionNoticeTail}
         </p>
-      </div>
-
-      <div class="strava">
-        <h3 class="strava__title">{strava.heading}</h3>
-        <p class="strava__body">{strava.body}</p>
-        <a class="btn btn--outline strava__action" href={links.strava}
-           target="_blank" rel="noopener noreferrer">
-          {strava.buttonLabel}<span class="visually-hidden">, {ui.newTab}</span>
-        </a>
-        <p class="strava__meta">{strava.clubName}</p>
       </div>
     </div>
   </div>
@@ -99,54 +86,31 @@ import { newsletter, privacy, links, strava, ui } from '../data/campaign';
   .collection-notice a { color: var(--terrain); text-underline-offset: 0.18em; }
   .collection-notice a:hover, .collection-notice a:focus-visible { color: var(--near); }
 
-  /* Wider screens: introduction and Strava stacked in the left column, the form
-     and its notice on the right, spanning both left rows.
-     grid-template-rows: auto 1fr is what keeps the Strava invitation tucked
-     under the introduction. Row one takes the introduction's own height, and
-     row two absorbs whatever extra height the taller form needs, so the form
-     can never push the invitation away from the text above it.
-     row-gap is 0 because the invitation carries its own approved 44px. */
+  /* Wider screens: ONE centred column, not two.
+     With the Strava block gone, a two column layout left roughly 530 by 400px
+     of empty floor beside a two line introduction, because the form card is
+     552px tall and nothing is allowed to fill that space. Narrowing to a single
+     measure removes the void instead of decorating it, and it makes the form
+     the only thing in the section.
+
+     Heading, rule, introduction, form and notice all share one left edge, so
+     the column reads as a deliberate stack rather than as centred fragments. */
   @media (min-width: 56.25rem) {
     .follow-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto 1fr;
-      row-gap: 0;
-      align-items: start;
+      display: block;
+      max-width: 40rem;
+      margin-inline: auto;
     }
-    .follow-intro { grid-column: 1; grid-row: 1; }
-    .strava       { grid-column: 1; grid-row: 2; align-self: start; margin-top: var(--space-7); }
-    .form-slot    { grid-column: 2; grid-row: 1 / span 2; }
-    /* The introduction and the invitation are separate grid items now, so the
-       introduction's trailing paragraph margin no longer collapses into the
-       invitation's. Zeroing it keeps the approved 44px between them rather than
-       44px plus a stray 16px. Stacked widths are untouched, where that margin
-       sits inside the flex gap exactly as it did before. */
+    .follow-intro { margin-bottom: var(--space-7); }
+    /* The introduction's own trailing margin would otherwise collapse into the
+       margin above, so it is cleared to keep the gap at exactly space-7. */
     .follow-intro > :last-child { margin-bottom: 0; }
+    .form-slot { width: 400px; max-width: 100%; margin-inline: 0; }
   }
 
-  .strava { max-width: 34rem; }
-  .strava__title {
-    font-family: var(--font-support); font-weight: 600; font-size: 1.125rem;
-    letter-spacing: 0.02em; color: var(--on-light-1); margin: 0 0 var(--space-3);
-  }
-  .strava__body { margin: 0 0 var(--space-5); color: var(--on-light-2); }
-  .strava__meta {
-    font-family: var(--font-support); font-weight: 600; font-size: var(--size-label);
-    letter-spacing: var(--tracking-label); text-transform: uppercase;
-    color: var(--on-light-2); margin: var(--space-4) 0 0;
-  }
-
-  /* Stacked: the source order as it stands, with no order values. Introduction,
-     form, collection notice, divider, Strava invitation.
-
-     The margin is ZERO on purpose: this flex column's gap already supplies the
-     separation, so any margin here is added on top of it and doubles the gap.
-     That is what made the invitation feel detached from the section. */
+  /* Stacked: the source order as it stands, with no order values. Heading and
+     introduction, then the form, then the collection and privacy notice. */
   @media (max-width: 56.25rem) {
     .follow-grid { display: flex; flex-direction: column; }
-    .strava {
-      margin-top: 0; padding-top: var(--space-5);
-      border-top: 1px solid var(--hairline-light);
-    }
   }
 </style>
