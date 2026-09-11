@@ -1,0 +1,18 @@
+---
+/**
+ * The only way a ticket action is ever rendered. Every instance takes its
+ * destination from links.tickets, so the confirmed TryBooking URL cannot drift
+ * between the header, the menu, the hero, the ticket card and the footer.
+ *
+ * All ticket actions open in a new tab, and every one of them announces that to
+ * assistive technology through a visually hidden span. The ticket card also
+ * carries the note visibly.
+ */
+import { links, ui } from '../data/campaign';
+
+interface Props { class?: string; }
+const { class: className = 'btn btn--gold' } = Astro.props;
+---
+<a class={className} href={links.tickets} target="_blank" rel="noopener noreferrer">
+  <slot /><span class="visually-hidden">, {ui.newTab}</span>
+</a>

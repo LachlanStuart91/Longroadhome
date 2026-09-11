@@ -1,0 +1,37 @@
+---
+import { partnership, partner, links } from '../data/campaign';
+---
+<section id="partner" class="section surface-green" aria-labelledby="partner-title">
+  <div class="wrap">
+    <div class="two-col wide-left">
+      <div>
+        <p class="eyebrow">{partnership.eyebrow}</p>
+        <h2 id="partner-title" class="display section-title">{partnership.heading}</h2>
+        <hr class="rule" />
+        <p class="lead">{partnership.body[0]}</p>
+        <p>{partnership.body[1]}</p>
+      </div>
+
+      <div class="contact">
+        <p class="contact__name">{partner.name}</p>
+        <p class="contact__org">{partner.organisation}</p>
+        <a class="btn btn--gold btn--block contact__action" href={links.partnerEmail}>
+          {partnership.buttonLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    border: 1px solid rgba(230, 227, 218, 0.3); padding: var(--space-6);
+    border-radius: var(--radius); background: rgba(3, 19, 7, 0.3);
+  }
+  .contact__name {
+    font-family: var(--font-support); font-weight: 600; font-size: 1.1875rem;
+    letter-spacing: 0.03em; margin: 0; color: var(--on-green-1);
+  }
+  .contact__org { color: var(--on-green-2); font-size: 0.9375rem; margin: 0.125rem 0 0; }
+  .contact__action { margin-top: var(--space-5); }
+</style>

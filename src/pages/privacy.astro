@@ -1,0 +1,204 @@
+---
+import Base from '../layouts/Base.astro';
+import { privacy, providerPolicies, partner } from '../data/campaign';
+
+/**
+ * The privacy page. Deliberately NOT a legal template: it describes only what
+ * this website actually does, names only the services that actually process
+ * information through it, and claims nothing about the Privacy Act or the
+ * Australian Privacy Principles, because the business structure and statutory
+ * threshold have not been established.
+ *
+ * There is no reCAPTCHA section and no Google policy links, because reCAPTCHA
+ * is disabled on the signup form. If it is ever turned back on, this page must
+ * be updated before that change goes live.
+ *
+ * No Event structured data is emitted here. That lives in the Long Lunch
+ * section, which only exists on the homepage.
+ */
+---
+<Base
+  title={privacy.title}
+  description={privacy.description}
+  socialTitle={privacy.title}
+  socialDescription={privacy.description}
+>
+  <section class="section surface-light legal" aria-labelledby="privacy-title">
+    <div class="wrap">
+      <p class="eyebrow">The Long Road Home</p>
+      <h1 id="privacy-title" class="display section-title">{privacy.heading}</h1>
+      <hr class="rule" />
+      <p class="updated">{privacy.updated}</p>
+
+      <p class="lead">{privacy.intro}</p>
+
+      <h2>Who runs this website</h2>
+      <p>
+        The Long Road Home website at thelongroadhome.run is owned and operated by
+        {' '}{privacy.owner}, based in Brisbane, Australia. If you have a question about
+        your information, email <a href={`mailto:${privacy.contactEmail}`}>{privacy.contactEmail}</a>.
+      </p>
+
+      <h2>What I collect</h2>
+      <p>
+        The signup form asks you to enter your name and email address. MailerLite and the
+        website host may also process technical information as explained below.
+      </p>
+      <p>
+        You only give me your name and email if you decide to subscribe. You can read the
+        whole website without subscribing.
+      </p>
+
+      <h2>What I use it for</h2>
+      <p>Your name and email address are used to send you:</p>
+      <ul>
+        <li>weekly updates on the journey</li>
+        <li>announcements</li>
+        <li>event invitations</li>
+        <li>ways to get involved</li>
+      </ul>
+      <p>
+        I use your name and email address to send the communications listed above and to
+        manage your subscription. Your name is there so the emails are not addressed to a
+        stranger.
+      </p>
+      <p class="commitment">I do not sell or rent subscriber information.</p>
+
+      <h2>MailerLite manages the list</h2>
+      <p>
+        My subscriber list is managed by MailerLite, and MailerLite sends the emails. When
+        you subscribe, your name and email address are stored on their service.
+      </p>
+      <p>
+        If you subscribe, MailerLite will send you a confirmation email. Your subscription
+        starts only after you confirm it.
+      </p>
+      <p>
+        MailerLite may also collect technical information and use cookies, tracking
+        technologies and email performance data, such as whether an email was delivered,
+        opened, or had a link clicked. What they collect and why is set out in the
+        {' '}<a href={providerPolicies.mailerlite} rel="noopener">MailerLite privacy policy</a>.
+      </p>
+
+      <h2>How long I keep your information</h2>
+      <p class="commitment">
+        I keep subscriber information while someone remains subscribed. After they
+        unsubscribe, MailerLite may retain the minimum record needed to make sure they are
+        not emailed again.
+      </p>
+
+      <h2>Vercel hosts the website</h2>
+      <p>
+        The website is hosted by Vercel. As with any web host, Vercel processes the normal
+        technical information needed to deliver the pages to your browser and keep the site
+        secure and available. See the
+        {' '}<a href={providerPolicies.vercel} rel="noopener">Vercel privacy notice</a>.
+      </p>
+
+      <h2>Tickets are handled by TryBooking</h2>
+      <p>
+        Tickets to the Long Lunch are sold through TryBooking. When you book, you leave this
+        website and complete the purchase on TryBooking's own site. Payment details are
+        entered and processed through TryBooking, not through this website.
+      </p>
+      <p>
+        What TryBooking collects when you book, and how it handles that information, is set
+        out in the
+        {' '}<a href={providerPolicies.trybooking} rel="noopener">TryBooking privacy policy</a>.
+      </p>
+
+      <h2>Donations are handled by Top Blokes Foundation</h2>
+      <p>
+        The donation button takes you to a fundraising form hosted by Raisely for Top Blokes
+        Foundation. Top Blokes Foundation controls that form and receives the donor
+        information. Lachlan Stuart and The Long Road Home do not receive or store donor
+        information or payment details.
+      </p>
+      <p>
+        Raisely processes information as the fundraising platform. Read the
+        {' '}<a href={providerPolicies.topBlokes} rel="noopener">Top Blokes Foundation Privacy Policy</a>
+        {' '}and <a href={providerPolicies.raisely} rel="noopener">Raisely Privacy Policy</a> for
+        details about how they handle information.
+      </p>
+
+      <h2>Partnership enquiries</h2>
+      <p>
+        The partnership button opens your own email application with a message addressed to
+        {' '}{partner.name} at {partner.organisation}. There is no enquiry form on this
+        website and no enquiry database behind it. Whatever you write goes from your email
+        account to his, the same as any other email you send.
+      </p>
+
+      <h2>Websites I link to</h2>
+      <p>
+        This website also links out to Top Blokes Foundation, States of Mind, Instagram, Strava and
+        my own website at lachlanstuart.com.au. This website does not embed content from
+        those services. If you follow one of the links, you leave The Long Road Home website
+        and the other service's privacy practices apply.
+      </p>
+
+      <h2>Your information may be processed outside Australia</h2>
+      <p>
+        MailerLite and Vercel provide services to this website, and in doing so they may
+        store or process information outside Australia. I am not able to tell you which
+        country that will be in your case, because it depends on how each provider runs its
+        own infrastructure and that can change. Rather than guess, I would point you at
+        their current privacy policies, linked above, which are the accurate source on where
+        and how they handle information.
+      </p>
+      <p>
+        TryBooking and Raisely are different again. You reach each of them by choosing to
+        follow a link and leaving this website, and from that point each handles your
+        information as its own service, under its own privacy policy.
+      </p>
+
+      <h2>Unsubscribing</h2>
+      <p>
+        Every email I send has an unsubscribe link at the bottom. Use it and you come off
+        the list. You do not have to give a reason and you do not have to ask me first.
+      </p>
+
+      <h2>Asking about, correcting or deleting your information</h2>
+      <p>
+        Email <a href={`mailto:${privacy.contactEmail}`}>{privacy.contactEmail}</a> if you
+        want to know what information I hold about you, or you want it corrected or deleted.
+        Tell me the email address you subscribed with so I can find you.
+      </p>
+
+      <h2>Analytics and advertising</h2>
+      <p>
+        As at the date at the top of this page, this website has no first party analytics,
+        no advertising pixels and no behavioural advertising. I am telling you what is true
+        now rather than making a promise about the future. If that changes in a way that
+        matters, I will update this page.
+      </p>
+
+      <h2>Changes to this page</h2>
+      <p>
+        If the way this website handles information materially changes, I will update this
+        page and change the date at the top.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal { padding-block: var(--space-9) var(--space-9); }
+  .updated {
+    font-family: var(--font-support); font-weight: 600; font-size: var(--size-label);
+    letter-spacing: var(--tracking-label); text-transform: uppercase;
+    color: var(--terrain); margin: var(--space-5) 0 0;
+  }
+  .legal h2 {
+    font-family: var(--font-support); font-weight: 600; font-size: 1.125rem;
+    letter-spacing: 0.02em; color: var(--on-light-1);
+    margin: var(--space-7) 0 var(--space-3);
+  }
+  .legal ul { margin: 0 0 var(--space-4); padding-left: var(--space-5); max-width: var(--measure); }
+  .legal li { margin-bottom: var(--space-2); line-height: var(--leading-body); color: var(--on-light-2); }
+  .legal a { color: var(--terrain); text-underline-offset: 0.18em; }
+  .legal a:hover, .legal a:focus-visible { color: var(--near); }
+  /* The two operating commitments read slightly stronger than the surrounding
+     explanation, because they are undertakings rather than description. */
+  .commitment { color: var(--on-light-1); font-weight: 600; }
+</style>

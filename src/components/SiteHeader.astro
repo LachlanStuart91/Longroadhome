@@ -1,0 +1,182 @@
+---
+import TicketLink from './TicketLink.astro';
+import { navigation, navigationAfterEvent, event, campaign, hero } from '../data/campaign';
+
+/**
+ * The header is driven entirely by event.active. When the event is over the
+ * Long Lunch anchor disappears, every ticket action disappears, and partnership
+ * becomes the persistent action.
+ */
+const nav = event.active ? navigation : navigationAfterEvent;
+
+/**
+ * Section anchors only resolve on the homepage. From any other page, such as
+ * /privacy, they are prefixed so they navigate home and then to the section
+ * rather than pointing at anchors that do not exist on that page.
+ */
+const path = Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '');
+const onHome = path === '/' || path === '';
+const anchor = (href: string) => (onHome ? href : `/${href}`);
+---
+<header class="site-header surface-dark">
+  <div class="bar wrap">
+    <a class="mark" href={onHome ? '#top' : '/'}
+       aria-label={onHome ? `${campaign.name}, back to top` : `${campaign.name}, home`}>
+      <span class="mark__text">The Long Road <b>Home</b></span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Sections">
+      <ul>
+        {nav.map((item) => <li><a href={anchor(item.href)}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="bar__actions">
+      {event.active ? (
+        <TicketLink class="btn btn--gold btn--small">
+          <span class="wide-only">Book&nbsp;</span>Tickets
+        </TicketLink>
+      ) : (
+        <a class="btn btn--gold btn--small" href={anchor('#partner')}>
+          Partner<span class="wide-only">&nbsp;With Us</span>
+        </a>
+      )}
+      <button
+        class="burger"
+        id="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="nav-panel"
+        aria-label="Open menu"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="nav-panel" id="nav-panel" aria-label="Sections, mobile" hidden>
+    <ul>
+      {nav.map((item) => <li><a href={anchor(item.href)}>{item.label}</a></li>)}
+    </ul>
+    <div class="nav-panel__actions">
+      {event.active ? (
+        <>
+          <TicketLink class="btn btn--gold btn--block">{hero.primaryActive}</TicketLink>
+          <a class="btn btn--outline btn--block" href={anchor('#partner')}>{hero.secondaryActive}</a>
+        </>
+      ) : (
+        <>
+          <a class="btn btn--gold btn--block" href={anchor('#partner')}>{hero.primaryArchived}</a>
+          <a class="btn btn--outline btn--block" href={anchor('#follow')}>{hero.secondaryArchived}</a>
+        </>
+      )}
+    </div>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 60;
+    background: rgba(3, 19, 7, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--hairline-dark);
+  }
+  .bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--space-5); padding-block: var(--space-3);
+  }
+  /* colour is set explicitly so the anchor can never expose the browser
+     default blue if the coloured span inside it is ever changed. */
+  .mark { text-decoration: none; display: block; color: inherit; }
+  .mark__text {
+    font-family: var(--font-display); font-size: 1.4375rem; letter-spacing: 0.07em;
+    text-transform: uppercase; line-height: 1; color: var(--on-dark-1);
+    white-space: nowrap; display: block;
+  }
+  .mark__text b { color: var(--gold); font-weight: 400; }
+
+  .nav-desktop ul { display: flex; gap: var(--space-5); list-style: none; margin: 0; padding: 0; }
+  .nav-desktop a {
+    font-family: var(--font-support); font-weight: 600;
+    font-size: var(--size-label); letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--on-dark-2); text-decoration: none;
+  }
+  .nav-desktop a:hover, .nav-desktop a:focus-visible { color: var(--gold); }
+
+  .bar__actions { display: flex; align-items: center; gap: var(--space-3); }
+
+  .burger {
+    display: none; width: 2.75rem; height: 2.5rem;
+    border: 1px solid rgba(230, 227, 218, 0.35); background: none;
+    flex-direction: column; justify-content: center; align-items: center; gap: 0.3125rem;
+    cursor: pointer; border-radius: var(--radius);
+  }
+  .burger span { width: 1.125rem; height: 2px; background: var(--on-dark-1); display: block; }
+
+  @media (max-width: 62.5rem) {
+    .nav-desktop { display: none; }
+    .burger { display: flex; }
+  }
+
+  .nav-panel {
+    border-top: 1px solid var(--hairline-dark);
+    padding: var(--space-2) var(--gutter) var(--space-6);
+    max-height: calc(100vh - 4.25rem);
+    overflow-y: auto; overscroll-behavior: contain;
+  }
+  .nav-panel[hidden] { display: none; }
+  .nav-panel ul { list-style: none; margin: 0; padding: 0; }
+  .nav-panel a:not(.btn) {
+    display: block; font-family: var(--font-support); font-weight: 600;
+    font-size: 1rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--on-dark-1); text-decoration: none;
+    padding: var(--space-4) 0.125rem; border-bottom: 1px solid var(--hairline-dark);
+  }
+  .nav-panel__actions { margin-top: var(--space-5); display: grid; gap: var(--space-3); }
+
+  @media (min-width: 62.5625rem) { .nav-panel { display: none !important; } }
+  @media (max-width: 47.5rem) { .wide-only { display: none; } }
+</style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const panel = document.getElementById('nav-panel');
+
+  if (toggle && panel) {
+    // State is read from the accessibility attribute rather than `hidden`,
+    // which the DOM types as boolean | 'until-found'.
+    const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+    // Selecting a section closes the menu and moves reading position to it.
+    panel.addEventListener('click', (clickEvent) => {
+      const link = (clickEvent.target as HTMLElement)?.closest('a');
+      if (!link) return;
+      setOpen(false);
+      const href = link.getAttribute('href');
+      if (href?.startsWith('#')) {
+        const target = document.querySelector(href);
+        if (target instanceof HTMLElement) {
+          target.setAttribute('tabindex', '-1');
+          window.setTimeout(() => target.focus({ preventScroll: true }), 450);
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (keyEvent) => {
+      if (keyEvent.key === 'Escape' && isOpen()) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>

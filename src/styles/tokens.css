@@ -1,0 +1,74 @@
+/* THE LONG ROAD HOME - design tokens.
+   Contrast figures are measured on the RENDERED result, with every
+   semi-transparent value flattened against the surface it actually sits on. */
+
+:root {
+  /* ---- brand palette, locked ---- */
+  --forest:   #031307;  /* Long Road Forest   */
+  --terrain:  #294A0A;  /* Deep Terrain Green */
+  --aus:      #54871E;  /* Australia Green    */
+  --gold:     #F8C302;  /* Signal Gold        */
+  --heritage: #D6A506;  /* Heritage Gold      */
+  --road:     #E6E3DA;  /* Road White         */
+  --near:     #020704;  /* Near Black         */
+
+  /* ---- text roles, with verified ratios ----
+     on-dark-1     Road White on Forest ............... 14.88:1  AAA
+     on-dark-2     Road White .72 on Forest ...........  7.99:1  AAA
+     on-green-2    Road White .84 on Terrain Green .....  6.30:1  AA
+     on-light-1    Near Black on Road White ........... 15.82:1  AAA
+     on-light-2    Near Black .72 on Road White .......  7.63:1  AAA
+     Australia Green on Forest is 4.42:1 and therefore never used for text. */
+  --on-dark-1:  var(--road);
+  --on-dark-2:  rgba(230, 227, 218, 0.72);
+  --on-green-1: var(--road);
+  --on-green-2: rgba(230, 227, 218, 0.84);
+  --on-light-1: var(--near);
+  --on-light-2: rgba(2, 7, 4, 0.72);
+
+  /* ---- non-text lines. Never use these for text. ---- */
+  --hairline-dark:  rgba(230, 227, 218, 0.22);
+  --hairline-light: rgba(2, 7, 4, 0.18);
+
+  /* ---- focus. Overridden per surface, see global.css ---- */
+  --focus-ring: var(--gold);
+
+  /* ---- type ---- */
+  --font-display: 'Bebas Neue', Impact, 'Haettenschweiler', sans-serif;
+  --font-support: 'Oswald', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --size-display-xl: clamp(2.875rem, 8.4vw, 7.75rem);  /*  46 to 124px */
+  --size-display-lg: clamp(2.25rem, 5.2vw, 3.875rem);  /*  36 to  62px */
+  --size-kicker:     clamp(1.0625rem, 2.1vw, 1.5625rem);/* 17 to  25px */
+  --size-lead:       1.1875rem;                        /*  19px */
+  --size-body:       1.0625rem;                        /*  17px, 16px on small */
+  --size-helper:     0.875rem;                         /*  14px floor for helper text */
+  --size-label:      0.75rem;                          /*  12px floor for labels */
+  --size-action:     0.84375rem;                       /*  13.5px */
+
+  --leading-display: 0.92;
+  --leading-body: 1.65;
+  --tracking-label: 0.14em;
+  --tracking-display: 0.02em;
+  --measure: 62ch;
+
+  /* ---- spacing ---- */
+  --space-1: 0.25rem;  --space-2: 0.5rem;   --space-3: 0.75rem;
+  --space-4: 1rem;     --space-5: 1.5rem;   --space-6: 2rem;
+  --space-7: 2.75rem;  --space-8: 3.5rem;   --space-9: 5.75rem;
+
+  --wrap: 75rem;          /* 1200px content width inside a 1440px viewport */
+  --gutter: 2.5rem;
+  --radius: 2px;
+  --header-h: 6rem;       /* used for scroll-margin under the sticky header */
+}
+
+@media (max-width: 47.5rem) {
+  :root {
+    --size-body: 1rem;    /* 16px */
+    --size-lead: 1.0625rem;
+    --gutter: 1.25rem;
+    --header-h: 4.75rem;
+  }
+}

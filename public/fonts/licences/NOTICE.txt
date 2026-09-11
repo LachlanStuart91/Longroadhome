@@ -1,0 +1,17 @@
+THE LONG ROAD HOME - SELF-HOSTED WEBFONTS
+
+Three families are self-hosted from this directory. No font is loaded from a
+third-party CDN at runtime, so the site makes no external font requests.
+
+  Bebas Neue   400  display        bebas-neue-latin-400-normal.woff2
+  Oswald       600  supporting     oswald-latin-600-normal.woff2
+  Inter        400  body           inter-latin-400-normal.woff2
+  Inter        600  body emphasis  inter-latin-600-normal.woff2
+
+Latin subsets only. Each family is licensed under the SIL Open Font License 1.1.
+The full licence for each is retained beside this notice and must be kept with
+any redistribution of the font files.
+
+Files were taken from the Fontsource packages recorded in package.json
+(@fontsource/bebas-neue, @fontsource/oswald, @fontsource/inter), which package
+the upstream Google Fonts releases unmodified.

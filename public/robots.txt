@@ -1,0 +1,6 @@
+# The Long Road Home
+# Normal indexing is permitted. Nothing on this site is private or gated.
+User-agent: *
+Allow: /
+
+Sitemap: https://thelongroadhome.run/sitemap.xml

@@ -1,0 +1,226 @@
+---
+import { campaign, topBlokes, links, ui } from '../data/campaign';
+
+/**
+ * Where the money goes.
+ *
+ * The personal story is the heart of this section, so it opens the section and
+ * closes it. The evidence sits in the middle, set quietly in Road White rather
+ * than gold, and the $500,000 target stays the largest number on the page by a
+ * clear margin. Two statistics only: a third read as a case being pressed
+ * rather than a reason being given.
+ *
+ * Help seeking sits directly beneath the statistics, where a reader affected by
+ * them actually is, rather than at the foot of the section.
+ *
+ * The written column is split into two groups with the donation panel between
+ * them IN THE SOURCE. That is deliberate. The stacked layout wants the panel in
+ * exactly that position, so source order and visual order agree and keyboard
+ * focus never has to jump back up the page to reach Donate. The desktop layout
+ * places the panel into the right column explicitly instead.
+ */
+---
+<section id="top-blokes" class="section surface-dark" aria-labelledby="top-blokes-title">
+  <div class="wrap">
+    <p class="eyebrow">{topBlokes.eyebrow}</p>
+    <h2 id="top-blokes-title" class="display section-title">{topBlokes.heading}</h2>
+    <hr class="rule" />
+
+    <div class="two-col wide-left tb__grid">
+      <div class="tb__body">
+        <div class="tb__group tb__group--intro">
+          <p class="lead">{topBlokes.intro}</p>
+          <h3 class="tb__sub">{topBlokes.programHeading}</h3>
+          <p>{topBlokes.programBody}</p>
+        </div>
+
+        <div class="panel panel-light tb__panel">
+          <p class="display amount">{campaign.fundraisingTarget}</p>
+          <p class="label target-label">{topBlokes.targetLabel}</p>
+
+          <a class="btn btn--gold btn--block donate" href={links.fundraising}
+             target="_blank" rel="noopener noreferrer">
+            {topBlokes.donateLabel}<span class="visually-hidden">, {ui.newTab}</span>
+          </a>
+          <p class="helper donate-note">{topBlokes.donateNote}</p>
+
+          <a class="btn btn--outline btn--block about" href={links.topBlokes} rel="noopener">
+            {topBlokes.aboutLabel}
+          </a>
+        </div>
+
+        <div class="tb__group tb__group--evidence">
+          <h3 class="tb__sub">{topBlokes.evidenceHeading}</h3>
+
+          {/* Two rows, not cards. Same rule and gutter language as the fact
+              strips elsewhere, so it reads as part of the site. */}
+          <dl class="evidence">
+            {topBlokes.evidence.map((item) => (
+              <div class="evidence__item">
+                <dt class="evidence__figure">
+                  <span class="evidence__qual">{item.qualifier}</span>
+                  <span class="evidence__num">{item.figure}</span>
+                </dt>
+                <dd class="evidence__desc">{item.description}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <p class="evidence__source">
+            {topBlokes.sourceLine.map((seg) =>
+              seg.href
+                ? <a href={seg.href} target="_blank" rel="noopener">{seg.text}</a>
+                : seg.text,
+            )}
+          </p>
+
+          <hr class="support__rule" />
+
+          <p class="support">
+            {topBlokes.supportLine.map((seg) =>
+              !seg.href
+                ? seg.text
+                : seg.href.startsWith('tel:')
+                  ? <a href={seg.href}>{seg.text}</a>
+                  : <a href={seg.href} target="_blank" rel="noopener">{seg.text}</a>,
+            )}
+          </p>
+
+          <p>{topBlokes.reason}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .amount { font-size: 3.5rem; margin: 0; color: var(--terrain); }
+  .target-label { margin: var(--space-2) 0 0; }
+  .donate { margin-top: var(--space-5); }
+  .donate-note { margin: var(--space-3) 0 0; }
+  .about { margin-top: 0.875rem; }   /* 14px between the two actions */
+
+  /* 19px, so the subsection headings are clearly a level above the body copy.
+     This matters most on mobile, where the section is long and a reader is
+     scanning for where each part begins. */
+  .tb__sub {
+    font-family: var(--font-support); font-weight: 600; font-size: 1.1875rem;
+    letter-spacing: 0.02em; color: var(--on-dark-1);
+    margin: var(--space-7) 0 var(--space-3);
+  }
+
+  .tb__body { display: contents; }
+  /* Space between the two written groups is owned by the heading that starts
+     the next one, so the group itself adds no trailing margin. */
+  .tb__group > :last-child { margin-bottom: 0; }
+
+  /* Desktop: two columns, with the panel spanning both written rows in the
+     right column. Sticky uses the same behaviour as the Long Lunch ticket
+     panel, and top: 7rem clears the header. The grid area is the sticky
+     containing block, so the panel cannot leave this section or reach the
+     next one. */
+  @media (min-width: 56.25rem) {
+    .tb__grid { row-gap: 0; }
+    .tb__group--intro    { grid-column: 1; grid-row: 1; }
+    .tb__group--evidence { grid-column: 1; grid-row: 2; }
+    .tb__panel {
+      grid-column: 2; grid-row: 1 / span 2;
+      position: sticky; top: 7rem; align-self: start;
+    }
+  }
+
+  /* Stacked: introduction, what Top Blokes does, the donation panel, then the
+     evidence, the sources, the support information and Lachlan's reason. The
+     donation action was buried at the foot of a long section, and this order
+     also avoids putting a fundraising request straight after crisis support.
+     gap is 0 on purpose: the spacing is carried by the panel's own margin and
+     by the heading that opens the evidence group, so both sides match the
+     section's existing rhythm rather than being doubled by a flex gap. */
+  @media (max-width: 56.25rem) {
+    .tb__grid { display: flex; flex-direction: column; gap: 0; }
+    .tb__panel {
+      position: static; margin-top: var(--space-7);
+      /* A donation panel stretched across a full tablet width reads as a
+         banner. On a narrow phone the available width is already less than
+         this, so the cap does nothing there and the panel uses the column. */
+      max-width: 33rem;
+    }
+  }
+
+  .evidence {
+    --gut: clamp(1.25rem, 2.2vw, 1.75rem);
+    display: grid; grid-template-columns: 1fr 1fr;
+    margin: var(--space-5) 0 0; border-top: 1px solid var(--hairline-dark);
+  }
+  .evidence__item {
+    position: relative; margin: 0;
+    padding: var(--space-5) var(--gut) 0 var(--gut);
+  }
+  .evidence__item:first-child { padding-left: 0; }
+  .evidence__item:last-child  { padding-right: 0; }
+  .evidence__item + .evidence__item::before {
+    content: ''; position: absolute; left: 0; top: 1.125rem; bottom: 0.25rem;
+    width: 1px; background: var(--hairline-dark);
+  }
+  .evidence__figure { margin: 0; }
+  /* The qualifier is never dropped. "More than" and "Almost" change what the
+     number means, so they sit with it rather than being trimmed for neatness. */
+  .evidence__qual {
+    display: block; font-family: var(--font-support); font-weight: 600;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--on-dark-2);
+  }
+  .evidence__num {
+    display: block; font-family: var(--font-display); font-size: 1.9375rem;
+    letter-spacing: 0.03em; line-height: 1.1; color: var(--on-dark-1);
+    margin-top: 0.25rem;
+  }
+  .evidence__desc {
+    margin: var(--space-3) 0 0; font-size: var(--size-helper);
+    line-height: 1.6; color: var(--on-dark-2);
+  }
+  .evidence__source {
+    margin: var(--space-5) 0 0; font-size: var(--size-label);
+    line-height: 1.65; color: var(--on-dark-2); max-width: none;
+  }
+
+  /* Help seeking. Readable, not fine print, and not the visual focus either. */
+  .support__rule {
+    border: 0; border-top: 1px solid var(--hairline-dark);
+    margin: var(--space-6) 0 var(--space-5); width: 100%;
+  }
+  .support {
+    font-size: 0.9375rem; line-height: 1.7; color: var(--on-dark-1);
+    margin: 0 0 var(--space-7);
+  }
+  /* Source links are attribution, not an action. They take the muted source
+     colour with a plain underline so gold stays with the donation button.
+     The crisis links stay gold: being easy to find matters more there. */
+  .evidence__source a {
+    color: inherit; text-decoration: underline; text-underline-offset: 0.18em;
+  }
+  .evidence__source a:hover, .evidence__source a:focus-visible { color: var(--on-dark-1); }
+  .support a { color: var(--gold); text-underline-offset: 0.18em; }
+  /* A crisis number must never break across two lines. Someone reading this
+     may be copying it down or dialling it under pressure. */
+  .support a[href^="tel:"] { white-space: nowrap; }
+  .support a:hover, .support a:focus-visible { color: var(--road); }
+
+  @media (max-width: 47.5rem) {
+    .evidence { display: block; }
+    .evidence__item {
+      padding: var(--space-4) 0; border-bottom: 1px solid var(--hairline-dark);
+    }
+    .evidence__item::before { display: none; }
+    .evidence__item:last-child { border-bottom: 0; }
+
+    /* .btn is white-space: nowrap, so a full width button still imposes its
+       whole label as a minimum width on its container. This panel sits at
+       exactly its limit at 390px, and the long donate label pushed it past the
+       viewport. A full width button is already centred, so wrapping to two
+       lines is the natural behaviour rather than a compromise. min-width: 0
+       stops the intrinsic minimum leaking back out into the grid. */
+    .btn--block { white-space: normal; min-width: 0; text-align: center; }
+    .tb__panel { min-width: 0; }
+  }
+</style>

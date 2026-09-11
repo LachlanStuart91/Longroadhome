@@ -1,0 +1,203 @@
+---
+import { Image } from 'astro:assets';
+import TicketLink from './TicketLink.astro';
+import heroImage from '../images/hero-lachlan-stuart-brisbane.jpg';
+import { campaign, event, hero } from '../data/campaign';
+
+/**
+ * Desktop: image beside the text, facts above the actions.
+ * Mobile: identity, proposition, connector, actions, facts, then the image.
+ *
+ * The mobile reordering is done with CSS order on the fact strip only. The strip
+ * contains no interactive elements, so visual order changes while tab order and
+ * reading order stay intact.
+ */
+/**
+ * Each fact is a quiet qualifier above a complete metric. Splitting them this
+ * way is what stops the browser breaking "4,400 km" or "100 km a day" across
+ * lines at awkward widths, and it lets the metrics and labels align on shared
+ * rows via subgrid.
+ *
+ * The colon after "Goal" is carried separately. On wider screens the qualifier
+ * sits on its own line, where a trailing colon reads like a form label, so it
+ * is hidden VISUALLY only. It stays in the accessible phrase, which is why it
+ * uses the visually-hidden pattern rather than display none.
+ */
+const facts = [
+  { qualifier: campaign.planningQualifier, colon: false, metric: campaign.planningMetric, label: 'Planning distance' },
+  { qualifier: campaign.dailyGoalQualifier, colon: true,  metric: campaign.dailyGoalMetric, label: campaign.schedule },
+  { qualifier: null,                        colon: false, metric: campaign.plannedStart,    label: 'Planned start' },
+];
+---
+<section id="hero" class="section surface-dark grain hero" aria-labelledby="hero-title">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow hero__eyebrow">{campaign.participant}</p>
+
+      <h1 id="hero-title" class="display hero-title hero__title">
+        The Long Road <span class="hero__home">Home</span>
+      </h1>
+
+      <p class="hero__kicker">{campaign.headline}</p>
+
+      <p class="hero__support">{campaign.supporting}</p>
+
+      <dl class="facts">
+        {facts.map((fact) => (
+          <div class="facts__item">
+            <dt class="facts__value">
+              <span class="facts__qualifier">
+                {fact.qualifier}{fact.colon && <span class="facts__colon">:</span>}
+              </span>{' '}
+              <span class="facts__metric">{fact.metric}</span>
+            </dt>
+            <dd class="facts__label label">{fact.label}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <p class="hero__connector">
+        {event.active ? hero.connectorActive : hero.connectorArchived}
+      </p>
+
+      <div class="actions hero__actions">
+        {event.active ? (
+          <>
+            <TicketLink class="btn btn--gold">{hero.primaryActive}</TicketLink>
+            <a class="btn btn--outline" href="#partner">{hero.secondaryActive}</a>
+          </>
+        ) : (
+          <>
+            <a class="btn btn--gold" href="#partner">{hero.primaryArchived}</a>
+            <a class="btn btn--outline" href="#follow">{hero.secondaryArchived}</a>
+          </>
+        )}
+      </div>
+    </div>
+
+    <Image
+      class="hero__image"
+      src={heroImage}
+      alt={hero.imageAlt}
+      width={1160}
+      height={1450}
+      widths={[400, 560, 700, 920, 1160]}
+      sizes="(max-width: 62.5rem) calc(100vw - 2.5rem), (max-width: 75rem) 38vw, 458px"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: var(--space-8) var(--space-9); }
+  .hero__grid {
+    display: grid; grid-template-columns: 1.14fr 0.86fr;
+    gap: var(--space-8); align-items: center;
+  }
+  .hero__text { display: flex; flex-direction: column; }
+  .hero__eyebrow { order: 1; }
+  .hero__title { order: 2; }
+  .hero__kicker { order: 3; }
+  .hero__support { order: 4; }
+  .facts { order: 5; }
+  .hero__connector { order: 6; }
+  .hero__actions { order: 7; }
+
+  .hero__home { color: var(--gold); }
+
+  .hero__kicker {
+    font-family: var(--font-support); font-weight: 600;
+    font-size: var(--size-kicker); letter-spacing: 0.03em; line-height: 1.3;
+    margin: var(--space-5) 0 var(--space-4); color: var(--on-dark-1);
+  }
+  .hero__support { color: var(--on-dark-2); max-width: 46ch; }
+
+  /* Three subgrid rows: qualifier, metric, label. Every metric therefore sits
+     on one shared row and every label on the next, whatever each one contains.
+     The gutter is 16 to 24px and the two long metrics get more width than the
+     short date, so no metric is ever forced to break. */
+  .facts {
+    --gut: clamp(1rem, 1.7vw, 1.5rem);
+    display: grid; grid-template-columns: 1.18fr 1.18fr 0.84fr;
+    grid-template-rows: auto auto auto;
+    margin: var(--space-6) 0 0; border-top: 2px solid var(--gold);
+  }
+  .facts__item {
+    position: relative;
+    display: grid; grid-template-rows: subgrid; grid-row: span 3;
+    padding: 1.375rem var(--gut) 0 var(--gut);
+  }
+  .facts__item:first-child { padding-left: 0; }
+  .facts__item:last-child  { padding-right: 0; }
+
+  /* The divider sits on the item box edge, which is the optical centre of the
+     gutter, and is inset so it never runs the full height of the row. */
+  .facts__item + .facts__item::before {
+    content: ''; position: absolute; left: 0; top: 1.125rem; bottom: 1.125rem;
+    width: 1px; background: var(--hairline-dark);
+  }
+
+  .facts__value { display: contents; }
+  .facts__qualifier {
+    font-family: var(--font-support); font-weight: 600; font-size: 0.75rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--on-dark-2);
+    min-height: 1em;
+  }
+  /* Hidden from sight, kept for assistive technology, so the phrase is still
+     read as "Goal: 100 km a day". */
+  .facts__colon {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+  }
+  .facts__metric {
+    font-family: var(--font-display); font-size: clamp(1.375rem, 1.7vw, 1.625rem);
+    letter-spacing: 0.03em; line-height: 1.12; color: var(--on-dark-1);
+    white-space: nowrap; margin-top: 0.375rem;
+  }
+  .facts__label { margin: 1rem 0 1.5rem; align-self: start; }
+
+  .hero__connector {
+    font-family: var(--font-support); font-weight: 600;
+    font-size: var(--size-action); letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--gold); margin: var(--space-6) 0 0; line-height: 1.5;
+  }
+
+  .hero__image { width: 100%; height: auto; display: block; border-radius: var(--radius); }
+
+  @media (max-width: 62.5rem) {
+    .hero__grid { grid-template-columns: 1fr; gap: var(--space-6); }
+
+  }
+
+  /* Mobile: actions come before the supporting facts. */
+  @media (max-width: 47.5rem) {
+    .hero { padding-block: var(--space-6) var(--space-8); }
+    .hero__connector { order: 5; margin-top: var(--space-5); font-size: var(--size-label); }
+    .hero__actions { order: 6; margin-top: var(--space-4); }
+    /* Compact stack. The qualifier returns inline with the metric, so the
+       value reads "Goal: 100 km a day" again, colon and all. */
+    .facts { order: 7; display: block; margin-top: var(--space-6); }
+    .facts__item {
+      display: flex; flex-direction: row;   /* reset the desktop column */
+      align-items: baseline; justify-content: space-between;
+      gap: var(--space-3); padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--hairline-dark);
+    }
+    .facts__item::before { display: none; }   /* no vertical dividers stacked */
+    .facts__item:last-child { border-bottom: 0; }
+    .facts__value { display: block; }
+    .facts__qualifier {
+      font-family: var(--font-display); font-size: 1.1875rem; font-weight: 400;
+      letter-spacing: 0.03em; text-transform: none; color: var(--on-dark-1);
+      min-height: 0; display: inline;
+    }
+    .facts__colon {
+      position: static; width: auto; height: auto; margin: 0;
+      overflow: visible; clip-path: none;
+    }
+    .facts__metric { display: inline; font-size: 1.1875rem; margin-top: 0; }
+    .facts__label { margin: 0; text-align: right; max-width: 46%; }
+    .hero__kicker { margin: var(--space-4) 0 var(--space-3); }
+  }
+</style>

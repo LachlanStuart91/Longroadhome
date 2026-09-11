@@ -1,0 +1,28 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+.pnpm-store/
+
+# project-scoped Node runtime, not committed
+.tooling/
+
+# Local development only. The launch configuration points at the Node runtime
+# in .tooling/, which is not committed, so it cannot work on another machine.
+.claude/
+
+# os
+.DS_Store
+
+# Vercel CLI project link. Local only, never committed.
+.vercel/
+
+# Review material: prototypes, comparison screenshots and audit captures for
+# each stage. Roughly 135 MB and not part of the published site.
+review/
+
+# Local project-management artefact. It stays on Lachlan's computer, but it
+# carries outdated stage information and does not belong in the repository.
+CLAUDE_BUILD_PROMPT.md

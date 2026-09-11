@@ -1,0 +1,191 @@
+---
+import TicketLink from './TicketLink.astro';
+import { event, links, meta } from '../data/campaign';
+
+/**
+ * Event structured data lives in this component on purpose. This section only
+ * renders while event.active is true, so the structured data is removed with
+ * it automatically when the page switches to its archived state. There is no
+ * second flag to remember and no way for the two to disagree.
+ *
+ * Every value is derived from the same campaign data the visible section
+ * renders, including the prices, so the markup cannot drift from the page.
+ * Nothing about availability, ticket inventory, attendance, speakers, sponsors
+ * or fundraising totals is asserted, because none of that is confirmed.
+ */
+const numeric = (price: string) => price.replace(/[^0-9.]/g, '');
+
+const eventSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: event.name,
+  description: event.invitation,
+  startDate: event.startISO,
+  endDate: event.endISO,
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  image: [new URL(meta.socialImage, Astro.site).href],
+  location: {
+    '@type': 'Place',
+    name: event.venue,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: event.streetAddress,
+      addressLocality: event.addressLocality,
+      addressRegion: event.addressRegion,
+      postalCode: event.postalCode,
+      addressCountry: event.addressCountry,
+    },
+  },
+  offers: [
+    {
+      '@type': 'Offer',
+      name: 'Individual ticket',
+      price: numeric(event.individualPrice),
+      priceCurrency: 'AUD',
+      url: links.tickets,
+    },
+    {
+      '@type': 'Offer',
+      name: 'Table of six',
+      price: numeric(event.tablePrice),
+      priceCurrency: 'AUD',
+      url: links.tickets,
+    },
+  ],
+};
+
+/**
+ * The strongest content section in the first release.
+ * Mobile places the ticket card before the descriptive body, so date, time,
+ * venue, price and the booking action all land within one screen of the
+ * section start.
+ */
+const glance = [
+  { value: event.dateShort, label: 'Date' },
+  { value: event.time, label: event.timezone },
+  { value: event.venueShort, label: 'Howard Smith Wharves' },
+];
+
+const details = [
+  { term: 'Venue', value: event.venue },
+  { term: 'Address', value: event.address },
+  { term: 'Includes', value: event.includes },
+  { term: 'On the day', value: event.onTheDay },
+];
+---
+<script type="application/ld+json" is:inline set:html={JSON.stringify(eventSchema)} />
+
+<section id="long-lunch" class="section surface-light" aria-labelledby="long-lunch-title">
+  <div class="wrap">
+    <p class="eyebrow">{event.date}, Brisbane</p>
+    <h2 id="long-lunch-title" class="display section-title">{event.name}</h2>
+
+    <dl class="glance">
+      {glance.map((item) => (
+        <div class="glance__item">
+          <dt class="glance__value">{item.value}</dt>
+          <dd class="glance__label label">{item.label}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="lunch__grid">
+      <div class="lunch__body">
+        <p class="lead">{event.invitation}</p>
+
+        <dl class="detail">
+          {details.map((row) => (
+            <>
+              <dt class="label">{row.term}</dt>
+              <dd>{row.value}</dd>
+            </>
+          ))}
+        </dl>
+
+        <p class="funding">{event.fundingNote}</p>
+      </div>
+
+      <div class="panel panel-dark ticket">
+        <h3 class="sub ticket__heading">Tickets</h3>
+
+        <div class="ticket__row">
+          <span class="label ticket__label">Individual</span>
+          <span class="ticket__amount">{event.individualPrice}</span>
+        </div>
+
+        <div class="ticket__row">
+          <span class="ticket__stack">
+            <span class="label ticket__label">Table of six</span>
+            <span class="helper ticket__per">{event.tablePriceDetail}</span>
+          </span>
+          <span class="ticket__amount">{event.tablePrice}</span>
+        </div>
+
+        <TicketLink class="btn btn--gold btn--block ticket__action">
+          {event.bookingLabel}
+        </TicketLink>
+
+        <p class="helper ticket__note">{event.bookingNote}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .glance { display: grid; grid-template-columns: repeat(3, auto);
+    border-top: 2px solid var(--terrain); border-bottom: 1px solid var(--hairline-light);
+    margin: var(--space-5) 0 var(--space-6); }
+  .glance__item { padding: var(--space-3) var(--space-5) var(--space-3) 0; }
+  .glance__value {
+    font-family: var(--font-support); font-weight: 600; font-size: 0.90625rem;
+    letter-spacing: 0.04em; color: var(--on-light-1); margin: 0;
+  }
+  .glance__label { margin: 0.1875rem 0 0; }
+
+  .lunch__grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: var(--space-8); align-items: start; }
+
+  .detail { margin: var(--space-5) 0 0; display: grid; grid-template-columns: auto 1fr;
+    gap: var(--space-2) var(--space-5); }
+  .detail dt { padding-top: 0.1875rem; }
+  .detail dd { margin: 0; color: var(--on-light-1); }
+
+  .funding {
+    font-size: var(--size-helper); line-height: 1.6; color: var(--on-light-2);
+    border-left: 3px solid var(--aus); padding: 0.125rem 0 0.125rem var(--space-4);
+    margin: var(--space-6) 0 0; max-width: 56ch;
+  }
+
+  .ticket { position: sticky; top: 7rem; }
+  .ticket__heading { color: var(--gold); }
+  .ticket__row {
+    display: flex; justify-content: space-between; align-items: center; gap: var(--space-3);
+    padding: var(--space-4) 0; border-bottom: 1px solid var(--hairline-dark);
+  }
+  .ticket__label { color: var(--on-dark-2); }
+  .ticket__amount {
+    font-family: var(--font-display); font-size: 1.875rem;
+    letter-spacing: 0.03em; color: var(--on-dark-1);
+  }
+  .ticket__stack { display: flex; flex-direction: column; gap: 0.1875rem; }
+  .ticket__per { font-size: var(--size-label); }
+  .ticket__action { margin-top: var(--space-5); }
+  .ticket__note { margin-top: var(--space-4); }
+
+  @media (max-width: 56.25rem) {
+    .lunch__grid { display: flex; flex-direction: column; gap: var(--space-6); }
+    .ticket { position: static; order: -1; }  /* booking before the body copy */
+  }
+
+  @media (max-width: 38.75rem) {
+    .glance { display: block; border-bottom: 0; }
+    .glance__item {
+      display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3);
+      padding: var(--space-3) 0; border-bottom: 1px solid var(--hairline-light);
+    }
+    .glance__item:last-child { border-bottom: 0; }
+    .glance__label { text-align: right; max-width: 48%; }
+    .detail { grid-template-columns: 1fr; gap: 0; }
+    .detail dd { margin-bottom: var(--space-3); }
+  }
+</style>

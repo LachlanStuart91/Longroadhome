@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import LongLunch from '../components/LongLunch.astro';
+import EventArchive from '../components/EventArchive.astro';
+import Challenge from '../components/Challenge.astro';
+import Why from '../components/Why.astro';
+import TopBlokes from '../components/TopBlokes.astro';
+import TrackRecord from '../components/TrackRecord.astro';
+import Partnership from '../components/Partnership.astro';
+import Follow from '../components/Follow.astro';
+import { event, meta, campaign, links } from '../data/campaign';
+
+/**
+ * Site identity, homepage only.
+ *
+ * Deliberately a SEPARATE block from the Long Lunch Event data. The Event
+ * markup lives in the Long Lunch component so it disappears when the event is
+ * archived; merging the two would take the site identity down with it in
+ * October. They are linked by @id instead, which is standards valid.
+ *
+ * Only confirmed details: no job title, award, record, family detail,
+ * birthplace or age, and no ProfilePage.
+ */
+const siteId = new URL('#website', Astro.site).href;
+const personId = new URL('#lachlan-stuart', Astro.site).href;
+
+const identitySchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': siteId,
+      name: meta.siteName,
+      alternateName: 'thelongroadhome.run',
+      url: new URL('/', Astro.site).href,
+      author: { '@id': personId },
+    },
+    {
+      '@type': 'Person',
+      '@id': personId,
+      name: campaign.participant,
+      url: links.lachlanStuart,
+      sameAs: [links.lachlanStuart, links.instagram],
+    },
+  ],
+};
+---
+<Base>
+  {/* Inside the layout, so it renders within the document body rather than
+      between the doctype and the opening html element. Google accepts JSON-LD
+      in the head or the body. Kept separate from the Long Lunch Event block. */}
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(identitySchema)} />
+
+  <Hero />
+
+  {/* One switch. Active renders the event, archived renders its archive. */}
+  {event.active ? <LongLunch /> : <EventArchive />}
+
+  <Challenge />
+
+  <Why />
+
+  <TopBlokes />
+
+  <TrackRecord />
+
+  <Partnership />
+
+  <Follow />
+
+</Base>

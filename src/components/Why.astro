@@ -1,0 +1,33 @@
+---
+import { why, links } from '../data/campaign';
+
+/**
+ * Text only, by decision. No candid portrait has been supplied and none is
+ * substituted. If an approved photograph arrives later, add it here and change
+ * .single back to a two column layout. No placeholder is ever published.
+ */
+---
+<section id="why" class="section surface-green" aria-labelledby="why-title">
+  <div class="wrap">
+    <div class="single">
+      <div>
+        <p class="eyebrow">{why.eyebrow}</p>
+        <h2 id="why-title" class="display section-title">{why.heading}</h2>
+        <hr class="rule" />
+        <p class="lead">{why.body[0]}</p>
+        {why.body.slice(1).map((para) => <p>{para}</p>)}
+        <div class="actions">
+          <a class="btn btn--outline" href={links.lachlanStuart} rel="noopener">
+            {why.linkLabel}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Centred so it reads as a deliberate statement section rather than a two
+     column layout with the image missing. */
+  .single { max-width: 62ch; margin-inline: auto; }
+</style>

@@ -1,0 +1,152 @@
+---
+import { newsletter, privacy, links, strava, ui } from '../data/campaign';
+
+/**
+ * The supplied MailerLite embed, used exactly as provided.
+ *
+ * The universal script is rendered with is:inline so Astro does not process,
+ * bundle or duplicate it, and it appears once on the page. MailerLite renders
+ * the fields, button, validation, consent wording and confirmation behaviour
+ * from the account configuration. Nothing here overrides any of that, and no
+ * submission endpoint is invented or rebuilt.
+ *
+ * Email signup is the primary action here and the Strava club is secondary, so
+ * the club is an outline action and never gold.
+ *
+ * SOURCE ORDER IS THE READING ORDER: heading and introduction, then the form
+ * and its collection notice, then the Strava invitation. All three are direct
+ * children of the layout, so a screen reader is told what the section is before
+ * it reaches the form, and keyboard focus reaches the form before the Strava
+ * button. The stacked layout uses this order as it stands, with no CSS order
+ * values. Only the wider layout places the columns, and it does so without
+ * changing the sequence.
+ */
+---
+<section id="follow" class="section surface-light" aria-labelledby="follow-title">
+  <div class="wrap">
+    <div class="two-col follow-grid">
+      <div class="follow-intro">
+        <h2 id="follow-title" class="display section-title">{newsletter.heading}</h2>
+        <hr class="rule" />
+        <p class="lead">{newsletter.promise}</p>
+      </div>
+
+      <div class="form-slot">
+        <div class="ml-embedded" data-form="q8HCNv"></div>
+        <noscript>
+          <p class="helper">
+            The signup form needs JavaScript to load. Turn it on and reload the page to subscribe.
+          </p>
+        </noscript>
+
+        {/*
+          Our own collection notice, in our own markup, directly beneath the
+          embed. It is here rather than inside the MailerLite form because the
+          form is built in their old builder and cannot carry a link. It must
+          always describe the live form, which currently asks for a name and an
+          email address and sends a confirmation before the subscription starts.
+        */}
+        <p class="collection-notice">
+          {privacy.collectionNotice}{' '}
+          <a href={links.privacy}>{privacy.collectionNoticeLink}</a>{' '}
+          {privacy.collectionNoticeTail}
+        </p>
+      </div>
+
+      <div class="strava">
+        <h3 class="strava__title">{strava.heading}</h3>
+        <p class="strava__body">{strava.body}</p>
+        <a class="btn btn--outline strava__action" href={links.strava}
+           target="_blank" rel="noopener noreferrer">
+          {strava.buttonLabel}<span class="visually-hidden">, {ui.newTab}</span>
+        </a>
+        <p class="strava__meta">{strava.clubName}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MailerLite Universal -->
+<script is:inline>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2595519');
+</script>
+<!-- End MailerLite Universal -->
+
+<style>
+  /* Space is reserved so a slow script does not shift the page when the form
+     appears. The form itself is rendered entirely by MailerLite. */
+  .form-slot { min-height: 20rem; }
+  @media (max-width: 56.25rem) { .form-slot { min-height: 0; } }
+
+  /* Matched to the MailerLite card rather than to the text measure. The card
+     is 400px wide with a 20px inner inset, so the notice takes the same width
+     and the same inset and its text lines up with the form's own content
+     instead of starting 55px to the left of it. Full width on narrow screens,
+     where the card is already full width. */
+  .collection-notice {
+    margin-top: var(--space-5);
+    width: 100%;
+    max-width: 400px;
+    margin-inline: auto;
+    padding-inline: 20px;
+    box-sizing: border-box;
+    font-size: var(--size-helper); line-height: 1.6; color: var(--on-light-2);
+  }
+  .collection-notice a { color: var(--terrain); text-underline-offset: 0.18em; }
+  .collection-notice a:hover, .collection-notice a:focus-visible { color: var(--near); }
+
+  /* Wider screens: introduction and Strava stacked in the left column, the form
+     and its notice on the right, spanning both left rows.
+     grid-template-rows: auto 1fr is what keeps the Strava invitation tucked
+     under the introduction. Row one takes the introduction's own height, and
+     row two absorbs whatever extra height the taller form needs, so the form
+     can never push the invitation away from the text above it.
+     row-gap is 0 because the invitation carries its own approved 44px. */
+  @media (min-width: 56.25rem) {
+    .follow-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      row-gap: 0;
+      align-items: start;
+    }
+    .follow-intro { grid-column: 1; grid-row: 1; }
+    .strava       { grid-column: 1; grid-row: 2; align-self: start; margin-top: var(--space-7); }
+    .form-slot    { grid-column: 2; grid-row: 1 / span 2; }
+    /* The introduction and the invitation are separate grid items now, so the
+       introduction's trailing paragraph margin no longer collapses into the
+       invitation's. Zeroing it keeps the approved 44px between them rather than
+       44px plus a stray 16px. Stacked widths are untouched, where that margin
+       sits inside the flex gap exactly as it did before. */
+    .follow-intro > :last-child { margin-bottom: 0; }
+  }
+
+  .strava { max-width: 34rem; }
+  .strava__title {
+    font-family: var(--font-support); font-weight: 600; font-size: 1.125rem;
+    letter-spacing: 0.02em; color: var(--on-light-1); margin: 0 0 var(--space-3);
+  }
+  .strava__body { margin: 0 0 var(--space-5); color: var(--on-light-2); }
+  .strava__meta {
+    font-family: var(--font-support); font-weight: 600; font-size: var(--size-label);
+    letter-spacing: var(--tracking-label); text-transform: uppercase;
+    color: var(--on-light-2); margin: var(--space-4) 0 0;
+  }
+
+  /* Stacked: the source order as it stands, with no order values. Introduction,
+     form, collection notice, divider, Strava invitation.
+
+     The margin is ZERO on purpose: this flex column's gap already supplies the
+     separation, so any margin here is added on top of it and doubles the gap.
+     That is what made the invitation feel detached from the section. */
+  @media (max-width: 56.25rem) {
+    .follow-grid { display: flex; flex-direction: column; }
+    .strava {
+      margin-top: 0; padding-top: var(--space-5);
+      border-top: 1px solid var(--hairline-light);
+    }
+  }
+</style>

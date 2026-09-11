@@ -1,0 +1,93 @@
+---
+import { trackRecord, links } from '../data/campaign';
+
+/**
+ * Text-first by design. No image positions are held open for 2022 or 2025.
+ * Photographs can be added later once selection, provenance and consent are
+ * confirmed, rather than reserving space for images that may never arrive.
+ */
+const figures = [
+  { value: trackRecord.distance2025, label: trackRecord.raisedContext },
+  { value: trackRecord.raised2025,   label: trackRecord.raisedFor2025 },
+  { value: trackRecord.statesOfMind, label: trackRecord.statesOfMindContext },
+];
+---
+<section id="track-record" class="section surface-dark surface-near" aria-labelledby="track-record-title">
+  <div class="wrap">
+    <p class="eyebrow">{trackRecord.eyebrow}</p>
+    <h2 id="track-record-title" class="display section-title">{trackRecord.heading}</h2>
+    <hr class="rule" />
+
+    <ol class="years">
+      <li class="year">
+        <p class="year__num display">{trackRecord.year2022}</p>
+        <p class="year__body lead">{trackRecord.rowing2022}</p>
+      </li>
+      <li class="year">
+        <p class="year__num display">{trackRecord.year2025}</p>
+        <p class="year__body lead">{trackRecord.running2025}</p>
+      </li>
+    </ol>
+
+    <dl class="figures">
+      {figures.map((f) => (
+        <div class="figures__item">
+          <dt class="figures__value">{f.value}</dt>
+          <dd class="figures__label label">{f.label}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="actions">
+      <a class="btn btn--outline" href={links.statesOfMind} rel="noopener">
+        {trackRecord.linkLabel}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .years { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); }
+  .year { display: grid; grid-template-columns: 7rem 1fr; gap: var(--space-5); align-items: start; }
+  .year__num {
+    font-size: 3.25rem; line-height: 1; color: var(--gold); margin: 0;
+    border-top: 2px solid var(--gold); padding-top: var(--space-3);
+  }
+  .year__body { margin: 0; padding-top: var(--space-3); max-width: 54ch; }
+
+  .figures {
+    --gut: clamp(1.25rem, 2.4vw, 2rem);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    margin: var(--space-7) 0 0; border-top: 2px solid var(--gold); }
+  .figures__item {
+    position: relative; padding: 1.375rem var(--gut) 0 var(--gut); }
+  .figures__item:first-child { padding-left: 0; }
+  .figures__item:last-child  { padding-right: 0; }
+  /* Divider sits at the optical centre of the gutter and is inset vertically,
+     so the value after it is no longer pressed against the line. */
+  .figures__item + .figures__item::before {
+    content: ''; position: absolute; left: 0; top: 1.125rem; bottom: 1.125rem;
+    width: 1px; background: var(--hairline-dark); }
+  .figures__value {
+    font-family: var(--font-display); font-size: 2.375rem; letter-spacing: 0.03em;
+    line-height: 1; color: var(--on-dark-1); margin: 0;
+  }
+  .figures__label { margin: 1rem 0 1.5rem; }
+
+  @media (max-width: 56.25rem) {
+    .year { grid-template-columns: 1fr; gap: var(--space-2); }
+    .year__num { font-size: 2.75rem; }
+    .year__body { padding-top: 0; }
+    .figures { display: block; }
+    .figures__item {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: var(--space-3); padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--hairline-dark);
+    }
+    .figures__item::before { display: none; }   /* no vertical dividers stacked */
+    .figures__item:last-child { border-bottom: 0; }
+    .figures__value { font-size: 1.5rem; }
+    .figures__label { margin: 0; text-align: right; max-width: 48%; }
+    .figures__item:first-child, .figures__item:last-child { padding-inline: 0; }
+  }
+</style>

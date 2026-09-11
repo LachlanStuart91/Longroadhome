@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import TicketLink from './TicketLink.astro';
+import wordmark from '../images/wordmark-long-road-home.png';
+import { links, campaign, event, topBlokes, ui } from '../data/campaign';
+---
+<footer class="site-footer surface-dark">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <Image class="footer-mark" src={wordmark} alt="The Long Road Home"
+               width={460} height={230} widths={[230, 460]} sizes="230px" loading="lazy" />
+        <p class="helper footer-summary">
+          {campaign.planningDistance} from {campaign.start} to {campaign.finish}.
+          Planned start {campaign.plannedStart}. Fundraising target of{' '}
+          {campaign.fundraisingTarget} for {campaign.beneficiary}.
+        </p>
+      </div>
+
+      <nav aria-label="Related sites">
+        <ul>
+          <li><a href={links.lachlanStuart} rel="noopener">Lachlan Stuart</a></li>
+          <li><a href={links.statesOfMind} rel="noopener">States of Mind</a></li>
+          <li><a href={links.topBlokes} rel="noopener">Top Blokes Foundation</a></li>
+        </ul>
+      </nav>
+
+      {/*
+        Approved order: tickets, donate, partnership, Instagram, Strava, privacy.
+        The two outbound campaign actions open in a new tab and say so, matching
+        the ticket link. Privacy lives in the footer only, never in the campaign
+        navigation.
+      */}
+      <nav aria-label="Campaign">
+        <ul>
+          {event.active && <li><TicketLink class="">Long Lunch tickets</TicketLink></li>}
+          <li>
+            <a href={links.fundraising} target="_blank" rel="noopener noreferrer">
+              {topBlokes.donateLabel}<span class="visually-hidden">, {ui.newTab}</span>
+            </a>
+          </li>
+          <li><a href={links.partnerEmail}>Partnership enquiries</a></li>
+          <li><a href={links.instagram} rel="noopener">Instagram</a></li>
+          <li>
+            <a href={links.strava} target="_blank" rel="noopener noreferrer">
+              Strava club<span class="visually-hidden">, {ui.newTab}</span>
+            </a>
+          </li>
+          <li><a href={links.privacy}>Privacy</a></li>
+        </ul>
+      </nav>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>The Long Road Home. Lachlan Stuart.</span>
+      <span>Brisbane, Australia</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--near); padding: var(--space-8) 0 var(--space-6); border-top: 1px solid var(--hairline-dark); }
+  .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: var(--space-6); }
+  @media (max-width: 56.25rem) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 35rem) { .footer-grid { grid-template-columns: 1fr; } }
+
+  .footer-mark { width: 230px; max-width: 100%; height: auto; display: block; }
+  .footer-summary { margin-top: var(--space-4); max-width: 34ch; }
+
+  .site-footer ul { list-style: none; margin: 0; padding: 0; }
+
+  /* :global is required, not decorative. The ticket link is rendered by
+     TicketLink.astro, so it carries that component's scope hash and a plain
+     `.site-footer a` rule never matches it. Without this the ticket link falls
+     back to the browser default blue underline on the near-black footer. */
+  .site-footer :global(a) {
+    display: block; color: var(--on-dark-2); text-decoration: none;
+    font-size: 0.9375rem; padding: var(--space-1) 0;
+  }
+  .site-footer :global(a:hover), .site-footer :global(a:focus-visible) { color: var(--gold); }
+
+  .footer-bottom {
+    margin-top: var(--space-7); padding-top: var(--space-5);
+    border-top: 1px solid var(--hairline-dark);
+    color: var(--on-dark-2); font-size: var(--size-helper);
+    display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
+  }
+</style>

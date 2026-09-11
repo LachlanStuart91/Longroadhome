@@ -1,0 +1,18 @@
+---
+import { eventArchive, event } from '../data/campaign';
+
+/**
+ * Replaces the Long Lunch section once event.active is false.
+ * Carries no ticket action and claims nothing about attendance, fundraising
+ * results or money transfers. Requires review after the lunch before use.
+ */
+---
+<section id="long-lunch-archive" class="section surface-light" aria-labelledby="archive-title">
+  <div class="wrap">
+    <p class="eyebrow">{eventArchive.eyebrow}</p>
+    <h2 id="archive-title" class="display section-title">{event.name}</h2>
+    <hr class="rule" />
+    <p class="lead">{eventArchive.body}</p>
+    <p>{eventArchive.closing}</p>
+  </div>
+</section>
