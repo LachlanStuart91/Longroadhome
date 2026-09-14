@@ -14,8 +14,9 @@ import { why, links } from '../data/campaign';
         <p class="eyebrow">{why.eyebrow}</p>
         <h2 id="why-title" class="display section-title">{why.heading}</h2>
         <hr class="rule" />
-        <p class="lead">{why.body[0]}</p>
-        {why.body.slice(1).map((para) => <p>{para}</p>)}
+        <p class="lead">{why.opening}</p>
+        <p class="why__question">{why.question}</p>
+        {why.body.map((para) => <p>{para}</p>)}
         <div class="actions">
           <a class="btn btn--outline" href={links.lachlanStuart} rel="noopener">
             {why.linkLabel}
@@ -30,4 +31,18 @@ import { why, links } from '../data/campaign';
   /* Centred so it reads as a deliberate statement section rather than a two
      column layout with the image missing. */
   .single { max-width: 62ch; margin-inline: auto; }
+
+  /* The existing question, given weight rather than repetition. Display type on
+     the section's own green, no quotation marks and no rule, so it reads as the
+     sentence it already is rather than as a pulled testimonial. It stays a
+     paragraph in the flow, so the reading order is unchanged. */
+  .why__question {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 4.2vw, 2.75rem);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.04;
+    color: var(--on-green-1);
+    margin: var(--space-5) 0 var(--space-6);
+    max-width: 20ch;
+  }
 </style>

@@ -50,9 +50,18 @@ fails if anything appears between the doctype and `<html>`, or after `</html>`.
 
 ## Hosting configuration
 
+The site is live in production at **https://thelongroadhome.run/**, served by
+Vercel. `https://www.thelongroadhome.run/` returns a 308 redirect to the apex
+domain. The homepage and `/privacy` both return 200.
+
 `vercel.json` sets `cleanUrls` to `true` and `trailingSlash` to `false`, which
 matches `build.format: 'file'` and `trailingSlash: 'never'` in
-`astro.config.mjs`. The site has not been deployed and no host is connected.
+`astro.config.mjs`.
+
+Those four facts were verified by request against the live domain. Nothing else
+about the hosting setup is documented here, because nothing else has been
+verified from this repository: there is no statement about deployment
+automation, build hooks, analytics, monitoring or account access.
 
 ## What is not committed
 

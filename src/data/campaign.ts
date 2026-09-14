@@ -143,11 +143,23 @@ export const challenge = {
 
 /* ---------------------------------------------------------------- why */
 
+/**
+ * The opening sentence and its question are held separately so the question can
+ * be set as a pull quote without the sentence being written out twice. The words
+ * and their order are unchanged: only the typographic treatment differs.
+ */
+const whyOpening =
+  "After 58 marathons in 58 days, I was left with a question I still haven't answered.";
+const whyQuestion = 'What am I really capable of?';
+
 export const why = {
   eyebrow: "Why I'm doing it",
   heading: "The question I couldn't put down",
+  opening: whyOpening,
+  question: whyQuestion,
+  /** The paragraphs that follow the opening. body[0] is deliberately absent:
+   *  it is composed on the page from `opening` and `question`. */
   body: [
-    "After 58 marathons in 58 days, I was left with a question I still haven't answered. What am I really capable of?",
     "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are, where I've built my business, and where this run finishes. That's the reason it's called The Long Road Home.",
     "I've got a son who watches what I do far more than he listens to what I say. I can't ask him to chase what he wants if I'm not chasing mine.",
     "I'm not doing this because I have it all worked out. I don't. What I've learned is that you pick something hard, you show up, you stack small wins, and you lean on the people around you when it gets difficult.",

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import topBlokesLogo from '../images/top-blokes-foundation-logo.png';
 import { campaign, topBlokes, links, ui } from '../data/campaign';
 
 /**
@@ -35,6 +37,26 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
         </div>
 
         <div class="panel panel-light tb__panel">
+          {/*
+            The official Top Blokes Foundation primary landscape logo, supplied
+            by the foundation. It opens the panel so the logo, the $500,000
+            target, the donation-destination statement and the Donate action read
+            as one unit before the visitor leaves for Raisely.
+
+            Decorative alt, deliberately. The section eyebrow, the Donate action,
+            the donation statement and the About action all name Top Blokes
+            Foundation in text, so an accessible name here would only repeat them.
+            PNG output keeps the flat black ink and its transparency lossless.
+          */}
+          <Image
+            class="tb__logo"
+            src={topBlokesLogo}
+            alt=""
+            widths={[160, 184, 320, 368, 552]}
+            sizes="(max-width: 23.75rem) 160px, 184px"
+            format="png"
+            loading="lazy"
+          />
           <p class="display amount">{campaign.fundraisingTarget}</p>
           <p class="label target-label">{topBlokes.targetLabel}</p>
 
@@ -66,10 +88,15 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
             ))}
           </dl>
 
+          {/* Every link below that opens a new tab says so to assistive
+              technology through the shared ui.newTab label, matching the
+              Donate, ticket and social links. The phrase is visually hidden,
+              so the visible copy and the layout are unchanged. The telephone
+              links open in the same context and carry no announcement. */}
           <p class="evidence__source">
             {topBlokes.sourceLine.map((seg) =>
               seg.href
-                ? <a href={seg.href} target="_blank" rel="noopener">{seg.text}</a>
+                ? <a href={seg.href} target="_blank" rel="noopener">{seg.text}<span class="visually-hidden">, {ui.newTab}</span></a>
                 : seg.text,
             )}
           </p>
@@ -82,7 +109,7 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
                 ? seg.text
                 : seg.href.startsWith('tel:')
                   ? <a href={seg.href}>{seg.text}</a>
-                  : <a href={seg.href} target="_blank" rel="noopener">{seg.text}</a>,
+                  : <a href={seg.href} target="_blank" rel="noopener">{seg.text}<span class="visually-hidden">, {ui.newTab}</span></a>,
             )}
           </p>
 
@@ -94,6 +121,33 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
 </section>
 
 <style>
+  /* The logo file carries its own clear space: the ink is 643 x 281px inside an
+     843 x 486px transparent canvas, with roughly 100px of empty margin on every
+     side. The file is never cropped. Each negative margin below is derived from
+     the file's own measured margins (96px left, 103px top, 102px bottom, all out
+     of 843px wide), and cancels only the part that would otherwise stack on top
+     of the panel's padding. The ink therefore lines up with the panel's left
+     content edge and sits at its top padding, instead of floating indented and
+     low, while the full image including its transparent margin still renders.
+
+     184px wide gives ink of about 140 x 61px: clearly recognisable, and well
+     below the 56px $500,000 target, which stays the strongest element. */
+  .tb__logo {
+    --logo-w: 11.5rem;
+    display: block;
+    width: var(--logo-w);
+    max-width: none;
+    height: auto;
+    margin-block-start: calc(var(--logo-w) * -103 / 843);
+    margin-inline-start: calc(var(--logo-w) * -96 / 843);
+    margin-block-end: calc(var(--logo-w) * -102 / 843 + var(--space-5));
+  }
+  /* The compact panel on the narrowest phones gets a proportionally smaller
+     logo, on the same breakpoint as the approved compact header. */
+  @media (max-width: 23.75rem) {
+    .tb__logo { --logo-w: 10rem; }
+  }
+
   .amount { font-size: 3.5rem; margin: 0; color: var(--terrain); }
   .target-label { margin: var(--space-2) 0 0; }
   .donate { margin-top: var(--space-5); }

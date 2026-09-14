@@ -5,12 +5,14 @@ import heroImage from '../images/hero-lachlan-stuart-brisbane.jpg';
 import { campaign, event, hero } from '../data/campaign';
 
 /**
- * Desktop: image beside the text, facts above the actions.
- * Mobile: identity, proposition, connector, actions, facts, then the image.
+ * One order at every width: identity, title, kicker, supporting copy, the event
+ * connector, the two actions, then the fact strip, with the image beside the
+ * text on desktop and beneath it on mobile.
  *
- * The mobile reordering is done with CSS order on the fact strip only. The strip
- * contains no interactive elements, so visual order changes while tab order and
- * reading order stay intact.
+ * The connector and actions sit BEFORE the facts on purpose. With the facts
+ * first, both hero actions fell below the fold at 1280x720 and 1366x768, which
+ * are ordinary laptop heights. Source order carries the change, so no CSS order
+ * scheme is needed and reading, tab and visual order cannot disagree.
  */
 /**
  * Each fact is a quiet qualifier above a complete metric. Splitting them this
@@ -42,20 +44,6 @@ const facts = [
 
       <p class="hero__support">{campaign.supporting}</p>
 
-      <dl class="facts">
-        {facts.map((fact) => (
-          <div class="facts__item">
-            <dt class="facts__value">
-              <span class="facts__qualifier">
-                {fact.qualifier}{fact.colon && <span class="facts__colon">:</span>}
-              </span>{' '}
-              <span class="facts__metric">{fact.metric}</span>
-            </dt>
-            <dd class="facts__label label">{fact.label}</dd>
-          </div>
-        ))}
-      </dl>
-
       <p class="hero__connector">
         {event.active ? hero.connectorActive : hero.connectorArchived}
       </p>
@@ -73,6 +61,20 @@ const facts = [
           </>
         )}
       </div>
+
+      <dl class="facts">
+        {facts.map((fact) => (
+          <div class="facts__item">
+            <dt class="facts__value">
+              <span class="facts__qualifier">
+                {fact.qualifier}{fact.colon && <span class="facts__colon">:</span>}
+              </span>{' '}
+              <span class="facts__metric">{fact.metric}</span>
+            </dt>
+            <dd class="facts__label label">{fact.label}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
 
     <Image
@@ -95,14 +97,12 @@ const facts = [
     display: grid; grid-template-columns: 1.14fr 0.86fr;
     gap: var(--space-8); align-items: center;
   }
+  /* No CSS order scheme. The source order IS the order at every width:
+     identity, title, kicker, supporting copy, connector, actions, facts. That
+     keeps reading order, tab order and visual order identical, and it puts the
+     two actions above the fold on common laptop heights. */
   .hero__text { display: flex; flex-direction: column; }
-  .hero__eyebrow { order: 1; }
-  .hero__title { order: 2; }
-  .hero__kicker { order: 3; }
-  .hero__support { order: 4; }
-  .facts { order: 5; }
-  .hero__connector { order: 6; }
-  .hero__actions { order: 7; }
+  .hero__actions { margin-top: var(--space-4); }
 
   .hero__home { color: var(--gold); }
 
@@ -170,14 +170,14 @@ const facts = [
 
   }
 
-  /* Mobile: actions come before the supporting facts. */
+  /* Mobile keeps the same sequence; only spacing and the fact strip change. */
   @media (max-width: 47.5rem) {
     .hero { padding-block: var(--space-6) var(--space-8); }
-    .hero__connector { order: 5; margin-top: var(--space-5); font-size: var(--size-label); }
-    .hero__actions { order: 6; margin-top: var(--space-4); }
+    .hero__connector { margin-top: var(--space-5); font-size: var(--size-label); }
+    .hero__actions { margin-top: var(--space-4); }
     /* Compact stack. The qualifier returns inline with the metric, so the
        value reads "Goal: 100 km a day" again, colon and all. */
-    .facts { order: 7; display: block; margin-top: var(--space-6); }
+    .facts { display: block; margin-top: var(--space-6); }
     .facts__item {
       display: flex; flex-direction: row;   /* reset the desktop column */
       align-items: baseline; justify-content: space-between;

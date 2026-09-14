@@ -102,8 +102,6 @@ const details = [
             </>
           ))}
         </dl>
-
-        <p class="funding">{event.fundingNote}</p>
       </div>
 
       <div class="panel panel-dark ticket">
@@ -125,6 +123,15 @@ const details = [
         <TicketLink class="btn btn--gold btn--block ticket__action">
           {event.bookingLabel}
         </TicketLink>
+
+        {/*
+          The approved funding distinction sits with the purchase decision, not
+          below the event description. On mobile the card is moved above the
+          body copy, so previously a visitor could reach the booking action long
+          before reading how ticket, raffle and auction money is allocated.
+          The wording is unchanged and rendered only here, never twice.
+        */}
+        <p class="ticket__funding">{event.fundingNote}</p>
 
         <p class="helper ticket__note">{event.bookingNote}</p>
       </div>
@@ -150,10 +157,13 @@ const details = [
   .detail dt { padding-top: 0.1875rem; }
   .detail dd { margin: 0; color: var(--on-light-1); }
 
-  .funding {
-    font-size: var(--size-helper); line-height: 1.6; color: var(--on-light-2);
+  /* Subordinate to the price rows and the action, but at helper size rather
+     than label size so it is comfortably readable. Australia Green is used as a
+     rule here, never as text, because it does not pass as text on forest. */
+  .ticket__funding {
+    font-size: var(--size-helper); line-height: 1.6; color: var(--on-dark-2);
     border-left: 3px solid var(--aus); padding: 0.125rem 0 0.125rem var(--space-4);
-    margin: var(--space-6) 0 0; max-width: 56ch;
+    margin: var(--space-5) 0 0; max-width: none;
   }
 
   .ticket { position: sticky; top: 7rem; }

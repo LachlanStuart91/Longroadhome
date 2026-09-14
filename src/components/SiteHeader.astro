@@ -138,6 +138,26 @@ const anchor = (href: string) => (onHome ? href : `/${href}`);
 
   @media (min-width: 62.5625rem) { .nav-panel { display: none !important; } }
   @media (max-width: 47.5rem) { .wide-only { display: none; } }
+
+  /* Compact phones, below 380px.
+     Measured before this rule: the header row needed 368px of content whatever
+     the viewport, so at 360px the menu button ran 8px past the right edge and
+     at 320px it sat entirely outside the viewport. In both cases the document
+     became horizontally scrollable, and at 320px the menu was unreachable.
+
+     Nothing is removed and nothing is hidden. The wordmark gives up type size
+     and letter spacing, the header gaps and gutter tighten, the Tickets button
+     keeps its visible label on narrower padding, and the brand region is
+     allowed to shrink. The menu button keeps its full 44 x 40px target, and the
+     12px gutter leaves room for its 3px focus ring and 3px offset. */
+  @media (max-width: 23.75rem) {
+    .bar { gap: var(--space-3); padding-inline: 0.75rem; }
+    .mark { min-width: 0; }
+    .mark__text { font-size: 1.125rem; letter-spacing: 0.04em; }
+    .bar__actions { gap: var(--space-2); }
+    .bar__actions .btn { padding-inline: 0.75rem; letter-spacing: 0.1em; }
+    .nav-panel { padding-inline: 0.75rem; }
+  }
 </style>
 
 <script>

@@ -162,6 +162,16 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 @media (max-width: 35rem) {
   .actions { display: grid; gap: var(--space-3); }
   .actions .btn { width: 100%; }
+  /* .btn is white-space: nowrap, so a full width button still imposes its whole
+     label as a minimum width on its container. Measured at 320px, the Track
+     Record action "Read the Full Story at States of Mind" was 345px wide and
+     ran 45px past the viewport, and the Partner action forced its column to
+     305px, which made the whole document horizontally scrollable at 320 and
+     360px. These buttons are already full width and centred, so wrapping to a
+     second line is the natural behaviour rather than a compromise.
+     min-width: 0 stops the intrinsic minimum leaking back out into the grid. */
+  .actions .btn,
+  .btn--block { white-space: normal; text-align: center; min-width: 0; }
 }
 
 /* ------------------------------------------------------------- panels */
