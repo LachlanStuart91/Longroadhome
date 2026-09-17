@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { privacy, providerPolicies, partner } from '../data/campaign';
+import { privacy, providerPolicies, partner, links } from '../data/campaign';
 
 /**
  * The privacy page. Deliberately NOT a legal template: it describes only what
@@ -34,7 +34,7 @@ import { privacy, providerPolicies, partner } from '../data/campaign';
 
       <h2>Who runs this website</h2>
       <p>
-        The Long Road Home website at thelongroadhome.run is owned and operated by
+        The Long Road Home website at thelongroadhome.com.au is owned and operated by
         {' '}{privacy.owner}, based in Brisbane, Australia. If you have a question about
         your information, email <a href={`mailto:${privacy.contactEmail}`}>{privacy.contactEmail}</a>.
       </p>
@@ -109,13 +109,37 @@ import { privacy, providerPolicies, partner } from '../data/campaign';
 
       <h2>Donations are handled by Top Blokes Foundation</h2>
       <p>
-        The donation button takes you to a fundraising form hosted by Raisely for Top Blokes
-        Foundation. Top Blokes Foundation controls that form and receives the donor
-        information. Lachlan Stuart and The Long Road Home do not receive or store donor
-        information or payment details.
+        The homepage can show a donation form provided by Raisely for Top Blokes Foundation.
+        It is not loaded when you open the page. Nothing is requested from Raisely until you
+        choose to load the form, by pressing the Donate button or the load button in the
+        donation section. Until then, no part of it runs on the page.
       </p>
       <p>
-        Raisely processes information as the fundraising platform. Read the
+        Once it loads, the form appears inside this website, but it is Raisely's form and it
+        comes from Raisely. Anything you enter into it, including your details and payment
+        information, is sent to Raisely and the payment services it uses, not to this
+        website.
+      </p>
+      <p>
+        Top Blokes Foundation controls the Raisely campaign and receives the donor
+        information. Lachlan Stuart and The Long Road Home do not receive or store donor
+        information or payment details, whether you use the form on this website or on
+        Raisely.
+      </p>
+      <p>
+        Loading the form may cause Raisely, and the payment, security, spam protection and
+        analytics services its form uses, to process the ordinary technical information
+        needed to show it to you, such as your IP address and browser details, and to use
+        cookies or store information in your browser. That processing is carried out by
+        those services, not by this website.
+      </p>
+      <p>
+        If you would rather not load the form here at all, you can
+        {' '}<a href={links.fundraising} rel="noopener">open the campaign page on Raisely</a>,
+        which Top Blokes Foundation controls, and donate there instead.
+      </p>
+      <p>
+        Read the
         {' '}<a href={providerPolicies.topBlokes} rel="noopener">Top Blokes Foundation Privacy Policy</a>
         {' '}and <a href={providerPolicies.raisely} rel="noopener">Raisely Privacy Policy</a> for
         details about how they handle information.
@@ -147,9 +171,15 @@ import { privacy, providerPolicies, partner } from '../data/campaign';
         and how they handle information.
       </p>
       <p>
-        TryBooking and Raisely are different again. You reach each of them by choosing to
-        follow a link and leaving this website, and from that point each handles your
-        information as its own service, under its own privacy policy.
+        TryBooking is different again. You reach it by choosing to follow a link and leaving
+        this website, and from that point it handles your information as its own service,
+        under its own privacy policy.
+      </p>
+      <p>
+        Raisely provides the donation form on this website, and it and the services its
+        form uses handle what they collect under their own privacy policies, linked above.
+        Those policies are the accurate source on where that information is stored or
+        processed.
       </p>
 
       <h2>Unsubscribing</h2>
@@ -171,6 +201,12 @@ import { privacy, providerPolicies, partner } from '../data/campaign';
         no advertising pixels and no behavioural advertising. I am telling you what is true
         now rather than making a promise about the future. If that changes in a way that
         matters, I will update this page.
+      </p>
+      <p>
+        The Raisely donation form on the homepage is separate. It is provided by Raisely, it
+        loads only if you choose to load it, and as explained above, Raisely and the services
+        its form uses, including analytics services, may collect technical information and
+        set cookies at that point. This website does not receive that information.
       </p>
 
       <h2>Changes to this page</h2>

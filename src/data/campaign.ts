@@ -254,12 +254,58 @@ export const topBlokes = {
   aboutLabel: 'About Top Blokes Foundation',
   donateLabel: 'Donate to Top Blokes Foundation',
   /**
-   * States who receives the money and that the form is somewhere else. Top
-   * Blokes Foundation controls the Raisely campaign and receives the donor
-   * information. This website never sees a donation or a payment detail.
+   * States who receives the money and where the form is. The panel's Donate
+   * action is a same-page anchor to the embedded Raisely form, so this no longer
+   * says the form opens in a new tab. Top Blokes Foundation controls the Raisely
+   * campaign and receives the donor information. This website never sees a
+   * donation or a payment detail.
    */
   donateNote:
-    'Donations made through Raisely go directly to Top Blokes Foundation. The donation form opens in a new tab.',
+    'Donations made through Raisely go directly to Top Blokes Foundation. The Raisely donation form is further down this page.',
+} as const;
+
+/* ------------------------------------------------------- donation embed */
+
+/**
+ * The Raisely donation form, loaded only when a visitor asks for it.
+ *
+ * Raisely provides the form for Top Blokes Foundation, and Raisely and its
+ * payment services receive everything typed into it. The parent page never
+ * reads, listens to or stores anything from the frame.
+ *
+ * NOTHING from Raisely or its payment, security and analytics services is
+ * requested until someone activates the Donate action or the load button. No
+ * claim is made here about which payment methods the embedded form offers,
+ * because that has not been verified.
+ */
+export const donation = {
+  eyebrow: 'Donate through Raisely',
+  heading: 'Support Top Blokes Foundation',
+  intro:
+    'The donation form on this page is provided by Raisely for Top Blokes Foundation. The Long Road Home does not receive or store donor information or payment details.',
+  /** Shown beside the load button, before anything from Raisely is requested. */
+  disclosure: 'Nothing from Raisely loads until you choose to continue.',
+  loadLabel: 'Load the Raisely donation form',
+  /** Concise and unique on the page: the iframe's accessible name. */
+  frameTitle: 'Donate to Top Blokes Foundation through Raisely',
+  /** Announced politely. One message per state, never repeated progress. */
+  loadingStatus: 'Loading the Raisely donation form…',
+  /**
+   * Announced when the frame's load event fires. Deliberately neutral: a
+   * browser fires that event for its own blocked or error page too, and a
+   * cross-origin frame cannot be inspected, so the page never claims success.
+   */
+  readyStatus:
+    'The Raisely donation form should appear below. If it does not, use the Raisely campaign page.',
+  failureStatus:
+    'The embedded form could not be loaded. You can continue on the Raisely campaign page.',
+  /**
+   * One external action, because the campaign homepage is the only external
+   * donation destination. It stays visible before, during and after loading.
+   */
+  campaignLabel: 'View The Long Road Home fundraiser on Raisely',
+  noscript:
+    'The donation form needs JavaScript to load. You can still donate using the Raisely link below.',
 } as const;
 
 /* -------------------------------------------------------- event archive */
@@ -334,11 +380,24 @@ export const links = {
   strava: 'https://www.strava.com/clubs/capable-of-more',
   partnerEmail: 'mailto:jason@FrontOfficeAgency.com.au',
   /**
-   * The Raisely donation form for the Top Blokes Foundation campaign, supplied
-   * and confirmed by Lachlan. Top Blokes Foundation controls that campaign and
-   * receives the donor information. Use this URL exactly.
+   * The Raisely campaign homepage for The Long Road Home, confirmed by Lachlan
+   * on 16 September 2026 as the single external donation destination. Top Blokes
+   * Foundation controls that campaign and receives the donor information. Use
+   * this URL exactly. It is the external action beside the embedded form, the
+   * footer's Donate link, and the alternative named on the privacy page.
+   *
+   * It REPLACES the earlier direct Raisely form URL, which is retired and must
+   * not be reintroduced anywhere on the website.
    */
-  fundraising: 'https://the-long-road-home.raiselysite.com/donation-form',
+  fundraising: 'https://the-long-road-home.raiselysite.com/',
+  /**
+   * Raisely's public embed surface for the same campaign: the donation form
+   * only. This page is framed, never linked. The direct form and the campaign
+   * homepage both refuse framing, so neither may be used as an iframe source.
+   */
+  fundraisingEmbed: 'https://the-long-road-home.raiselysite.com/embed',
+  /** Same-page anchor for the embedded donation section. */
+  donateSection: '#donate',
   privacy: '/privacy',
 } as const;
 
@@ -377,11 +436,11 @@ export const privacy = {
   heading: 'Privacy',
   description:
     'How The Long Road Home handles your information, who else is involved, and how to unsubscribe or ask about your details.',
-  updated: 'Last updated 11 September 2026',
+  updated: 'Last updated 17 September 2026',
   owner: 'Lachlan Stuart',
   contactEmail: 'lachie@themanthatcanproject.com',
   intro:
-    'This page explains what happens to your information when you use thelongroadhome.run. It is written to be read, not to be waded through.',
+    'This page explains what happens to your information when you use thelongroadhome.com.au. It is written to be read, not to be waded through.',
   /** Shown beneath the signup form. Must always describe the live form. */
   collectionNotice:
     'Lachlan Stuart collects your name and email address to send you updates, announcements and invitations for The Long Road Home. MailerLite manages the list and will send you a confirmation email. Your subscription starts only after you confirm it. You can unsubscribe at any time using the link in any email. See the',
@@ -394,8 +453,9 @@ export const providerPolicies = {
   vercel: 'https://vercel.com/legal/privacy-notice',
   trybooking: 'https://www.trybooking.com/info/privacy',
   /**
-   * Donations are handled entirely by Top Blokes Foundation on Raisely, so both
-   * of those policies are linked rather than described second hand here.
+   * Donations are handled by Top Blokes Foundation on Raisely, including through
+   * the embedded form, so both of those policies are linked rather than
+   * described second hand here.
    */
   topBlokes: 'https://www.topblokes.org.au/privacy-policy/',
   raisely: 'https://www.raisely.com/privacy',

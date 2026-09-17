@@ -41,7 +41,7 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
             The official Top Blokes Foundation primary landscape logo, supplied
             by the foundation. It opens the panel so the logo, the $500,000
             target, the donation-destination statement and the Donate action read
-            as one unit before the visitor leaves for Raisely.
+            as one unit before the visitor moves on to the Raisely form.
 
             Decorative alt, deliberately. The section eyebrow, the Donate action,
             the donation statement and the About action all name Top Blokes
@@ -60,9 +60,16 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
           <p class="display amount">{campaign.fundraisingTarget}</p>
           <p class="label target-label">{topBlokes.targetLabel}</p>
 
-          <a class="btn btn--gold btn--block donate" href={links.fundraising}
-             target="_blank" rel="noopener noreferrer">
-            {topBlokes.donateLabel}<span class="visually-hidden">, {ui.newTab}</span>
+          {/* A same-page anchor to the Raisely form in the next section, so it
+              opens in place and carries no new-tab wording. The external
+              Raisely campaign page is offered there as the alternative.
+
+              data-donate-trigger is read by the donation section's script: one
+              press both jumps to the section and starts loading the form, so
+              nobody has to press twice. The href does the jump on its own if
+              the script has not run, and Enter activates the anchor as usual. */}
+          <a class="btn btn--gold btn--block donate" href={links.donateSection} data-donate-trigger>
+            {topBlokes.donateLabel}
           </a>
           <p class="helper donate-note">{topBlokes.donateNote}</p>
 

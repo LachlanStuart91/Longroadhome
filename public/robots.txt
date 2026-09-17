@@ -3,4 +3,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://thelongroadhome.run/sitemap.xml
+Sitemap: https://thelongroadhome.com.au/sitemap.xml

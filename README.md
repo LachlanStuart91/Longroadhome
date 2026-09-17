@@ -50,18 +50,38 @@ fails if anything appears between the doctype and `<html>`, or after `</html>`.
 
 ## Hosting configuration
 
-The site is live in production at **https://thelongroadhome.run/**, served by
-Vercel. `https://www.thelongroadhome.run/` returns a 308 redirect to the apex
-domain. The homepage and `/privacy` both return 200.
+The site is hosted on Vercel.
+
+The canonical production address is **https://thelongroadhome.com.au/**, the
+non-www apex. `site` in `astro.config.mjs` is set to that origin, and every
+canonical tag, `og:url`, social image URL, structured-data URL and sitemap entry
+is derived from it. `public/robots.txt` points to
+`https://thelongroadhome.com.au/sitemap.xml`.
+
+The intended domain configuration, set in Vercel's Domains settings rather than
+in this repository, is:
+
+    thelongroadhome.com.au        Production
+    www.thelongroadhome.com.au    permanent redirect to the apex
+    thelongroadhome.run           permanent redirect to https://thelongroadhome.com.au
+    www.thelongroadhome.run       permanent redirect to https://thelongroadhome.com.au
+
+`thelongroadhome.run` was the original address. It stays owned and connected
+only as a legacy redirect, so existing links and bookmarks keep working. It is
+not a canonical address and the site does not reference it.
+
+Whole-domain redirects live in Vercel's Domains settings, not in `vercel.json`.
+Adding host redirects there as well would risk a redirect loop.
 
 `vercel.json` sets `cleanUrls` to `true` and `trailingSlash` to `false`, which
 matches `build.format: 'file'` and `trailingSlash: 'never'` in
 `astro.config.mjs`.
 
-Those four facts were verified by request against the live domain. Nothing else
-about the hosting setup is documented here, because nothing else has been
-verified from this repository: there is no statement about deployment
-automation, build hooks, analytics, monitoring or account access.
+Nothing else about the hosting setup is documented here, because nothing else
+has been verified from this repository: there is no statement about deployment
+automation, build hooks, analytics, monitoring or account access. The domain
+configuration above describes the intended setup and should be confirmed by
+request once it is live.
 
 ## What is not committed
 

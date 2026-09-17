@@ -1,0 +1,233 @@
+---
+import { donation, links, ui } from '../data/campaign';
+
+/**
+ * The Raisely donation form, loaded only when a visitor asks for it.
+ *
+ * WHY THERE IS NO IFRAME IN THIS MARKUP. An iframe with a real src contacts
+ * Raisely, Stripe, Google Pay, hCaptcha, Google Tag Manager and GrowthBook, and
+ * lets them set cookies and browser storage, before the visitor has decided to
+ * donate. loading="lazy" only delays that until the section is near the
+ * viewport, which scrolling reaches on its own. So the embed URL is carried in a
+ * plain data attribute, which fetches nothing, and the iframe is created by the
+ * script below only after a deliberate activation:
+ *
+ *   1. the gold Donate action in the Top Blokes panel, which also jumps here, or
+ *   2. the load button in this section.
+ *
+ * Nothing else may start it: not page load, scrolling, an observer, the #donate
+ * hash, hover, focus, a timer or a breakpoint.
+ *
+ * Raisely provides the form for Top Blokes Foundation and receives everything
+ * typed into it. This page sends nothing into the frame, listens to no messages
+ * from it, stores nothing about it and styles nothing inside it. No API key or
+ * campaign configuration is involved or needed.
+ *
+ * SOURCE ORDER IS THE READING ORDER at every width: heading and statement, the
+ * load card, the status message, the form once it exists, then the external
+ * Raisely action. The external action sits immediately after the frame so
+ * keyboard and screen reader users reach it the moment they leave the form, and
+ * it stays visible in every state.
+ */
+---
+<section id="donate" class="section surface-light" aria-labelledby="donate-title">
+  <div class="wrap">
+    {/* Every value the script needs travels as plain data. data-donate-embed is
+        a string attribute, not a src, so the document requests nothing from
+        Raisely until the script builds an iframe from it. */}
+    <div
+      class="donate"
+      data-donate
+      data-donate-embed={links.fundraisingEmbed}
+      data-donate-title={donation.frameTitle}
+      data-donate-loading={donation.loadingStatus}
+      data-donate-ready={donation.readyStatus}
+      data-donate-failed={donation.failureStatus}
+    >
+      <p class="eyebrow">{donation.eyebrow}</p>
+      <h2 id="donate-title" class="display section-title">{donation.heading}</h2>
+      <hr class="rule" />
+      <p class="lead donate__intro">{donation.intro}</p>
+
+      {/* Compact on purpose. No blank frame area is reserved, because nothing
+          is loading yet and a 600px hole would only look broken. */}
+      <div class="donate__card" data-donate-card>
+        <p class="helper donate__disclosure">{donation.disclosure}</p>
+        <button type="button" class="btn btn--gold btn--block donate__load" data-donate-load>
+          {donation.loadLabel}
+        </button>
+      </div>
+
+      {/* One polite status region, written to once per state. It is in the
+          markup from the start so assistive technology is already watching it. */}
+      <p class="helper donate__status" role="status" data-donate-status></p>
+
+      {/* The created iframe is appended here, between the status message and
+          the external action, so the reading and tab order stay correct. */}
+      <div class="donate__frame" data-donate-frame hidden></div>
+
+      <noscript>
+        <p class="helper donate__noscript">{donation.noscript}</p>
+      </noscript>
+
+      <div class="donate__fallback">
+        <a class="btn btn--outline btn--block donate__campaign" href={links.fundraising}
+           target="_blank" rel="noopener noreferrer">
+          {donation.campaignLabel}<span class="visually-hidden">, {ui.newTab}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* One centred column, the same measure as the Follow section, so the form is
+     the only thing in the section and the rest of the page is not redesigned. */
+  .donate { max-width: 40rem; margin-inline: auto; }
+  .donate__intro { margin-bottom: var(--space-6); }
+
+  /* 28rem is Raisely's own 420px form column plus a small inset. A wider frame
+     only adds empty white either side of the form. The card, the frame and the
+     external action share that width so every state reads as one unit, the same
+     pattern as the 400px signup form under the wider Follow introduction. */
+  .donate__card,
+  .donate__frame,
+  .donate__fallback { max-width: 28rem; }
+
+  .donate__card {
+    background: #fff;
+    border: 1px solid var(--hairline-light);
+    border-radius: var(--radius);
+    padding: var(--space-5);
+  }
+  .donate__disclosure { margin: 0 0 var(--space-4); }
+  .donate__load { margin: 0; }
+
+  /* Empty until a state is announced, so it takes no space on arrival. */
+  .donate__status { margin: var(--space-4) 0 0; }
+  .donate__status:empty { display: none; }
+
+  /* Raisely's form is white, so it sits on Road White as a quiet card with a
+     hairline edge. Nothing inside the frame is styled from here.
+
+     Raisely's plain iframe sends no resize messages, so the height is fixed.
+     The first step, the amount selection, measured 343px tall at 320, 390 and
+     1280px wide. 600px is the height Raisely's own iframe example uses: it
+     shows the whole first step with room to spare and no inner scrolling. The
+     later steps were deliberately not opened, so their height is unverified;
+     if one is taller, Raisely's page scrolls inside the frame rather than
+     being clipped. */
+  .donate__frame {
+    margin-top: var(--space-5);
+    background: #fff;
+    border: 1px solid var(--hairline-light);
+    border-radius: var(--radius);
+  }
+  .donate__frame :global(iframe) {
+    display: block;
+    width: 100%;
+    height: 37.5rem;
+    border: 0;
+  }
+  .donate__noscript { margin-top: var(--space-4); }
+  .donate__fallback { margin-top: var(--space-5); }
+  /* The full width buttons wrap below 35rem through the global .btn--block
+     rule, so no narrow phone rule is needed here. */
+</style>
+
+<script>
+  /**
+   * Creates the Raisely iframe, once, and only on deliberate activation.
+   *
+   * The embed URL lives in a data attribute until this runs, so the initial
+   * document requests nothing from Raisely or any payment, security or
+   * analytics service it uses. There is no observer, no hash check and no
+   * timer that could start it on a visitor's behalf.
+   */
+  const root = document.querySelector<HTMLElement>('[data-donate]');
+
+  if (root) {
+    const card = root.querySelector<HTMLElement>('[data-donate-card]');
+    const loadButton = root.querySelector<HTMLButtonElement>('[data-donate-load]');
+    const status = root.querySelector<HTMLElement>('[data-donate-status]');
+    const frame = root.querySelector<HTMLElement>('[data-donate-frame]');
+
+    /** Copy comes from the markup's own data attributes, set from campaign.ts. */
+    const messages = {
+      loading: root.dataset.donateLoading || '',
+      ready: root.dataset.donateReady || '',
+      failed: root.dataset.donateFailed || '',
+      title: root.dataset.donateTitle || '',
+    };
+
+    /** Whatever happens, the frame is built at most once and never rebuilt. */
+    let started = false;
+    /** The first state to arrive wins, so nothing announces twice. */
+    let settled = false;
+
+    const startLoading = () => {
+      // Read at activation, not at start-up, so the attribute in the document
+      // stays the single source of the URL right up to the moment it is used.
+      const src = root.dataset.donateEmbed;
+      if (started || !src || !card || !status || !frame) return;
+      started = true;
+
+      // The button has done its job. Removing the card keeps one action in the
+      // section and stops a second press landing on a disabled control.
+      loadButton?.setAttribute('disabled', '');
+      card.hidden = true;
+      status.textContent = messages.loading;
+
+      const iframe = document.createElement('iframe');
+      iframe.title = messages.title;
+      // A bounded wait for a frame that never finishes loading. When it runs
+      // out the frame is removed once, the visitor is told once and pointed to
+      // the Raisely campaign page. There is no retry.
+      const timeout = window.setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        frame.hidden = true;
+        frame.replaceChildren();
+        status.textContent = messages.failed;
+      }, 15000);
+
+      // The load event only means the browser finished loading SOMETHING into
+      // the frame. It also fires for the browser's own blocked or error page,
+      // and a cross-origin frame cannot be inspected to tell the difference. So
+      // this announces a neutral message that points to the campaign page, and
+      // never claims the form rendered.
+      const ready = () => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        status.textContent = messages.ready;
+      };
+      const fail = () => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        frame.hidden = true;
+        frame.replaceChildren();
+        status.textContent = messages.failed;
+      };
+
+      iframe.addEventListener('load', ready, { once: true });
+      iframe.addEventListener('error', fail, { once: true });
+
+      // Focus is deliberately left where the visitor put it. Moving it into a
+      // cross-origin frame would take them somewhere they did not ask to go.
+      iframe.src = src;
+      frame.hidden = false;
+      frame.replaceChildren(iframe);
+    };
+
+    loadButton?.addEventListener('click', startLoading);
+
+    // The panel's gold Donate action. Its href stays #donate, so without
+    // JavaScript it still jumps here and the load button is waiting. With
+    // JavaScript, one press both jumps and starts the form: no second press.
+    document.querySelectorAll<HTMLAnchorElement>('[data-donate-trigger]').forEach((trigger) => {
+      trigger.addEventListener('click', () => startLoading());
+    });
+  }
+</script>

@@ -6,6 +6,7 @@ import EventArchive from '../components/EventArchive.astro';
 import Challenge from '../components/Challenge.astro';
 import Why from '../components/Why.astro';
 import TopBlokes from '../components/TopBlokes.astro';
+import DonationEmbed from '../components/DonationEmbed.astro';
 import TrackRecord from '../components/TrackRecord.astro';
 import Partnership from '../components/Partnership.astro';
 import Follow from '../components/Follow.astro';
@@ -32,7 +33,7 @@ const identitySchema = {
       '@type': 'WebSite',
       '@id': siteId,
       name: meta.siteName,
-      alternateName: 'thelongroadhome.run',
+      alternateName: 'thelongroadhome.com.au',
       url: new URL('/', Astro.site).href,
       author: { '@id': personId },
     },
@@ -62,6 +63,10 @@ const identitySchema = {
   <Why />
 
   <TopBlokes />
+
+  {/* The embedded Raisely form. The Top Blokes panel's Donate action is a
+      same-page anchor to this section. */}
+  <DonationEmbed />
 
   <TrackRecord />
 
