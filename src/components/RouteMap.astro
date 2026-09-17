@@ -1,0 +1,164 @@
+---
+import { campaign } from '../data/campaign';
+
+/**
+ * Editorial journey illustration, not a navigational map or published course.
+ * Coastline simplified from public-domain Natural Earth 1:110m countries data:
+ * https://www.naturalearthdata.com/about/terms-of-use/
+ * Only the two publicly named places are marked. The gold connection is
+ * schematic: it has no intermediate stops, roads or measured distance.
+ */
+---
+<figure class="route-map">
+  <div class="route-map__art" aria-hidden="true">
+    <svg viewBox="0 0 1024 668" xmlns="http://www.w3.org/2000/svg" focusable="false">
+      <defs>
+        <linearGradient id="route-land" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0" stop-color="#294A0A" />
+          <stop offset="1" stop-color="#172E0B" />
+        </linearGradient>
+        <linearGradient id="route-gold" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#F8C302" stop-opacity="0.65" />
+          <stop offset="0.5" stop-color="#F8C302" />
+          <stop offset="1" stop-color="#F8C302" stop-opacity="0.85" />
+        </linearGradient>
+      </defs>
+
+      <path class="route-map__guide" d="M64 212H960M64 362H960M64 512H960" />
+      <path class="route-map__guide" d="M250 58V624M512 58V624M774 58V624" />
+
+      {/* Tasmania and mainland are separate polygons in the source data. */}
+      <g class="route-map__land">
+        <path d="M810.5 573.6L823.1 574.7L824.6 594.6L817.4 600.4L815.2 614L807.9 609.4L793.3 621.1L776 619.6L748.1 579.5L748.6 571.8L782.6 579.1L794.1 576.8Z" />
+        <path d="M358.1 429.2L317.7 441.7L305.9 457.4L226.8 458.8L214.3 467.8L187.5 477.1L158.1 476.4L124.6 462.5L125 452.9L139 446.8L140.8 429L123.9 392.5L124.8 382.9L115.9 367.1L106.6 360.4L104 347.2L89.1 326.8L98.3 334L91.3 318.4L107.9 329.8L107.5 321.2L90.3 297.7L99.7 275.4L97.5 265.6L106.1 253.5L107.7 266.3L116.6 254.7L159.9 235.8L175.3 236.5L213.3 223.2L247 218.7L276.1 193.7L277.6 177.9L292.3 163.6L301.1 178.1L310 174.8L302.6 166.8L309.2 158.7L318.4 162.3L321 149.5L337.5 134.6L348.1 131.8L348.4 127.1L357.6 129L358 124.8L377.4 120.1L404.6 137.8L431.1 139.5L426.6 130.3L436.7 116.8L446.1 112.4L442.9 108.2L452 98.6L464.7 92.7L493.1 91.5L492.7 82.9L477.3 77.4L488.5 75L513.6 86L550.3 93.8L575.3 87.2L585 95.5L571.4 111.3L564.2 111.9L566.6 118.6L553 135.2L554.5 140L613.4 170.4L630.3 174.7L633.5 179.8L653.5 185.5L667.4 179.8L675.8 163.3L684.7 140.8L680.9 118.1L687.7 102.1L684.4 96.4L694 73.5L701.8 67.2L709.2 86L714.4 88L723 103.6L723.8 119.2L731.4 132.4L744.8 126.1L761.9 139.7L759.7 147.2L764.2 161.6L767.4 170L772.7 172L778.4 186.4L776.3 195.1L783.1 206.5L834.8 230.6L832.1 234.6L844.1 245.2L852.2 263.4L860.6 259.7L869.1 266.9L874.3 264.4L877.9 282.2L919 312.5L924.9 326L924 346L934 360.2L919.7 419.6L910.5 434.8L894.9 443.1L880.2 464.4L860.6 499.9L858.9 516.7L846.9 522.6L823.4 523.2L781.7 543.8L751.4 533.4L754.7 524.7L724.8 540L662.4 526.7L648.8 516.4L640.1 495.1L629.7 488.3L609.5 486.3L616.4 478.1L611.4 465.7L601.1 477.3L582.4 480.4L604.7 453.2L603 440.7L572.8 460.8L564.8 474.2L548.4 467.2L549 458.3L524.8 439.8L528.8 436L466.9 417.1L429.3 418.7L378.2 430.3Z" />
+      </g>
+
+      {/* This broad connection is intentionally not an actual walking route. */}
+      <path class="route-map__halo" d="M140 426C210 433 249 427 310 423S403 397 470 402S560 431 625 421S715 408 775 395S860 366 923 347" />
+      <path class="route-map__journey" d="M140 426C210 433 249 427 310 423S403 397 470 402S560 431 625 421S715 408 775 395S860 366 923 347" />
+      <circle class="route-map__outer" cx="140" cy="426" r="18" />
+      <circle class="route-map__start" cx="140" cy="426" r="8" />
+      <circle class="route-map__outer" cx="923" cy="347" r="18" />
+      <circle class="route-map__finish" cx="923" cy="347" r="8" />
+    </svg>
+  </div>
+
+  <figcaption class="route-map__caption">
+    <span class="visually-hidden">Illustrated map of Australia with a schematic line between the start and finish. Not a confirmed running route.</span>
+    <div class="route-map__place">
+      <span class="route-map__label">Start / {campaign.startRegion}</span>
+      <strong class="route-map__name">{campaign.startPlace}</strong>
+    </div>
+    <div class="route-map__distance">
+      <span class="route-map__label">Planned distance</span>
+      <strong class="route-map__metric">{campaign.planningDistance}</strong>
+      <span class="route-map__schedule">{campaign.noRestDays}</span>
+    </div>
+    <div class="route-map__place route-map__place--finish">
+      <span class="route-map__label">Finish / {campaign.finishRegion}</span>
+      <strong class="route-map__name">{campaign.finishPlace}</strong>
+    </div>
+  </figcaption>
+  <p class="route-map__note">Illustrative journey only. The detailed running route is still in planning.</p>
+</figure>
+
+<style>
+  .route-map {
+    max-width: 70rem;
+    margin: var(--space-8) 0 0;
+    border-top: 1px solid var(--hairline-dark);
+    padding-top: var(--space-5);
+  }
+  .route-map__art {
+    background: radial-gradient(ellipse at 53% 55%, rgba(84, 135, 30, 0.13), transparent 62%);
+  }
+  .route-map__art svg { width: 100%; }
+  .route-map__guide {
+    fill: none;
+    stroke: var(--road);
+    stroke-opacity: 0.065;
+    stroke-width: 1;
+  }
+  .route-map__land path {
+    fill: url(#route-land);
+    stroke: var(--road);
+    stroke-opacity: 0.42;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .route-map__halo,
+  .route-map__journey {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .route-map__halo { stroke: var(--gold); stroke-opacity: 0.22; stroke-width: 17; }
+  .route-map__journey {
+    stroke: url(#route-gold);
+    stroke-width: 5;
+    stroke-dasharray: 3 13;
+  }
+  .route-map__outer { fill: var(--forest); stroke: var(--gold); stroke-opacity: 0.6; stroke-width: 2; }
+  .route-map__start { fill: var(--gold); }
+  .route-map__finish { fill: var(--forest); stroke: var(--gold); stroke-width: 4; }
+
+  .route-map__caption {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    gap: var(--space-4);
+    align-items: end;
+    margin-top: -0.25rem;
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--hairline-dark);
+    border-bottom: 1px solid var(--hairline-dark);
+  }
+  .route-map__place,
+  .route-map__distance { display: grid; gap: var(--space-2); }
+  .route-map__distance { text-align: center; }
+  .route-map__place--finish { text-align: right; }
+  .route-map__label {
+    font-family: var(--font-support);
+    font-size: var(--size-label);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--on-dark-2);
+  }
+  .route-map__name,
+  .route-map__metric {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: var(--tracking-display);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .route-map__name { font-size: clamp(1.5rem, 2.8vw, 2.25rem); }
+  .route-map__metric { color: var(--gold); font-size: clamp(1.75rem, 3.3vw, 2.875rem); }
+  .route-map__schedule {
+    font-family: var(--font-support);
+    font-size: var(--size-helper);
+    font-weight: 600;
+    color: var(--on-dark-2);
+  }
+  .route-map__note {
+    max-width: none;
+    margin: var(--space-4) 0 0;
+    color: var(--on-dark-2);
+    font-size: var(--size-helper);
+  }
+
+  @media (max-width: 47.5rem) {
+    .route-map { margin-top: var(--space-7); padding-top: var(--space-4); }
+    .route-map__caption { grid-template-columns: 1fr 1fr; gap: var(--space-5); margin-top: 0; }
+    .route-map__distance { grid-column: 1 / -1; grid-row: 2; text-align: left; }
+    .route-map__place--finish { text-align: right; }
+    .route-map__name { font-size: 1.5rem; }
+    .route-map__metric { font-size: 2.125rem; }
+  }
+  @media (max-width: 23.75rem) {
+    .route-map__caption { grid-template-columns: 1fr; gap: var(--space-4); }
+    .route-map__distance { grid-column: 1; grid-row: auto; }
+    .route-map__place--finish { text-align: left; }
+    .route-map__metric { font-size: clamp(1.5rem, 8vw, 2.125rem); }
+  }
+</style>
