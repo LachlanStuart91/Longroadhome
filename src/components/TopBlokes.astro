@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import topBlokesLogo from '../images/top-blokes-foundation-logo.png';
+import topBlokesLogo from '../images/top-blokes-proud-supporter-logo.png';
 import { campaign, topBlokes, links, ui } from '../data/campaign';
 
 /**
@@ -38,10 +38,12 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
 
         <div class="panel panel-light tb__panel">
           {/*
-            The official Top Blokes Foundation primary landscape logo, supplied
-            by the foundation. It opens the panel so the logo, the $500,000
-            target, the donation-destination statement and the Donate action read
-            as one unit before the visitor moves on to the Raisely form.
+            The official Top Blokes Foundation Proud Supporter lockup, supplied
+            by the foundation. The full-colour treatment is used because this is
+            a light panel; the white treatment is reserved for dark backgrounds.
+            It opens the panel so the logo, the $500,000 target, the
+            donation-destination statement and the Donate action read as one
+            unit before the visitor moves on to the Raisely form.
 
             Decorative alt, deliberately. The section eyebrow, the Donate action,
             the donation statement and the About action all name Top Blokes
@@ -52,8 +54,8 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
             class="tb__logo"
             src={topBlokesLogo}
             alt=""
-            widths={[160, 184, 320, 368, 552]}
-            sizes="(max-width: 23.75rem) 160px, 184px"
+            widths={[192, 216, 384, 432, 648]}
+            sizes="(max-width: 23.75rem) 192px, 216px"
             format="png"
             loading="lazy"
           />
@@ -128,31 +130,30 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
 </section>
 
 <style>
-  /* The logo file carries its own clear space: the ink is 643 x 281px inside an
-     843 x 486px transparent canvas, with roughly 100px of empty margin on every
-     side. The file is never cropped. Each negative margin below is derived from
-     the file's own measured margins (96px left, 103px top, 102px bottom, all out
-     of 843px wide), and cancels only the part that would otherwise stack on top
-     of the panel's padding. The ink therefore lines up with the panel's left
-     content edge and sits at its top padding, instead of floating indented and
-     low, while the full image including its transparent margin still renders.
+  /* The supplied Proud Supporter artwork carries its own clear space: the ink
+     is 1565 x 1139px inside a 2065 x 1636px transparent canvas. The file is
+     never cropped. Each negative margin below is derived from the measured
+     transparent margins (245px left, 250px top and 247px bottom, all relative
+     to the 2065px canvas width), and cancels only the part that would otherwise
+     stack on top of the panel's padding. The official clear space still renders
+     while the visible mark aligns with the panel content.
 
-     184px wide gives ink of about 140 x 61px: clearly recognisable, and well
-     below the 56px $500,000 target, which stays the strongest element. */
+     216px wide gives visible ink of about 164 x 119px, large enough for the
+     Proud Supporter line to remain legible without competing with the target. */
   .tb__logo {
-    --logo-w: 11.5rem;
+    --logo-w: 13.5rem;
     display: block;
     width: var(--logo-w);
     max-width: none;
     height: auto;
-    margin-block-start: calc(var(--logo-w) * -103 / 843);
-    margin-inline-start: calc(var(--logo-w) * -96 / 843);
-    margin-block-end: calc(var(--logo-w) * -102 / 843 + var(--space-5));
+    margin-block-start: calc(var(--logo-w) * -250 / 2065);
+    margin-inline-start: calc(var(--logo-w) * -245 / 2065);
+    margin-block-end: calc(var(--logo-w) * -247 / 2065 + var(--space-5));
   }
   /* The compact panel on the narrowest phones gets a proportionally smaller
      logo, on the same breakpoint as the approved compact header. */
   @media (max-width: 23.75rem) {
-    .tb__logo { --logo-w: 10rem; }
+    .tb__logo { --logo-w: 12rem; }
   }
 
   .amount { font-size: 3.5rem; margin: 0; color: var(--terrain); }
