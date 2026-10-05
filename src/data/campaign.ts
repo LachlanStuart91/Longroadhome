@@ -24,15 +24,15 @@ const dailyGoalMetric = '100 km a day';
 
 const startPlace = 'Cottesloe Beach';
 const startRegion = 'Western Australia';
-const finishPlace = 'Manly Beach';
-const finishRegion = 'Brisbane';
+const finishPlace = 'Redcliffe';
+const finishRegion = 'Queensland';
 
 export const campaign = {
   name: 'The Long Road Home',
   participant: 'Lachlan Stuart',
   headline: "I'm running home across Australia.",
   supporting:
-    "In March 2027, I'm planning to run from Cottesloe Beach in Western Australia to Manly Beach, Brisbane, with a goal of raising $500,000 for Top Blokes Foundation.",
+    `In March 2027, I'm planning to run from ${startPlace} in ${startRegion} to ${finishPlace}, ${finishRegion}, with a goal of raising $500,000 for Top Blokes Foundation.`,
   startPlace,
   startRegion,
   finishPlace,
@@ -60,7 +60,7 @@ export const campaign = {
   beneficiary: 'Top Blokes Foundation',
   /** Route and exact endpoints are still in planning. Never publish as final. */
   detailedRoute: pending('Detailed route still in planning. Do not publish.'),
-  exactEndpoints: pending('Exact start and finish points not yet confirmed.'),
+  exactEndpoints: pending('Exact start point and exact finish location within Redcliffe not yet confirmed.'),
 } as const;
 
 /* ------------------------------------------------------------------- event */
@@ -131,7 +131,7 @@ export const challenge = {
   eyebrow: 'The challenge',
   heading: 'Coast to coast, on foot',
   body: [
-    "I'll start at Cottesloe Beach in Western Australia and finish at Manly Beach, Brisbane. Approximately 4,400 km, with a goal of 100 km a day and no rest days planned.",
+    `I'll start at ${startPlace} in ${startRegion} and finish at ${finishPlace}, ${finishRegion}. Approximately 4,400 km, with a goal of 100 km a day and no rest days planned.`,
     "There will be a support crew and vehicle. The detailed route is still being planned, along with the exact start and finish points, and I won't publish those until they're settled.",
   ],
   /**
@@ -160,7 +160,7 @@ export const why = {
   /** The paragraphs that follow the opening. body[0] is deliberately absent:
    *  it is composed on the page from `opening` and `question`. */
   body: [
-    "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are, where I've built my business, and where this run finishes. That's the reason it's called The Long Road Home.",
+    "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are and where I've built my business. The run will finish in Redcliffe. That's the reason it's called The Long Road Home.",
     "I've got a son who watches what I do far more than he listens to what I say. I can't ask him to chase what he wants if I'm not chasing mine.",
     "I'm not doing this because I have it all worked out. I don't. What I've learned is that you pick something hard, you show up, you stack small wins, and you lean on the people around you when it gets difficult.",
   ],
@@ -475,7 +475,7 @@ export const meta = {
   siteName: 'The Long Road Home',
   socialTitle: 'The Long Road Home | Lachlan Stuart',
   socialDescription:
-    'Cottesloe Beach to Manly Beach, Brisbane. Approximately 4,400 km, planned start 22 March 2027. Fundraising goal of $500,000 for Top Blokes Foundation.',
+    `${startPlace} to ${finishPlace}, ${finishRegion}. Approximately 4,400 km, planned start 22 March 2027. Fundraising goal of $500,000 for Top Blokes Foundation.`,
   /**
    * Approved by Lachlan: social card option B, the Deep Terrain Green panel
    * beside the Brisbane photograph. Served from public/ unprocessed so the
