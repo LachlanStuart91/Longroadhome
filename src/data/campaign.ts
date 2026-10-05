@@ -18,7 +18,7 @@ export const isPending = <T>(value: T | Pending): value is Pending =>
 /* ---------------------------------------------------------------- campaign */
 
 const planningQualifier = 'Approximately';
-const planningMetric = '4,400 km';
+const planningMetric = '4,000 km';
 const dailyGoalQualifier = 'Goal';
 const dailyGoalMetric = '100 km a day';
 
@@ -131,7 +131,7 @@ export const challenge = {
   eyebrow: 'The challenge',
   heading: 'Coast to coast, on foot',
   body: [
-    `I'll start at ${startPlace} in ${startRegion} and finish at ${finishPlace}, ${finishRegion}. Approximately 4,400 km, with a goal of 100 km a day and no rest days planned.`,
+    `I'll start at ${startPlace} in ${startRegion} and finish at ${finishPlace}, ${finishRegion}. Approximately ${planningMetric}, with a goal of 100 km a day and no rest days planned.`,
     "There will be a support crew and vehicle. The detailed route is still being planned, along with the exact start and finish points, and I won't publish those until they're settled.",
   ],
   /**
@@ -471,11 +471,11 @@ export const meta = {
    */
   title: "Lachlan Stuart's Run Across Australia | The Long Road Home",
   description:
-    "Follow Lachlan Stuart's planned 4,400 km run across Australia, starting 22 March 2027, with a $500,000 fundraising goal for Top Blokes Foundation.",
+    `Follow Lachlan Stuart's planned ${planningMetric} run across Australia, starting 22 March 2027, with a $500,000 fundraising goal for Top Blokes Foundation.`,
   siteName: 'The Long Road Home',
   socialTitle: 'The Long Road Home | Lachlan Stuart',
   socialDescription:
-    `${startPlace} to ${finishPlace}, ${finishRegion}. Approximately 4,400 km, planned start 22 March 2027. Fundraising goal of $500,000 for Top Blokes Foundation.`,
+    `${startPlace} to ${finishPlace}, ${finishRegion}. Approximately ${planningMetric}, planned start 22 March 2027. Fundraising goal of $500,000 for Top Blokes Foundation.`,
   /**
    * Approved by Lachlan: social card option B, the Deep Terrain Green panel
    * beside the Brisbane photograph. Served from public/ unprocessed so the
