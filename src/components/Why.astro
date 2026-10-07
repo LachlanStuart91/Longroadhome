@@ -3,19 +3,26 @@ import { why, links } from '../data/campaign';
 
 /**
  * Text only, by decision. No candid portrait has been supplied and none is
- * substituted. If an approved photograph arrives later, add it here and change
- * .single back to a two column layout. No placeholder is ever published.
+ * substituted. The editorial layout uses the full site grid while keeping each
+ * reading column comfortable, so the section still feels intentional without
+ * inventing a visual asset.
  */
 ---
 <section id="why" class="section surface-green" aria-labelledby="why-title">
   <div class="wrap">
-    <div class="single">
-      <div>
-        <p class="eyebrow">{why.eyebrow}</p>
-        <h2 id="why-title" class="display section-title">{why.heading}</h2>
-        <hr class="rule" />
+    <header class="why__header">
+      <p class="eyebrow">{why.eyebrow}</p>
+      <h2 id="why-title" class="display section-title">{why.heading}</h2>
+      <hr class="rule" />
+    </header>
+
+    <div class="why__story">
+      <div class="why__prompt">
         <p class="lead">{why.opening}</p>
         <p class="why__question">{why.question}</p>
+      </div>
+
+      <div class="why__body">
         {why.body.map((para) => <p>{para}</p>)}
         <div class="actions">
           <a class="btn btn--outline" href={links.lachlanStuart} rel="noopener">
@@ -28,9 +35,34 @@ import { why, links } from '../data/campaign';
 </section>
 
 <style>
-  /* Centred so it reads as a deliberate statement section rather than a two
-     column layout with the image missing. */
-  .single { max-width: 62ch; margin-inline: auto; }
+  /* The heading shares the same broad left edge as the surrounding sections.
+     A generous cap keeps it from running into the far edge on very wide
+     screens, while still allowing the full phrase to breathe on desktop. */
+  .why__header { max-width: 62rem; }
+
+  /* A full-width editorial grid replaces the former centred 62ch column. The
+     left side carries the premise and pull question; the longer narrative is
+     kept to a readable line length on the right. */
+  .why__story {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr);
+    gap: clamp(var(--space-7), 6vw, 5.5rem);
+    align-items: start;
+    margin-top: var(--space-7);
+  }
+
+  .why__prompt,
+  .why__body { min-width: 0; }
+
+  .why__prompt .lead { margin-bottom: var(--space-5); }
+
+  .why__body {
+    border-left: 1px solid rgba(230, 227, 218, 0.3);
+    padding-left: clamp(var(--space-6), 4vw, var(--space-8));
+  }
+
+  .why__body p { max-width: 58ch; }
+  .why__body > :last-child { margin-bottom: 0; }
 
   /* The existing question, given weight rather than repetition. Display type on
      the section's own green, no quotation marks and no rule, so it reads as the
@@ -42,7 +74,24 @@ import { why, links } from '../data/campaign';
     letter-spacing: var(--tracking-display);
     line-height: 1.04;
     color: var(--on-green-1);
-    margin: var(--space-5) 0 var(--space-6);
-    max-width: 20ch;
+    margin: 0;
+    max-width: 17ch;
+  }
+
+  @media (max-width: 56.25rem) {
+    .why__header { max-width: var(--measure); }
+    .why__story {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      margin-top: var(--space-6);
+    }
+    .why__prompt { max-width: var(--measure); }
+    .why__body {
+      border-left: 0;
+      border-top: 1px solid rgba(230, 227, 218, 0.3);
+      padding: var(--space-6) 0 0;
+      max-width: var(--measure);
+    }
+    .why__question { max-width: 20ch; }
   }
 </style>
