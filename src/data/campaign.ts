@@ -22,7 +22,7 @@ const planningMetric = '4,000 km';
 const dailyGoalQualifier = 'Goal';
 const dailyGoalMetric = '100 km a day';
 
-const startPlace = 'Cottesloe Beach';
+const startPlace = 'Scarborough Beach';
 const startRegion = 'Western Australia';
 const finishPlace = 'Redcliffe';
 const finishRegion = 'Queensland';
@@ -60,7 +60,9 @@ export const campaign = {
   beneficiary: 'Top Blokes Foundation',
   /** Route and exact endpoints are still in planning. Never publish as final. */
   detailedRoute: pending('Detailed route still in planning. Do not publish.'),
-  exactEndpoints: pending('Exact start point and exact finish location within Redcliffe not yet confirmed.'),
+  exactEndpoints: pending(
+    'Exact start point at Scarborough Beach and exact finish location within Redcliffe not yet confirmed.',
+  ),
 } as const;
 
 /* ------------------------------------------------------------------- event */
@@ -123,6 +125,32 @@ export const hero = {
    * training for the 2027 run, not tied to any dated challenge.
    */
   imageAlt: 'Lachlan Stuart running on a tree lined path in Brisbane.',
+} as const;
+
+/* --------------------------------------------------------- video message */
+
+/**
+ * Lachlan's piece to camera, supplied by him as a CapCut export and re-encoded
+ * for the web. It is self hosted, so no video platform, player script, cookie
+ * or third party request is involved, and nothing is requested until a visitor
+ * presses play.
+ *
+ * The duration and the on screen captions are measured from the file itself:
+ * 112.76 seconds, with the captions burned into the picture. Nothing here
+ * describes what is said beyond the plain subject of the recording.
+ */
+export const video = {
+  eyebrow: 'Watch',
+  heading: 'Two minutes from me',
+  intro: 'The short version of what I am taking on, and why.',
+  /** Verified against the encoded file: 112.76s, captions burned in. */
+  helper: '1 minute 53 seconds. Captions are on screen.',
+  /** The accessible name for the player itself. */
+  label: 'Video: a message from Lachlan Stuart about The Long Road Home',
+  /** Shown only if the browser cannot play the file at all. */
+  fallback: 'Your browser cannot play this video.',
+  fallbackLink: 'Download the video',
+  posterAlt: '',
 } as const;
 
 /* ------------------------------------------------------- the challenge */

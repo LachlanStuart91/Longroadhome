@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
+import VideoMessage from '../components/VideoMessage.astro';
 import LongLunch from '../components/LongLunch.astro';
 import EventArchive from '../components/EventArchive.astro';
 import Challenge from '../components/Challenge.astro';
@@ -54,6 +55,10 @@ const identitySchema = {
   <script type="application/ld+json" is:inline set:html={JSON.stringify(identitySchema)} />
 
   <Hero />
+
+  {/* Lachlan's piece to camera. Self hosted and click to play: nothing is
+      fetched from it until a visitor presses play. */}
+  <VideoMessage />
 
   {/* One switch. Active renders the event, archived renders its archive. */}
   {event.active ? <LongLunch /> : <EventArchive />}

@@ -54,6 +54,17 @@ import { why, links } from '../data/campaign';
   .why__prompt,
   .why__body { min-width: 0; }
 
+  /* Two columns of very different length: the premise and the question are
+     short, the narrative beside them is three paragraphs and a button. Left
+     aligned to the top, the short column left a tall empty block beneath it.
+     Centring it against the taller column splits that space above and below,
+     so the question sits opposite the middle of the story and the emptiness
+     reads as margin rather than as something missing. Single column layouts
+     below 56.25rem are unaffected. */
+  @media (min-width: 56.3125rem) {
+    .why__prompt { align-self: center; }
+  }
+
   .why__prompt .lead { margin-bottom: var(--space-5); }
 
   .why__body {

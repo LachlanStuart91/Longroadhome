@@ -62,20 +62,25 @@ const facts = [
         )}
       </div>
 
-      <dl class="facts">
-        {facts.map((fact) => (
-          <div class="facts__item">
-            <dt class="facts__value">
-              <span class="facts__qualifier">
-                {fact.qualifier}{fact.colon && <span class="facts__colon">:</span>}
-              </span>{' '}
-              <span class="facts__metric">{fact.metric}</span>
-            </dt>
-            <dd class="facts__label label">{fact.label}</dd>
-          </div>
-        ))}
-      </dl>
     </div>
+
+    {/* A sibling of the text and the photograph, not a child of the text, so
+        on desktop it can run the full width of the hero and sit under both
+        columns. Source order is unchanged: it still follows the actions and
+        precedes the photograph, which is the stacked order on phones. */}
+    <dl class="facts">
+      {facts.map((fact) => (
+        <div class="facts__item">
+          <dt class="facts__value">
+            <span class="facts__qualifier">
+              {fact.qualifier}{fact.colon && <span class="facts__colon">:</span>}
+            </span>{' '}
+            <span class="facts__metric">{fact.metric}</span>
+          </dt>
+          <dd class="facts__label label">{fact.label}</dd>
+        </div>
+      ))}
+    </dl>
 
     <Image
       class="hero__image"
@@ -103,6 +108,18 @@ const facts = [
      two actions above the fold on common laptop heights. */
   .hero__text { display: flex; flex-direction: column; }
   .hero__actions { margin-top: var(--space-4); }
+
+  /* Desktop only: the words take the left column, the photograph the right,
+     and the fact strip runs under both. Its gold rule then spans the whole
+     hero and gives the section a base line, instead of stopping halfway and
+     leaving the corner under the photograph empty. Below this width the grid
+     is a single column and the three children stack in source order. */
+  @media (min-width: 62.5625rem) {
+    .hero__grid { align-items: start; }
+    .hero__text { grid-column: 1; grid-row: 1; }
+    .hero__image { grid-column: 2; grid-row: 1; align-self: center; }
+    .facts { grid-column: 1 / -1; grid-row: 2; }
+  }
 
   .hero__home { color: var(--gold); }
 
