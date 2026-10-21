@@ -2,10 +2,11 @@
 
 Campaign website for The Long Road Home. Static Astro site, no server runtime.
 
-The build produces two public routes:
+The build produces three public routes:
 
-    /            the campaign homepage
-    /privacy     the privacy page
+    /                  the campaign homepage
+    /capable-of-more   the ongoing community challenge
+    /privacy           the privacy page
 
 ## Runtime
 
@@ -27,11 +28,19 @@ To use the project runtime in a shell:
     npm run build     production build into dist/
     npm run preview   serve the built output
     npm run check     astro check, types and template diagnostics
-    npm run verify    astro check, then the production build, then the
-                      built-output structural check in scripts/check-output.mjs
+    npm run generate:qr  regenerate the challenge signup QR asset
+    npm run verify       decode and verify the QR, run astro check, then the
+                         production build and built-output structural check
 
 `npm run verify` is the gate. The structural check runs over every built page and
 fails if anything appears between the doctype and `<html>`, or after `</html>`.
+The editorial check verifies internal anchors and assets, sold-out ticket
+actions, em-dash-free output, donation opt-in and original photograph hashes.
+
+Use Astro's dev or preview server, not Python's plain HTTP server. The public
+links use clean URLs such as `/capable-of-more`, while the static build contains
+`.html` files. Astro preview and Vercel resolve these correctly; Python's server
+does not. Use `npm run preview -- --host 127.0.0.1 --port 4321` for the built site.
 
 ## Structure
 
@@ -96,10 +105,23 @@ request once it is live.
 
 ## The event switch
 
-`event.active` in `src/data/campaign.ts` drives the whole page. Setting it to
-`false` removes every ticket action, drops the Long Lunch navigation item,
-replaces the event section with its archive, and makes partnership the primary
-campaign action.
+`event.soldOut` in `src/data/campaign.ts` is true. The lunch is a compact sold-out
+notice with expandable guest details, and both structured-data offers are marked
+SoldOut. It is not the campaign's primary action. The header supports donations
+on the homepage and registration on the community page.
+
+Setting `event.active` to `false` replaces the lunch notice with the archive and
+removes its footer link. Review the archive copy before making that change.
 
 The switch is manual on purpose. It is not driven by the date, and it must not
 be flipped until the archive copy has been reviewed after the lunch.
+
+## Original photographs
+
+The four photographs supplied on 22 October 2026 live in `public/images/`.
+They are copied without editing, recompression, cropping or colour changes.
+Plain image elements preserve their natural proportions, with no overlays or
+filters. Three are lazy-loaded on the homepage; the opening image loads eagerly.
+The originals total about 26 MB. Any smaller replacement exports need the
+owner's approval, and the integrity hashes must then be updated deliberately.
+Logo processing is separate from the photographic assets.

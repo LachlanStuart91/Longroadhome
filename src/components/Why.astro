@@ -1,108 +1,34 @@
 ---
 import { why, links } from '../data/campaign';
-
-/**
- * Text only, by decision. No candid portrait has been supplied and none is
- * substituted. The editorial layout uses the full site grid while keeping each
- * reading column comfortable, so the section still feels intentional without
- * inventing a visual asset.
- */
 ---
-<section id="why" class="section surface-green" aria-labelledby="why-title">
-  <div class="wrap">
-    <header class="why__header">
-      <p class="eyebrow">{why.eyebrow}</p>
-      <h2 id="why-title" class="display section-title">{why.heading}</h2>
-      <hr class="rule" />
-    </header>
-
-    <div class="why__story">
-      <div class="why__prompt">
-        <p class="lead">{why.opening}</p>
-        <p class="why__question">{why.question}</p>
-      </div>
-
-      <div class="why__body">
-        {why.body.map((para) => <p>{para}</p>)}
-        <div class="actions">
-          <a class="btn btn--outline" href={links.lachlanStuart} rel="noopener">
-            {why.linkLabel}
-          </a>
-        </div>
-      </div>
+<section id="why" class="why surface-light" aria-labelledby="why-title">
+  <div class="wrap why__layout">
+    <figure class="documentary">
+      <img src="/images/between-runs.png" width="3354" height="1902"
+           alt="Lachlan sitting beside the camper with his running shoes off."
+           loading="lazy" decoding="async" />
+      <figcaption>A moment off my feet.</figcaption>
+    </figure>
+    <div class="why__copy">
+      <h2 id="why-title" class="editorial-title">Why I'm running home.</h2>
+      <p class="why__opening">{why.opening} <strong>{why.question}</strong></p>
+      <p>I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are, and where I've built my business.</p>
+      <p>{why.body[1]}</p>
+      <p>I don't have it all worked out. What I've learned is to show up, stack small wins and lean on the people around me when it gets difficult.</p>
+      <a class="text-link" href={links.lachlanStuart}>More about my story <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 </section>
-
 <style>
-  /* The heading shares the same broad left edge as the surrounding sections.
-     A generous cap keeps it from running into the far edge on very wide
-     screens, while still allowing the full phrase to breathe on desktop. */
-  .why__header { max-width: 62rem; }
-
-  /* A full-width editorial grid replaces the former centred 62ch column. The
-     left side carries the premise and pull question; the longer narrative is
-     kept to a readable line length on the right. */
-  .why__story {
-    display: grid;
-    grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr);
-    gap: clamp(var(--space-7), 6vw, 5.5rem);
-    align-items: start;
-    margin-top: var(--space-7);
-  }
-
-  .why__prompt,
-  .why__body { min-width: 0; }
-
-  /* Two columns of very different length: the premise and the question are
-     short, the narrative beside them is three paragraphs and a button. Left
-     aligned to the top, the short column left a tall empty block beneath it.
-     Centring it against the taller column splits that space above and below,
-     so the question sits opposite the middle of the story and the emptiness
-     reads as margin rather than as something missing. Single column layouts
-     below 56.25rem are unaffected. */
-  @media (min-width: 56.3125rem) {
-    .why__prompt { align-self: center; }
-  }
-
-  .why__prompt .lead { margin-bottom: var(--space-5); }
-
-  .why__body {
-    border-left: 1px solid rgba(230, 227, 218, 0.3);
-    padding-left: clamp(var(--space-6), 4vw, var(--space-8));
-  }
-
-  .why__body p { max-width: 58ch; }
-  .why__body > :last-child { margin-bottom: 0; }
-
-  /* The existing question, given weight rather than repetition. Display type on
-     the section's own green, no quotation marks and no rule, so it reads as the
-     sentence it already is rather than as a pulled testimonial. It stays a
-     paragraph in the flow, so the reading order is unchanged. */
-  .why__question {
-    font-family: var(--font-display);
-    font-size: clamp(1.875rem, 4.2vw, 2.75rem);
-    letter-spacing: var(--tracking-display);
-    line-height: 1.04;
-    color: var(--on-green-1);
-    margin: 0;
-    max-width: 17ch;
-  }
-
+  .why { padding-block: var(--editorial-space) 2rem; }
+  .why__layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
+  .why h2 { margin-bottom: 1.75rem; }
+  .why__copy p { color: var(--on-light-2); }
+  .why__opening { font-size: 1.125rem; }
+  .why__opening strong { font-weight: 600; color: var(--near); }
+  .why .text-link { margin-top: .75rem; }
   @media (max-width: 56.25rem) {
-    .why__header { max-width: var(--measure); }
-    .why__story {
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
-      margin-top: var(--space-6);
-    }
-    .why__prompt { max-width: var(--measure); }
-    .why__body {
-      border-left: 0;
-      border-top: 1px solid rgba(230, 227, 218, 0.3);
-      padding: var(--space-6) 0 0;
-      max-width: var(--measure);
-    }
-    .why__question { max-width: 20ch; }
+    .why__layout { grid-template-columns: 1fr; }
+    .why__copy { max-width: 42rem; }
   }
 </style>

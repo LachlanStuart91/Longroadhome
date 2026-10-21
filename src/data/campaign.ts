@@ -24,7 +24,7 @@ const dailyGoalMetric = '100 km a day';
 
 const startPlace = 'Scarborough Beach';
 const startRegion = 'Western Australia';
-const finishPlace = 'Redcliffe';
+const finishPlace = 'Redcliffe Beach';
 const finishRegion = 'Queensland';
 
 export const campaign = {
@@ -58,10 +58,10 @@ export const campaign = {
   plannedStart: '22 March 2027',
   fundraisingTarget: '$500,000',
   beneficiary: 'Top Blokes Foundation',
-  /** Route and exact endpoints are still in planning. Never publish as final. */
+  /** The route between the confirmed beach locations is still in planning. */
   detailedRoute: pending('Detailed route still in planning. Do not publish.'),
   exactEndpoints: pending(
-    'Exact start point at Scarborough Beach and exact finish location within Redcliffe not yet confirmed.',
+    'Exact gathering points within Scarborough Beach and Redcliffe Beach are not yet confirmed.',
   ),
 } as const;
 
@@ -70,6 +70,9 @@ export const campaign = {
 export const event = {
   /** Set to false from 23 October 2026 to switch the page to its archive state. */
   active: true,
+  soldOut: true,
+  soldOutHeading: 'The Long Lunch is sold out.',
+  soldOutMessage: "Thanks to everyone who's booked a seat.",
   name: 'The Long Road Home Long Lunch',
   date: 'Thursday 22 October 2026',
   dateShort: 'Thu 22 Oct 2026',
@@ -169,6 +172,64 @@ export const challenge = {
    */
 } as const;
 
+/* ------------------------------------------------ community challenge */
+
+/**
+ * Capable of More is the ongoing community challenge brand. The campaign
+ * block is deliberately nested so The Long Road Home can be replaced by a
+ * future campaign without rewriting the evergreen participation journey.
+ */
+export const capableOfMore = {
+  name: 'The Capable of More Challenge',
+  navLabel: 'Community Challenge',
+  tagline: 'Your challenge. Your way. A difference worth making.',
+  introduction: "I'm running across Australia. You don't have to.",
+  invitation:
+    'Pick a walk, run, swim or ride that stretches you, and use it to raise funds for Top Blokes Foundation.',
+  participation:
+    'Do it on your own, with your mates or with your workplace.',
+  personalStatement:
+    "Through every challenge I’ve done, I’ve realised I’m capable of more than I thought. Now I want to give other people a way to discover that for themselves.",
+  movementTypes: ['Walk', 'Run', 'Swim', 'Ride'],
+  participationTypes: ['On your own', 'With your mates', 'With your workplace'],
+  stepsHeading: 'How it works',
+  steps: [
+    {
+      title: 'Choose your challenge',
+      body: 'Decide what you’ll do and the distance you want to achieve.',
+    },
+    {
+      title: 'Create your fundraising page',
+      body: 'Sign up, set your fundraising goal and tell people why you’re getting involved.',
+    },
+    {
+      title: 'Get people behind you',
+      body: 'Share your personal fundraising link so friends, family and workmates can support you.',
+    },
+    {
+      title: 'Get moving',
+      body: 'Take on your challenge and share your progress along the way.',
+    },
+  ],
+  currentCampaign: {
+    eyebrow: 'Where it starts',
+    heading: 'The Long Road Home',
+    body:
+      `In March 2027, I’m running across Australia, from ${startPlace} in ${startRegion} to ${finishPlace} in ${finishRegion}, with the goal of raising ${campaign.fundraisingTarget} for ${campaign.beneficiary}.`,
+    invitation: "That’s my challenge. I’m asking you to find yours.",
+  },
+  impactHeading: 'Do something hard. Help a young man back himself.',
+  impact:
+    'Your fundraising will support Top Blokes Foundation’s work helping boys and young men build confidence, connection and the skills to navigate life’s challenges.',
+  closing: 'That is what makes every kilometre mean something.',
+  cta: 'Start my challenge',
+  qrLabel: 'Scan to sign up',
+  qrAlt: 'QR code to sign up for The Capable of More Challenge.',
+  pageTitle: 'The Capable of More Challenge | The Long Road Home',
+  pageDescription:
+    'Choose a movement goal, create your fundraising page and raise funds for Top Blokes Foundation through The Capable of More Challenge.',
+} as const;
+
 /* ---------------------------------------------------------------- why */
 
 /**
@@ -188,7 +249,7 @@ export const why = {
   /** The paragraphs that follow the opening. body[0] is deliberately absent:
    *  it is composed on the page from `opening` and `question`. */
   body: [
-    "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are and where I've built my business. The run will finish in Redcliffe. That's the reason it's called The Long Road Home.",
+    "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are and where I've built my business. The run will finish at Redcliffe Beach. That's the reason it's called The Long Road Home.",
     "I've got a son who watches what I do far more than he listens to what I say. I can't ask him to chase what he wants if I'm not chasing mine.",
     "I'm not doing this because I have it all worked out. I don't. What I've learned is that you pick something hard, you show up, you stack small wins, and you lean on the people around you when it gets difficult.",
   ],
@@ -229,7 +290,7 @@ export const topBlokes = {
     "I came across Top Blokes Foundation after seeing Kieran Foran's work with them online. The more I learned, the more it made sense to me.",
   programHeading: 'What Top Blokes does',
   programBody:
-    'Top Blokes Foundation runs long-term, evidence-based mentoring programs for boys and young men aged 10 to 24. These programs are not quick fixes. Led by qualified youth workers, they create safe, consistent spaces where young males can talk openly and build resilience, emotional literacy, respectful relationships, critical thinking, confidence and a stronger sense of identity.',
+    'Top Blokes Foundation runs long-term mentoring programs for boys and young men aged 10 to 24. Qualified youth workers give them a consistent place to talk, build confidence and learn how to handle the challenges in their lives.',
   evidenceHeading: 'Why this matters',
   /**
    * Two figures, not three. The qualifier is part of the fact: "More than" and
@@ -277,7 +338,7 @@ export const topBlokes = {
   ] as readonly Segment[],
   /** The section finishes on Lachlan's reason, not on an administrative note. */
   reason:
-    "I remember how confusing my teenage years could be, and I didn't always have the right people around me. Now I've got a young boy of my own. That's why I'm supporting Top Blokes. I want to help fund mentoring programs that give boys and young men somewhere safe to talk, build resilience and get support at such a crucial stage in their lives.",
+    "I remember how confusing my teenage years could be, and I didn't always have the right people around me. Now I've got a young boy of my own. That's why I'm supporting Top Blokes.",
   targetLabel: 'Fundraising target',
   aboutLabel: 'About Top Blokes Foundation',
   donateLabel: 'Donate to Top Blokes Foundation',
@@ -308,12 +369,12 @@ export const topBlokes = {
  */
 export const donation = {
   eyebrow: 'Donate through Raisely',
-  heading: 'Support Top Blokes Foundation',
+  heading: 'Help fund the mentoring.',
   intro:
     'The donation form on this page is provided by Raisely for Top Blokes Foundation. The Long Road Home does not receive or store donor information or payment details.',
   /** Shown beside the load button, before anything from Raisely is requested. */
   disclosure: 'Nothing from Raisely loads until you choose to continue.',
-  loadLabel: 'Load the Raisely donation form',
+  loadLabel: 'Donate to Top Blokes',
   /** Concise and unique on the page: the iframe's accessible name. */
   frameTitle: 'Donate to Top Blokes Foundation through Raisely',
   /** Announced politely. One message per state, never repeated progress. */
@@ -331,7 +392,7 @@ export const donation = {
    * One external action, because the campaign homepage is the only external
    * donation destination. It stays visible before, during and after loading.
    */
-  campaignLabel: 'View The Long Road Home fundraiser on Raisely',
+  campaignLabel: 'Or donate on Raisely',
   noscript:
     'The donation form needs JavaScript to load. You can still donate using the Raisely link below.',
 } as const;
@@ -382,8 +443,8 @@ export const partnership = {
   eyebrow: 'Partnership',
   heading: 'Partner with the campaign',
   body: [
-    "I'm looking for businesses that want to be part of the journey. There's an opportunity to share stories, work together and build a partnership that grows along the way.",
-    'If that sounds like your business, get in touch with Jason at Front Office Agency.',
+    "If your business would like to support the run, I'd love to hear from you.",
+    'Talk to Jason at Front Office Agency about getting involved.',
   ],
   /** Jason's email is the ONLY sponsorship contact. No phone number, no
    *  packages, no sponsor levels, no deliverables. */
@@ -424,6 +485,9 @@ export const links = {
    * homepage both refuse framing, so neither may be used as an iframe source.
    */
   fundraisingEmbed: 'https://the-long-road-home.raiselysite.com/embed',
+  /** Registration for The Capable of More Challenge. */
+  challengeSignup: 'https://the-long-road-home.raiselysite.com/signup',
+  communityChallenge: '/capable-of-more',
   /** Same-page anchor for the embedded donation section. */
   donateSection: '#donate',
   privacy: '/privacy',
@@ -523,12 +587,10 @@ export const meta = {
 export type NavItem = { readonly label: string; readonly href: string };
 
 export const navigation: readonly NavItem[] = [
-  { label: 'Long Lunch', href: '#long-lunch' },
   { label: 'The Run', href: '#the-run' },
-  { label: 'Why', href: '#why' },
+  { label: 'Community Challenge', href: links.communityChallenge },
+  { label: 'My Story', href: '#why' },
   { label: 'Top Blokes', href: '#top-blokes' },
-  { label: 'Partner', href: '#partner' },
-  { label: 'Follow', href: '#follow' },
 ];
 
 /** Navigation with the event anchor removed, for the post-event state. */

@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import { capableOfMore, links, topBlokes } from '../data/campaign';
+---
+<Base title={capableOfMore.pageTitle} description={capableOfMore.pageDescription}
+      socialTitle={capableOfMore.name} socialDescription={capableOfMore.pageDescription}>
+  <section class="challenge-hero surface-dark" aria-labelledby="challenge-title">
+    <div class="wrap challenge-hero__layout">
+      <div class="challenge-hero__heading">
+        <p class="eyebrow">The community challenge</p>
+        <h1 id="challenge-title" class="display">Capable<br /><span>of More</span></h1>
+      </div>
+      <figure class="challenge-hero__photo">
+        <img src="/images/behind-the-scenes.jpeg" width="4032" height="2268"
+             alt="Lachlan with three people and their cameras outdoors."
+             loading="eager" fetchpriority="high" decoding="async" />
+        <figcaption>{capableOfMore.participation}</figcaption>
+      </figure>
+      <div class="challenge-hero__copy">
+        <p class="challenge-hero__opening">{capableOfMore.introduction}</p>
+        <p class="challenge-hero__invitation">{capableOfMore.invitation}</p>
+        <a class="btn btn--gold" href={links.challengeSignup}>{capableOfMore.cta}</a>
+        <p class="challenge-hero__note">Your fundraising page is hosted by Raisely.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-it-works" class="take-part surface-light" aria-labelledby="take-part-title">
+    <div class="wrap take-part__layout">
+      <div class="take-part__intro">
+        <h2 id="take-part-title" class="editorial-title">Choose something<br />that stretches you.</h2>
+        <blockquote>“{capableOfMore.personalStatement}”</blockquote>
+        <p class="take-part__byline">Lachlan Stuart</p>
+      </div>
+      <ol class="take-part__steps">
+        {capableOfMore.steps.map((step) => (
+          <li><h3>{step.title}</h3><p>{step.body}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="impact surface-light" aria-labelledby="impact-title">
+    <div class="wrap impact__layout">
+      <div>
+        <p class="eyebrow">Top Blokes Foundation</p>
+        <h2 id="impact-title" class="editorial-title">Who you're helping.</h2>
+        <p>{topBlokes.programBody}</p>
+        <a class="text-link" href={links.topBlokes}>About Top Blokes <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="impact__campaign">
+        <h3>Part of The Long Road Home</h3>
+        <p>{capableOfMore.currentCampaign.body}</p>
+        <a class="text-link" href="/#the-run">Read about my run <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="signup surface-light" aria-labelledby="signup-title">
+    <div class="wrap signup__inner">
+      <div class="signup__copy">
+        <h2 id="signup-title" class="display">What will you take on?</h2>
+        <p>Choose your challenge, create your fundraising page and share it with the people who will support you.</p>
+        <a class="btn btn--dark signup__button" href={links.challengeSignup}>{capableOfMore.cta}</a>
+      </div>
+      <a class="signup__qr" href={links.challengeSignup} aria-label="Start my challenge on Raisely">
+        <img src="/images/capable-of-more-signup-qr.png" width="512" height="512"
+             alt={capableOfMore.qrAlt} loading="lazy" />
+        <span>{capableOfMore.qrLabel}</span>
+      </a>
+    </div>
+  </section>
+</Base>
+<style>
+  .challenge-hero { padding-block: clamp(3.5rem, 7vw, 6.5rem); }
+  .challenge-hero__layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); grid-template-areas: 'heading photo' 'copy photo'; column-gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
+  .challenge-hero__heading { grid-area: heading; }
+  .challenge-hero__copy { grid-area: copy; }
+  .challenge-hero h1 { font-size: clamp(5rem, 8.4vw, 8.4rem); line-height: .85; letter-spacing: -.015em; }
+  .challenge-hero h1 span { color: var(--gold); }
+  .challenge-hero__opening { margin-top: 1.75rem; font-size: 1.2rem; }
+  .challenge-hero__invitation { color: var(--on-dark-2); }
+  .challenge-hero .btn { margin-top: .75rem; }
+  .challenge-hero__note { margin: 1rem 0 0; font-size: .875rem; color: var(--on-dark-2); }
+  .challenge-hero__photo { grid-area: photo; margin: 0; }
+  .challenge-hero__photo img { width: 100%; height: auto; }
+  .challenge-hero__photo figcaption { margin-top: .8rem; font-size: .875rem; color: var(--on-dark-2); }
+  .take-part { padding-block: var(--editorial-space); }
+  .take-part__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(3rem, 8vw, 7rem); }
+  .take-part blockquote { margin: 2rem 0 1rem; max-width: 32rem; font-size: 1.25rem; line-height: 1.6; }
+  .take-part__byline { color: var(--on-light-2); font-size: .875rem; }
+  .take-part__steps { margin: 0; padding-left: 1.5rem; }
+  .take-part__steps li { padding-left: .75rem; }
+  .take-part__steps li + li { margin-top: 1.5rem; }
+  .take-part__steps li::marker { font-size: .9375rem; color: var(--terrain); }
+  .take-part__steps h3 { font: 600 1.125rem/1.4 var(--font-body); margin: 0 0 .5rem; }
+  .take-part__steps p { color: var(--on-light-2); margin-bottom: 0; }
+  .impact { padding-block: 0 var(--editorial-space); }
+  .impact__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(3rem, 8vw, 7rem); align-items: start; }
+  .impact h2 { margin-bottom: 1.5rem; }
+  .impact p { color: var(--on-light-2); }
+  .impact .eyebrow { color: var(--terrain); }
+  .impact h3 { margin: 0 0 1rem; font: 600 1.25rem/1.4 var(--font-body); }
+  .signup { --focus-ring: var(--near); background: var(--gold); padding-block: var(--editorial-space); }
+  .signup__inner { display: flex; align-items: center; justify-content: space-between; gap: 3rem; }
+  .signup h2 { font-size: clamp(3rem, 5vw, 5rem); line-height: .95; }
+  .signup__copy { max-width: 42rem; }
+  .signup__copy p { margin: 1.25rem 0 1.5rem; }
+  .signup__qr { display: block; flex: 0 0 9.5rem; color: var(--near); font-size: .875rem; text-align: center; text-decoration: none; }
+  .signup__qr img { width: 100%; height: auto; padding: .55rem; background: #fff; margin-bottom: .65rem; }
+  @media (max-width: 56.25rem) {
+    .challenge-hero__layout, .take-part__layout, .impact__layout { grid-template-columns: 1fr; }
+    .challenge-hero__layout { grid-template-areas: 'heading' 'photo' 'copy'; gap: 2rem; }
+    .challenge-hero__opening { margin-top: 0; }
+    .challenge-hero h1 { font-size: clamp(5rem, 13vw, 7.5rem); }
+    .challenge-hero__invitation { max-width: 39rem; }
+    .impact__campaign { max-width: 42rem; }
+  }
+  @media (max-width: 38rem) {
+    .challenge-hero h1 { font-size: clamp(4.5rem, 23vw, 6.5rem); }
+    .signup__inner { display: block; }
+    .signup__qr { display: none; }
+  }
+</style>

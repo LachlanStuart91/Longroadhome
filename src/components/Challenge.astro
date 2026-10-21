@@ -1,16 +1,26 @@
 ---
-import { challenge } from '../data/campaign';
-import RouteMap from './RouteMap.astro';
+import { campaign } from '../data/campaign';
+import VideoMessage from './VideoMessage.astro';
 ---
-<section id="the-run" class="section surface-dark grain" aria-labelledby="the-run-title">
-  <div class="wrap">
-    <p class="eyebrow">{challenge.eyebrow}</p>
-    <h2 id="the-run-title" class="display section-title">{challenge.heading}</h2>
-    <hr class="rule" />
-
-    <p class="lead">{challenge.body[0]}</p>
-    <p>{challenge.body[1]}</p>
-
-    <RouteMap />
+<section id="the-run" class="run surface-dark" aria-labelledby="the-run-title">
+  <div class="wrap run__layout">
+    <div>
+      <p class="eyebrow">The run · March 2027</p>
+      <h2 id="the-run-title" class="editorial-title">{campaign.startPlace}<br /><span class="run__to">to</span> {campaign.finishPlace}.</h2>
+      <p class="run__places">{campaign.startRegion} to {campaign.finishRegion}</p>
+      <p class="run__plan">{campaign.planningDistance}. A goal of {campaign.dailyGoalMetric}, with no rest days planned.</p>
+      <p class="run__details">I'll have a support crew and vehicle with me. The detailed route and exact start and finish points are still being planned. I'll share those once they're settled.</p>
+    </div>
+    <VideoMessage />
   </div>
 </section>
+<style>
+  .run { padding-block: var(--editorial-space); }
+  .run__layout { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2.5rem, 7vw, 6rem); align-items: center; }
+  .run h2 { max-width: 18ch; }
+  .run__to { color: var(--gold); }
+  .run__places { font-size: .875rem; color: var(--on-dark-2); margin: 1rem 0 1.75rem; }
+  .run__plan { max-width: 31rem; font-size: 1.125rem; }
+  .run__details { color: var(--on-dark-2); font-size: 1rem; margin-bottom: 0; }
+  @media (max-width: 56.25rem) { .run__layout { grid-template-columns: 1fr; } }
+</style>

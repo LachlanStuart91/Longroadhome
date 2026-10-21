@@ -1,116 +1,90 @@
 ---
 import { newsletter, privacy, links } from '../data/campaign';
-
-/**
- * The supplied MailerLite embed, used exactly as provided.
- *
- * The universal script is rendered with is:inline so Astro does not process,
- * bundle or duplicate it, and it appears once on the page. MailerLite renders
- * the fields, button, validation, consent wording and confirmation behaviour
- * from the account configuration. Nothing here overrides any of that, and no
- * submission endpoint is invented or rebuilt.
- *
- * Email signup is the ONLY action in this section. The Strava invitation that
- * used to sit beside it has moved to the footer as a quiet text link, so
- * nothing here competes with the form for a reader's attention.
- *
- * SOURCE ORDER IS THE READING ORDER: heading and introduction, then the form
- * and its collection notice. That is also the stacked visual order, so no CSS
- * order values are used anywhere in this component.
- */
+import Partnership from './Partnership.astro';
 ---
-<section id="follow" class="section surface-light" aria-labelledby="follow-title">
-  <div class="wrap">
-    <div class="two-col follow-grid">
-      <div class="follow-intro">
-        <h2 id="follow-title" class="display section-title">{newsletter.heading}</h2>
-        <hr class="rule" />
-        <p class="lead">{newsletter.promise}</p>
-      </div>
+<section id="follow" class="follow surface-light" aria-labelledby="follow-title">
+  <div class="wrap follow__layout">
+    <header>
+      <h2 id="follow-title">Come along for the journey.</h2>
+      <p>{newsletter.promise}</p>
+      <Partnership />
+    </header>
 
-      <div class="form-slot">
-        <div class="ml-embedded" data-form="q8HCNv"></div>
-        <noscript>
-          <p class="helper">
-            The signup form needs JavaScript to load. Turn it on and reload the page to subscribe.
-          </p>
-        </noscript>
-
-        {/*
-          Our own collection notice, in our own markup, directly beneath the
-          embed. It is here rather than inside the MailerLite form because the
-          form is built in their old builder and cannot carry a link. It must
-          always describe the live form, which currently asks for a name and an
-          email address and sends a confirmation before the subscription starts.
-        */}
-        <p class="collection-notice">
-          {privacy.collectionNotice}{' '}
-          <a href={links.privacy}>{privacy.collectionNoticeLink}</a>{' '}
-          {privacy.collectionNoticeTail}
-        </p>
-      </div>
+    <div class="follow__form">
+      <div class="ml-embedded" data-form="q8HCNv"></div>
+      <noscript>
+        <p class="follow__helper">The signup form needs JavaScript to load. Turn it on and reload the page to subscribe.</p>
+      </noscript>
+      <p class="follow__notice">
+        {privacy.collectionNotice}{' '}
+        <a href={links.privacy}>{privacy.collectionNoticeLink}</a>{' '}
+        {privacy.collectionNoticeTail}
+      </p>
     </div>
   </div>
 </section>
 
-<!-- MailerLite Universal -->
 <script is:inline>
-    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
-    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
-    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-    ml('account', '2595519');
+  (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+  .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+  n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+  (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+  ml('account', '2595519');
 </script>
-<!-- End MailerLite Universal -->
+
+<script>
+  // Enhance the supplied form locally. Submission, validation and consent
+  // remain owned by MailerLite; no account settings or field values change.
+  const embed = document.querySelector<HTMLElement>('.ml-embedded[data-form="q8HCNv"]');
+  if (embed) {
+    const addLabels = () => {
+      for (const [field, labelText] of [['name', 'Name'], ['email', 'Email']]) {
+        const input = embed.querySelector<HTMLInputElement>(`input[name="fields[${field}]"]`);
+        if (!input || input.labels?.length) continue;
+        input.id ||= `journey-${field}`;
+        const label = document.createElement('label');
+        label.htmlFor = input.id;
+        label.textContent = labelText;
+        input.before(label);
+        input.setAttribute('aria-label', labelText);
+      }
+    };
+    addLabels();
+    const observer = new MutationObserver(addLabels);
+    observer.observe(embed, { childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer.disconnect(), { once: true });
+  }
+</script>
 
 <style>
-  /* Space is reserved so a slow script does not shift the page when the form
-     appears. The form itself is rendered entirely by MailerLite. */
-  .form-slot { min-height: 20rem; }
-  @media (max-width: 56.25rem) { .form-slot { min-height: 0; } }
-
-  /* Matched to the MailerLite card rather than to the text measure. The card
-     is 400px wide with a 20px inner inset, so the notice takes the same width
-     and the same inset and its text lines up with the form's own content
-     instead of starting 55px to the left of it. Full width on narrow screens,
-     where the card is already full width. */
-  .collection-notice {
-    margin-top: var(--space-5);
-    width: 100%;
-    max-width: 400px;
-    margin-inline: auto;
-    padding-inline: 20px;
-    box-sizing: border-box;
-    font-size: var(--size-helper); line-height: 1.6; color: var(--on-light-2);
+  .follow { padding-block: var(--editorial-space); }
+  .follow__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 25rem;
+    gap: clamp(2.5rem, 7vw, 6rem);
+    align-items: start;
   }
-  .collection-notice a { color: var(--terrain); text-underline-offset: 0.18em; }
-  .collection-notice a:hover, .collection-notice a:focus-visible { color: var(--near); }
-
-  /* Wider screens: ONE centred column, not two.
-     With the Strava block gone, a two column layout left roughly 530 by 400px
-     of empty floor beside a two line introduction, because the form card is
-     552px tall and nothing is allowed to fill that space. Narrowing to a single
-     measure removes the void instead of decorating it, and it makes the form
-     the only thing in the section.
-
-     Heading, rule, introduction, form and notice all share one left edge, so
-     the column reads as a deliberate stack rather than as centred fragments. */
-  @media (min-width: 56.25rem) {
-    .follow-grid {
-      display: block;
-      max-width: 40rem;
-      margin-inline: auto;
-    }
-    .follow-intro { margin-bottom: var(--space-7); }
-    /* The introduction's own trailing margin would otherwise collapse into the
-       margin above, so it is cleared to keep the gap at exactly space-7. */
-    .follow-intro > :last-child { margin-bottom: 0; }
-    .form-slot { width: 400px; max-width: 100%; margin-inline: 0; }
+  .follow h2 {
+    margin: 0; max-width: 17ch; font-family: var(--font-support);
+    font-size: clamp(2.25rem, 3.7vw, 3.5rem); font-weight: 600;
+    letter-spacing: -.025em; line-height: 1.12;
   }
-
-  /* Stacked: the source order as it stands, with no order values. Heading and
-     introduction, then the form, then the collection and privacy notice. */
+  .follow header > p { margin: 1.25rem 0 0; max-width: 32rem; color: var(--on-light-2); }
+  .follow__form { min-height: 20rem; }
+  .follow__notice {
+    width: 100%; max-width: 400px; margin: 1.25rem auto 0; padding-inline: 20px;
+    color: var(--on-light-2); font-size: .875rem; line-height: 1.6;
+  }
+  .follow__notice a { color: var(--terrain); text-underline-offset: .18em; }
+  .follow__helper { color: rgba(2,7,4,.62); font-size: .875rem; }
+  .follow :global(.ml-form-embedWrapper) { background: transparent !important; }
+  .follow :global(.ml-form-embedContent) { display: none; }
+  #follow :global(.ml-embedded .ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input) {
+    font-family: var(--font-body); font-size: 1rem !important; border-radius: 2px !important;
+  }
+  .follow :global(.ml-field-group label) { color: var(--near) !important; }
   @media (max-width: 56.25rem) {
-    .follow-grid { display: flex; flex-direction: column; }
+    .follow__layout { grid-template-columns: 1fr; }
+    .follow__form { min-height: 0; max-width: 25rem; }
   }
 </style>

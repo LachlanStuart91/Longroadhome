@@ -108,6 +108,23 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 /* ------------------------------------------------------------- layout */
 .wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
 
+section[id], figure[id] { scroll-margin-top: var(--header-h); }
+.editorial-title {
+  font-family: var(--font-support); font-weight: 600;
+  font-size: clamp(2.25rem, 3.7vw, 3.5rem); line-height: 1.12;
+  letter-spacing: -.025em; margin: 0;
+}
+.text-link {
+  display: inline-block; color: inherit; font-size: .9375rem; font-weight: 600;
+  text-underline-offset: .28em; text-decoration-thickness: 1px;
+  padding-block: .35rem;
+}
+.text-link span { margin-left: .3rem; }
+.surface-light .text-link { color: var(--terrain); }
+.documentary { margin: 0; min-width: 0; }
+.documentary img { display: block; width: 100%; height: auto; }
+.documentary figcaption { margin-top: .65rem; color: var(--on-light-2); font-size: .875rem; }
+
 .section { padding-block: var(--space-9); position: relative; scroll-margin-top: var(--header-h); }
 @media (max-width: 47.5rem) { .section { padding-block: var(--space-8); } }
 
@@ -149,6 +166,8 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 }
 .btn--gold { background: var(--gold); color: var(--near); border-color: var(--gold); }
 .btn--gold:hover { background: var(--heritage); border-color: var(--heritage); }
+.btn--dark { background: var(--near); color: var(--road); border-color: var(--near); }
+.btn--dark:hover { background: var(--terrain); border-color: var(--terrain); }
 .btn--outline { background: transparent; color: var(--on-dark-1); border-color: rgba(230,227,218,0.5); }
 .btn--outline:hover { border-color: var(--gold); color: var(--gold); }
 .surface-light .btn--outline,
@@ -193,11 +212,13 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
    light-on-light. This is the same class of bug as the focus ring, so it is
    solved the same way: the component follows its own surface, not its parent. */
 .panel-dark { color: var(--on-dark-1); }
+.panel-dark .eyebrow { color: var(--gold); }
 .panel-dark p,
 .panel-dark .helper,
 .panel-dark .label { color: var(--on-dark-2); }
 
 .panel-light { color: var(--on-light-1); }
+.panel-light .eyebrow { color: var(--terrain); }
 .panel-light p,
 .panel-light .helper,
 .panel-light .label { color: var(--on-light-2); }

@@ -1,77 +1,19 @@
 ---
 import posterImage from '../images/video-poster-lachlan-stuart.jpg';
 import { video } from '../data/campaign';
-
-/**
- * Lachlan's piece to camera, directly under the hero.
- *
- * SELF HOSTED ON PURPOSE. A YouTube or Vimeo embed would load a third party
- * player, its cookies and its analytics before anyone pressed play, which is
- * exactly what the donation section was rebuilt to avoid. The file is served
- * from this site instead, so the only host involved is the one already named
- * on the privacy page.
- *
- * preload="none" means the 28 MB file is not fetched until a visitor presses
- * play. Only the poster image, which Astro optimises, loads with the page.
- * The captions are burned into the picture by the supplied edit, so they are
- * always on and need no separate track or toggle.
- *
- * Near black rather than forest green: the hero above is Forest and the Long
- * Lunch below is Road White, so this sits between them as its own dark beat
- * and keeps the eye on the picture. It reuses the Track Record surface rather
- * than introducing a new colour.
- */
 ---
-<section id="watch" class="section surface-dark surface-near watch" aria-labelledby="watch-title">
-  <div class="wrap">
-    <div class="watch__col">
-      <p class="eyebrow">{video.eyebrow}</p>
-      <h2 id="watch-title" class="display section-title">{video.heading}</h2>
-      <hr class="rule" />
-      <p class="lead watch__intro">{video.intro}</p>
-
-      <div class="watch__frame">
-        <video
-          class="watch__video"
-          controls
-          preload="none"
-          playsinline
-          poster={posterImage.src}
-          width="1280"
-          height="720"
-          aria-label={video.label}
-        >
-          <source src="/video/the-long-road-home-message.mp4" type="video/mp4" />
-          <p class="watch__fallback">
-            {video.fallback}{' '}
-            <a href="/video/the-long-road-home-message.mp4" download>{video.fallbackLink}</a>.
-          </p>
-        </video>
-      </div>
-
-      <p class="helper watch__helper">{video.helper}</p>
-    </div>
-  </div>
-</section>
-
+<figure id="watch" class="watch">
+  <video controls preload="none" playsinline poster={posterImage.src}
+         width="1280" height="720" aria-label={video.label}>
+    <source src="/video/the-long-road-home-message.mp4" type="video/mp4" />
+    <p>{video.fallback} <a href="/video/the-long-road-home-message.mp4" download>{video.fallbackLink}</a>.</p>
+  </video>
+  <figcaption><span>{video.heading}</span><span>{video.helper}</span></figcaption>
+</figure>
 <style>
-  /* One centred measure, a little wider than the text sections so the picture
-     has room without becoming the whole screen on a large monitor. */
-  .watch__col { max-width: 64rem; margin-inline: auto; }
-  .watch__intro { margin-bottom: var(--space-6); max-width: 54ch; }
-
-  /* The frame carries the shape, so the video itself needs no layout rules and
-     the poster cannot letterbox differently from the file. */
-  .watch__frame {
-    aspect-ratio: 16 / 9;
-    background: #000;
-    border: 1px solid var(--hairline-dark);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .watch__video { display: block; width: 100%; height: 100%; }
-
-  .watch__helper { margin-top: var(--space-4); }
-  .watch__fallback { color: var(--on-dark-1); padding: var(--space-5); }
-  .watch__fallback a { color: var(--gold); text-underline-offset: 0.18em; }
+  .watch { margin: 0; min-width: 0; }
+  .watch video { display: block; width: 100%; height: auto; background: #000; }
+  .watch figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .4rem 1rem; margin-top: .8rem; color: var(--on-dark-2); font-size: .875rem; }
+  .watch figcaption span:first-child { color: var(--road); }
+  .watch a { color: var(--gold); }
 </style>

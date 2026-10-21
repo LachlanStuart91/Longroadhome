@@ -1,13 +1,11 @@
 ---
-import TicketLink from './TicketLink.astro';
-import { navigation, navigationAfterEvent, event, campaign, hero } from '../data/campaign';
+import { navigation, campaign, links } from '../data/campaign';
 
 /**
- * The header is driven entirely by event.active. When the event is over the
- * Long Lunch anchor disappears, every ticket action disappears, and partnership
- * becomes the persistent action.
+ * The persistent action follows the page's purpose. Event booking never
+ * replaces the donation or community signup journey.
  */
-const nav = event.active ? navigation : navigationAfterEvent;
+const nav = navigation;
 
 /**
  * Section anchors only resolve on the homepage. From any other page, such as
@@ -16,7 +14,8 @@ const nav = event.active ? navigation : navigationAfterEvent;
  */
 const path = Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '');
 const onHome = path === '/' || path === '';
-const anchor = (href: string) => (onHome ? href : `/${href}`);
+const onChallenge = path === links.communityChallenge;
+const destination = (href: string) => href.startsWith('#') && !onHome ? `/${href}` : href;
 ---
 <header class="site-header surface-dark">
   <div class="bar wrap">
@@ -27,20 +26,22 @@ const anchor = (href: string) => (onHome ? href : `/${href}`);
 
     <nav class="nav-desktop" aria-label="Sections">
       <ul>
-        {nav.map((item) => <li><a href={anchor(item.href)}>{item.label}</a></li>)}
+        {nav.map((item) => (
+          <li>
+            <a href={destination(item.href)} aria-current={item.href === path ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
 
     <div class="bar__actions">
-      {event.active ? (
-        <TicketLink class="btn btn--gold btn--small">
-          <span class="wide-only">Book&nbsp;</span>Tickets
-        </TicketLink>
-      ) : (
-        <a class="btn btn--gold btn--small" href={anchor('#partner')}>
-          Partner<span class="wide-only">&nbsp;With Us</span>
-        </a>
-      )}
+      <a class="btn btn--gold btn--small"
+         href={onChallenge ? links.challengeSignup : destination('#donate')}
+         aria-label={onChallenge ? 'Start my challenge' : 'Donate to Top Blokes Foundation'}>
+        {onChallenge ? <><span class="wide-only">Start my challenge</span><span class="narrow-only">Join</span></> : 'Donate'}
+      </a>
       <button
         class="burger"
         id="nav-toggle"
@@ -58,20 +59,19 @@ const anchor = (href: string) => (onHome ? href : `/${href}`);
 
   <nav class="nav-panel" id="nav-panel" aria-label="Sections, mobile" hidden>
     <ul>
-      {nav.map((item) => <li><a href={anchor(item.href)}>{item.label}</a></li>)}
+      {nav.map((item) => (
+        <li>
+          <a href={destination(item.href)} aria-current={item.href === path ? 'page' : undefined}>
+            {item.label}
+          </a>
+        </li>
+      ))}
     </ul>
     <div class="nav-panel__actions">
-      {event.active ? (
-        <>
-          <TicketLink class="btn btn--gold btn--block">{hero.primaryActive}</TicketLink>
-          <a class="btn btn--outline btn--block" href={anchor('#partner')}>{hero.secondaryActive}</a>
-        </>
-      ) : (
-        <>
-          <a class="btn btn--gold btn--block" href={anchor('#partner')}>{hero.primaryArchived}</a>
-          <a class="btn btn--outline btn--block" href={anchor('#follow')}>{hero.secondaryArchived}</a>
-        </>
-      )}
+      <a class="btn btn--gold btn--block" href={onChallenge ? links.challengeSignup : destination('#donate')}>
+        {onChallenge ? 'Start my challenge' : 'Donate to Top Blokes'}
+      </a>
+      <a class="btn btn--outline btn--block" href={destination('#partner')}>Support the run</a>
     </div>
   </nav>
 </header>
@@ -104,6 +104,7 @@ const anchor = (href: string) => (onHome ? href : `/${href}`);
     color: var(--on-dark-2); text-decoration: none;
   }
   .nav-desktop a:hover, .nav-desktop a:focus-visible { color: var(--gold); }
+  .nav-desktop a[aria-current='page'] { color: var(--gold); }
 
   .bar__actions { display: flex; align-items: center; gap: var(--space-3); }
 
@@ -134,10 +135,12 @@ const anchor = (href: string) => (onHome ? href : `/${href}`);
     color: var(--on-dark-1); text-decoration: none;
     padding: var(--space-4) 0.125rem; border-bottom: 1px solid var(--hairline-dark);
   }
+  .nav-panel a[aria-current='page'] { color: var(--gold); }
   .nav-panel__actions { margin-top: var(--space-5); display: grid; gap: var(--space-3); }
 
   @media (min-width: 62.5625rem) { .nav-panel { display: none !important; } }
-  @media (max-width: 47.5rem) { .wide-only { display: none; } }
+  .narrow-only { display: none; }
+  @media (max-width: 47.5rem) { .wide-only { display: none; } .narrow-only { display: inline; } }
 
   /* Compact phones, below 380px.
      Measured before this rule: the header row needed 368px of content whatever

@@ -30,7 +30,7 @@ import { donation, links, ui } from '../data/campaign';
  * it stays visible in every state.
  */
 ---
-<section id="donate" class="section surface-light" aria-labelledby="donate-title">
+<section id="donate" class="donate-section surface-dark surface-near" aria-labelledby="donate-title">
   <div class="wrap">
     {/* Every value the script needs travels as plain data. data-donate-embed is
         a string attribute, not a src, so the document requests nothing from
@@ -44,36 +44,34 @@ import { donation, links, ui } from '../data/campaign';
       data-donate-ready={donation.readyStatus}
       data-donate-failed={donation.failureStatus}
     >
-      <p class="eyebrow">{donation.eyebrow}</p>
-      <h2 id="donate-title" class="display section-title">{donation.heading}</h2>
-      <hr class="rule" />
-      <p class="lead donate__intro">{donation.intro}</p>
+      <h3 id="donate-title">{donation.heading}</h3>
+      <p class="donate__intro">{donation.intro}</p>
 
       {/* Compact on purpose. No blank frame area is reserved, because nothing
           is loading yet and a 600px hole would only look broken. */}
       <div class="donate__card" data-donate-card>
-        <p class="helper donate__disclosure">{donation.disclosure}</p>
-        <button type="button" class="btn btn--gold btn--block donate__load" data-donate-load>
+        <p class="donate__disclosure">{donation.disclosure}</p>
+        <button type="button" class="btn btn--gold donate__load" data-donate-load>
           {donation.loadLabel}
         </button>
       </div>
 
       {/* One polite status region, written to once per state. It is in the
           markup from the start so assistive technology is already watching it. */}
-      <p class="helper donate__status" role="status" data-donate-status></p>
+      <p class="donate__status" role="status" tabindex="-1" data-donate-status></p>
 
       {/* The created iframe is appended here, between the status message and
           the external action, so the reading and tab order stay correct. */}
       <div class="donate__frame" data-donate-frame hidden></div>
 
       <noscript>
-        <p class="helper donate__noscript">{donation.noscript}</p>
+          <p class="donate__noscript">{donation.noscript}</p>
       </noscript>
 
       <div class="donate__fallback">
-        <a class="btn btn--outline btn--block donate__campaign" href={links.fundraising}
+        <a class="donate__campaign" href={links.fundraising}
            target="_blank" rel="noopener noreferrer">
-          {donation.campaignLabel}<span class="visually-hidden">, {ui.newTab}</span>
+          {donation.campaignLabel} <span aria-hidden="true">→</span><span class="visually-hidden">, {ui.newTab}</span>
         </a>
       </div>
     </div>
@@ -81,47 +79,24 @@ import { donation, links, ui } from '../data/campaign';
 </section>
 
 <style>
-  /* One centred column, the same measure as the Follow section, so the form is
-     the only thing in the section and the rest of the page is not redesigned. */
-  .donate { max-width: 40rem; margin-inline: auto; }
-  .donate__intro { margin-bottom: var(--space-6); }
-
-  /* 28rem is Raisely's own 420px form column plus a small inset. A wider frame
-     only adds empty white either side of the form. The card, the frame and the
-     external action share that width so every state reads as one unit, the same
-     pattern as the 400px signup form under the wider Follow introduction. */
-  .donate__card,
-  .donate__frame,
-  .donate__fallback { max-width: 28rem; }
-
-  .donate__card {
-    background: #fff;
-    border: 1px solid var(--hairline-light);
-    border-radius: var(--radius);
-    padding: var(--space-5);
+  .donate-section { padding: clamp(1.5rem, 3vw, 2.5rem); min-width: 0; }
+  .donate-section > .wrap { padding: 0; }
+  .donate { max-width: 58rem; margin-inline: auto; }
+  .donate h3 {
+    margin: 0; max-width: 16ch; color: var(--road); font-family: var(--font-support);
+    font-size: clamp(2rem, 3vw, 2.8rem); font-weight: 600;
+    letter-spacing: -0.025em; line-height: 1.12;
   }
-  .donate__disclosure { margin: 0 0 var(--space-4); }
+  .donate__intro { margin: 1.25rem 0 0; max-width: 43rem; color: var(--on-dark-2); font-size: 1rem; }
+  .donate__card { margin-top: 1.5rem; }
+  .donate__disclosure { margin: 0 0 1rem; color: rgba(230,227,218,.58); font-size: .875rem; }
   .donate__load { margin: 0; }
-
-  /* Empty until a state is announced, so it takes no space on arrival. */
-  .donate__status { margin: var(--space-4) 0 0; }
+  .donate__status { margin: var(--space-4) 0 0; color: rgba(230,227,218,.68); font-size: .875rem; }
   .donate__status:empty { display: none; }
-
-  /* Raisely's form is white, so it sits on Road White as a quiet card with a
-     hairline edge. Nothing inside the frame is styled from here.
-
-     Raisely's plain iframe sends no resize messages, so the height is fixed.
-     The first step, the amount selection, measured 343px tall at 320, 390 and
-     1280px wide. 600px is the height Raisely's own iframe example uses: it
-     shows the whole first step with room to spare and no inner scrolling. The
-     later steps were deliberately not opened, so their height is unverified;
-     if one is taller, Raisely's page scrolls inside the frame rather than
-     being clipped. */
   .donate__frame {
     margin-top: var(--space-5);
+    max-width: 32rem;
     background: #fff;
-    border: 1px solid var(--hairline-light);
-    border-radius: var(--radius);
   }
   .donate__frame :global(iframe) {
     display: block;
@@ -129,10 +104,13 @@ import { donation, links, ui } from '../data/campaign';
     height: 37.5rem;
     border: 0;
   }
-  .donate__noscript { margin-top: var(--space-4); }
+  .donate__noscript { margin-top: var(--space-4); color: rgba(230,227,218,.68); font-size: .875rem; }
   .donate__fallback { margin-top: var(--space-5); }
-  /* The full width buttons wrap below 35rem through the global .btn--block
-     rule, so no narrow phone rule is needed here. */
+  .donate__campaign {
+    color: var(--road); font-family: var(--font-support); font-size: .875rem;
+    font-weight: 600; text-underline-offset: .32rem; text-decoration-thickness: 2px;
+  }
+  @media (max-width: 27rem) { .donate__load { width: 100%; white-space: normal; text-align: center; } }
 </style>
 
 <script>
@@ -177,6 +155,7 @@ import { donation, links, ui } from '../data/campaign';
       loadButton?.setAttribute('disabled', '');
       card.hidden = true;
       status.textContent = messages.loading;
+      status.focus({ preventScroll: true });
 
       const iframe = document.createElement('iframe');
       iframe.title = messages.title;
@@ -214,8 +193,8 @@ import { donation, links, ui } from '../data/campaign';
       iframe.addEventListener('load', ready, { once: true });
       iframe.addEventListener('error', fail, { once: true });
 
-      // Focus is deliberately left where the visitor put it. Moving it into a
-      // cross-origin frame would take them somewhere they did not ask to go.
+      // Keep focus on the local status, not on the now-hidden load button or
+      // inside a cross-origin frame. Tab continues naturally into the form.
       iframe.src = src;
       frame.hidden = false;
       frame.replaceChildren(iframe);

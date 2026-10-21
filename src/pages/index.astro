@@ -1,15 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-import VideoMessage from '../components/VideoMessage.astro';
 import LongLunch from '../components/LongLunch.astro';
 import EventArchive from '../components/EventArchive.astro';
 import Challenge from '../components/Challenge.astro';
+import CommunityChallengePromo from '../components/CommunityChallengePromo.astro';
 import Why from '../components/Why.astro';
 import TopBlokes from '../components/TopBlokes.astro';
-import DonationEmbed from '../components/DonationEmbed.astro';
 import TrackRecord from '../components/TrackRecord.astro';
-import Partnership from '../components/Partnership.astro';
 import Follow from '../components/Follow.astro';
 import { event, meta, campaign, links } from '../data/campaign';
 
@@ -56,10 +54,6 @@ const identitySchema = {
 
   <Hero />
 
-  {/* Lachlan's piece to camera. Self hosted and click to play: nothing is
-      fetched from it until a visitor presses play. */}
-  <VideoMessage />
-
   {/* One switch. Active renders the event, archived renders its archive. */}
   {event.active ? <LongLunch /> : <EventArchive />}
 
@@ -67,15 +61,11 @@ const identitySchema = {
 
   <Why />
 
-  <TopBlokes />
-
-  {/* The embedded Raisely form. The Top Blokes panel's Donate action is a
-      same-page anchor to this section. */}
-  <DonationEmbed />
-
   <TrackRecord />
 
-  <Partnership />
+  <CommunityChallengePromo />
+
+  <TopBlokes />
 
   <Follow />
 
