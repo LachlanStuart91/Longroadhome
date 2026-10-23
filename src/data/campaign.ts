@@ -342,59 +342,9 @@ export const topBlokes = {
   targetLabel: 'Fundraising target',
   aboutLabel: 'About Top Blokes Foundation',
   donateLabel: 'Donate to Top Blokes Foundation',
-  /**
-   * States who receives the money and where the form is. The panel's Donate
-   * action is a same-page anchor to the embedded Raisely form, so this no longer
-   * says the form opens in a new tab. Top Blokes Foundation controls the Raisely
-   * campaign and receives the donor information. This website never sees a
-   * donation or a payment detail.
-   */
+  /** All donation actions lead directly to the campaign's Raisely homepage. */
   donateNote:
-    'Donations made through Raisely go directly to Top Blokes Foundation. The Raisely donation form is further down this page.',
-} as const;
-
-/* ------------------------------------------------------- donation embed */
-
-/**
- * The Raisely donation form, loaded only when a visitor asks for it.
- *
- * Raisely provides the form for Top Blokes Foundation, and Raisely and its
- * payment services receive everything typed into it. The parent page never
- * reads, listens to or stores anything from the frame.
- *
- * NOTHING from Raisely or its payment, security and analytics services is
- * requested until someone activates the Donate action or the load button. No
- * claim is made here about which payment methods the embedded form offers,
- * because that has not been verified.
- */
-export const donation = {
-  eyebrow: 'Donate through Raisely',
-  heading: 'Help fund the mentoring.',
-  intro:
-    'The donation form on this page is provided by Raisely for Top Blokes Foundation. The Long Road Home does not receive or store donor information or payment details.',
-  /** Shown beside the load button, before anything from Raisely is requested. */
-  disclosure: 'Nothing from Raisely loads until you choose to continue.',
-  loadLabel: 'Donate to Top Blokes',
-  /** Concise and unique on the page: the iframe's accessible name. */
-  frameTitle: 'Donate to Top Blokes Foundation through Raisely',
-  /** Announced politely. One message per state, never repeated progress. */
-  loadingStatus: 'Loading the Raisely donation form…',
-  /**
-   * Announced when the frame's load event fires. Deliberately neutral: a
-   * browser fires that event for its own blocked or error page too, and a
-   * cross-origin frame cannot be inspected, so the page never claims success.
-   */
-  readyStatus:
-    'The Raisely donation form should appear below. If it does not, use the Raisely campaign page.',
-  failureStatus:
-    'The embedded form could not be loaded. You can continue on the Raisely campaign page.',
-  /**
-   * One external action, because the campaign homepage is the only external
-   * donation destination. It stays visible before, during and after loading.
-   */
-  campaignLabel: 'Or donate on Raisely',
-  noscript:
-    'The donation form needs JavaScript to load. You can still donate using the Raisely link below.',
+    'Donations made through Raisely go directly to Top Blokes Foundation.',
 } as const;
 
 /* -------------------------------------------------------- event archive */
@@ -471,24 +421,15 @@ export const links = {
    * The Raisely campaign homepage for The Long Road Home, confirmed by Lachlan
    * on 16 September 2026 as the single external donation destination. Top Blokes
    * Foundation controls that campaign and receives the donor information. Use
-   * this URL exactly. It is the external action beside the embedded form, the
-   * footer's Donate link, and the alternative named on the privacy page.
+   * this URL exactly for every donation action. No donation form is embedded.
    *
    * It REPLACES the earlier direct Raisely form URL, which is retired and must
    * not be reintroduced anywhere on the website.
    */
   fundraising: 'https://the-long-road-home.raiselysite.com/',
-  /**
-   * Raisely's public embed surface for the same campaign: the donation form
-   * only. This page is framed, never linked. The direct form and the campaign
-   * homepage both refuse framing, so neither may be used as an iframe source.
-   */
-  fundraisingEmbed: 'https://the-long-road-home.raiselysite.com/embed',
   /** Registration for The Capable of More Challenge. */
   challengeSignup: 'https://the-long-road-home.raiselysite.com/signup',
   communityChallenge: '/capable-of-more',
-  /** Same-page anchor for the embedded donation section. */
-  donateSection: '#donate',
   privacy: '/privacy',
 } as const;
 
@@ -505,7 +446,7 @@ export const newsletter = {
     'Follow the journey with weekly updates, announcements, event invitations and ways to get involved.',
   /** The embed is supplied and sufficient: form q8HCNv, account 2595519. */
   eyebrow: 'Follow the journey',
-  heading: 'Follow the journey',
+  heading: 'Join my email list.',
   /** MailerLite renders the fields, button and messages. Nothing here overrides
    *  what the account is configured to show. */
   configuration: pending(
@@ -544,8 +485,8 @@ export const providerPolicies = {
   vercel: 'https://vercel.com/legal/privacy-notice',
   trybooking: 'https://www.trybooking.com/info/privacy',
   /**
-   * Donations are handled by Top Blokes Foundation on Raisely, including through
-   * the embedded form, so both of those policies are linked rather than
+   * Donations are handled by Top Blokes Foundation on the separate Raisely
+   * campaign site, so both of those policies are linked rather than
    * described second hand here.
    */
   topBlokes: 'https://www.topblokes.org.au/privacy-policy/',
@@ -587,9 +528,10 @@ export type NavItem = { readonly label: string; readonly href: string };
 
 export const navigation: readonly NavItem[] = [
   { label: 'The Run', href: '#the-run' },
-  { label: 'Community Challenge', href: links.communityChallenge },
+  { label: 'Capable of More', href: links.communityChallenge },
   { label: 'My Story', href: '#why' },
   { label: 'Top Blokes', href: '#top-blokes' },
+  { label: 'Email updates', href: '#follow' },
 ];
 
 /** Navigation with the event anchor removed, for the post-event state. */

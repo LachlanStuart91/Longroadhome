@@ -1,15 +1,23 @@
 ---
 import { partnership, partner, links } from '../data/campaign';
 ---
-<section id="partner" class="partner" aria-labelledby="partner-title">
-  <h3 id="partner-title">Interested in supporting the run?</h3>
-  <p>{partnership.body[0]} {partnership.body[1]}</p>
-  <a class="text-link" href={links.partnerEmail}>{partnership.buttonLabel} <span aria-hidden="true">↗</span></a>
-  <p class="partner__contact">{partner.organisation}</p>
+<section id="partner" class="partner surface-light" aria-labelledby="partner-title">
+  <div class="wrap partner__layout">
+    <div>
+      <h2 id="partner-title">Interested in supporting the run?</h2>
+      <p>{partnership.body[0]} {partnership.body[1]}</p>
+    </div>
+    <div>
+      <a class="text-link" href={links.partnerEmail}>{partnership.buttonLabel} <span aria-hidden="true">↗</span></a>
+      <p class="partner__contact">{partner.organisation}</p>
+    </div>
+  </div>
 </section>
 <style>
-  .partner { margin-top: 2.5rem; max-width: 32rem; }
-  .partner h3 { font: 600 1.125rem/1.4 var(--font-body); margin: 0 0 .75rem; }
-  .partner > p { color: var(--on-light-2); font-size: .9375rem; }
+  .partner { padding-block: 2.5rem; }
+  .partner__layout { display: flex; justify-content: space-between; gap: 1.5rem 3rem; align-items: center; }
+  .partner h2 { font: 600 1.125rem/1.4 var(--font-body); margin: 0 0 .75rem; }
+  .partner p { color: var(--on-light-2); font-size: .9375rem; max-width: 36rem; margin-bottom: 0; }
   .partner .partner__contact { font-size: .875rem; margin: .3rem 0 0; }
+  @media (max-width: 56.25rem) { .partner__layout { flex-direction: column; align-items: flex-start; } }
 </style>

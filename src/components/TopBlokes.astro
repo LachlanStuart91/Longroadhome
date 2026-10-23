@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import topBlokesLogo from '../images/top-blokes-proud-supporter-logo.png';
-import DonationEmbed from './DonationEmbed.astro';
 import { campaign, topBlokes, links, ui } from '../data/campaign';
 ---
 <section id="top-blokes" class="tb surface-light" aria-labelledby="tb-title">
@@ -13,13 +12,14 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
         <p class="tb__reason">{topBlokes.reason}</p>
         <p>{topBlokes.programBody}</p>
         <a class="text-link" href={links.topBlokes}>{topBlokes.aboutLabel} <span aria-hidden="true">↗</span></a>
-        <div class="tb__target">
-          <div><p class="tb__amount">{campaign.fundraisingTarget}</p><p>{topBlokes.targetLabel}</p></div>
-          <Image class="tb__logo" src={topBlokesLogo} alt="Proud supporter of Top Blokes Foundation"
-                 widths={[180,360]} sizes="150px" format="png" loading="lazy" />
-        </div>
       </div>
-      <DonationEmbed />
+      <section id="donate" class="tb__donate" aria-labelledby="donate-title">
+        <h3 id="donate-title" class="tb__amount">{campaign.fundraisingTarget}<span>{topBlokes.targetLabel}</span></h3>
+        <p>Help me get there. Donations through the campaign's Raisely page go directly to Top Blokes Foundation.</p>
+        <a class="btn btn--dark" href={links.fundraising}>Donate on Raisely <span aria-hidden="true">↗</span></a>
+        <Image class="tb__logo" src={topBlokesLogo} alt="Proud supporter of Top Blokes Foundation"
+               widths={[180,360]} sizes="150px" format="png" loading="lazy" />
+      </section>
     </div>
     <details class="tb__evidence">
       <summary>Research and support</summary>
@@ -46,15 +46,16 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
   </div>
 </section>
 <style>
-  .tb { padding-block: var(--editorial-space); background: #f1efe8; }
-  .tb__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2.5rem, 7vw, 6rem); align-items: start; }
+  .tb { padding-block: var(--editorial-space); background: #faf9f5; }
+  .tb__layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(2.5rem, 8vw, 7rem); align-items: start; }
   .tb__story > p { color: var(--on-light-2); }
   .tb__story .eyebrow { color: var(--terrain); }
   .tb__reason { margin-top: 1.75rem; font-size: 1.125rem; }
-  .tb__target { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-top: 2rem; }
-  .tb__amount { font-family: var(--font-display); font-size: clamp(3.5rem, 5vw, 5rem); line-height: 1; color: var(--terrain); margin: 0; }
-  .tb__target p:last-child:not(.tb__amount) { font-size: .875rem; margin: .35rem 0 0; color: var(--on-light-2); }
-  .tb__logo { width: 9.5rem; height: auto; }
+  .tb__amount { font-family: var(--font-display); font-weight: 400; font-size: clamp(4rem, 6vw, 6rem); line-height: 1; color: var(--terrain); margin: 0 0 1.5rem; }
+  .tb__amount span { display: block; font: 400 .875rem/1.5 var(--font-body); margin-top: .5rem; color: var(--on-light-2); }
+  .tb__donate > p { font-size: 1rem; color: var(--on-light-2); }
+  .tb__donate .btn { gap: 1rem; margin-top: .5rem; white-space: normal; }
+  .tb__logo { width: 9.5rem; height: auto; margin-top: 2rem; }
   .tb__evidence { margin-top: 2.5rem; max-width: 65rem; }
   .tb__evidence summary { width: fit-content; padding-block: .5rem; color: var(--terrain); font-size: .9375rem; cursor: pointer; }
   .tb__evidence summary:hover { text-decoration: underline; text-underline-offset: .2em; }

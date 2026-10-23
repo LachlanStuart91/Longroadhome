@@ -38,8 +38,8 @@ const destination = (href: string) => href.startsWith('#') && !onHome ? `/${href
 
     <div class="bar__actions">
       <a class="btn btn--gold btn--small"
-         href={onChallenge ? links.challengeSignup : destination('#donate')}
-         aria-label={onChallenge ? 'Start my challenge' : 'Donate to Top Blokes Foundation'}>
+         href={onChallenge ? links.challengeSignup : links.fundraising}
+         aria-label={onChallenge ? 'Start my challenge' : 'Donate to Top Blokes Foundation on Raisely'}>
         {onChallenge ? <><span class="wide-only">Start my challenge</span><span class="narrow-only">Join</span></> : 'Donate'}
       </a>
       <button
@@ -68,8 +68,8 @@ const destination = (href: string) => href.startsWith('#') && !onHome ? `/${href
       ))}
     </ul>
     <div class="nav-panel__actions">
-      <a class="btn btn--gold btn--block" href={onChallenge ? links.challengeSignup : destination('#donate')}>
-        {onChallenge ? 'Start my challenge' : 'Donate to Top Blokes'}
+      <a class="btn btn--gold btn--block" href={onChallenge ? links.challengeSignup : links.fundraising}>
+        {onChallenge ? 'Start my challenge' : 'Donate on Raisely'}
       </a>
       <a class="btn btn--outline btn--block" href={destination('#partner')}>Support the run</a>
     </div>
@@ -116,7 +116,7 @@ const destination = (href: string) => href.startsWith('#') && !onHome ? `/${href
   }
   .burger span { width: 1.125rem; height: 2px; background: var(--on-dark-1); display: block; }
 
-  @media (max-width: 62.5rem) {
+  @media (max-width: 68.75rem) {
     .nav-desktop { display: none; }
     .burger { display: flex; }
   }
@@ -138,7 +138,7 @@ const destination = (href: string) => href.startsWith('#') && !onHome ? `/${href
   .nav-panel a[aria-current='page'] { color: var(--gold); }
   .nav-panel__actions { margin-top: var(--space-5); display: grid; gap: var(--space-3); }
 
-  @media (min-width: 62.5625rem) { .nav-panel { display: none !important; } }
+  @media (min-width: 68.8125rem) { .nav-panel { display: none !important; } }
   .narrow-only { display: none; }
   @media (max-width: 47.5rem) { .wide-only { display: none; } .narrow-only { display: inline; } }
 

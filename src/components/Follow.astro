@@ -1,16 +1,19 @@
 ---
 import { newsletter, privacy, links } from '../data/campaign';
-import Partnership from './Partnership.astro';
 ---
 <section id="follow" class="follow surface-light" aria-labelledby="follow-title">
   <div class="wrap follow__layout">
     <header>
-      <h2 id="follow-title">Come along for the journey.</h2>
+      <p class="eyebrow">{newsletter.eyebrow}</p>
+      <h2 id="follow-title">{newsletter.heading}</h2>
       <p>{newsletter.promise}</p>
-      <Partnership />
     </header>
 
     <div class="follow__form">
+      <div class="follow__loading" data-newsletter-loading hidden>
+        <p class="follow__helper" role="status" data-newsletter-status>Loading the email signup…</p>
+        <button type="button" class="text-link follow__retry" data-newsletter-retry hidden>Reload the signup form</button>
+      </div>
       <div class="ml-embedded" data-form="q8HCNv"></div>
       <noscript>
         <p class="follow__helper">The signup form needs JavaScript to load. Turn it on and reload the page to subscribe.</p>
@@ -37,6 +40,17 @@ import Partnership from './Partnership.astro';
   // provider validation and double opt-in remain owned by MailerLite.
   const embed = document.querySelector<HTMLElement>('.ml-embedded[data-form="q8HCNv"]');
   if (embed) {
+    const loading = document.querySelector<HTMLElement>('[data-newsletter-loading]');
+    const status = document.querySelector<HTMLElement>('[data-newsletter-status]');
+    const retry = document.querySelector<HTMLButtonElement>('[data-newsletter-retry]');
+    if (loading) loading.hidden = false;
+    const loadingTimeout = window.setTimeout(() => {
+      if (loading?.hidden) return;
+      if (status) status.textContent = "The email signup hasn't loaded. Please reload, or try again with content blockers turned off for this site.";
+      if (retry) retry.hidden = false;
+    }, 10000);
+    retry?.addEventListener('click', () => window.location.reload());
+
     const enhancedEmails = new WeakMap<HTMLInputElement, () => void>();
 
     const enhanceEmail = (input: HTMLInputElement) => {
@@ -102,6 +116,10 @@ import Partnership from './Partnership.astro';
     };
 
     const enhanceForm = () => {
+      if (embed.querySelector('input[name="fields[email]"]')) {
+        if (loading) loading.hidden = true;
+        window.clearTimeout(loadingTimeout);
+      }
       for (const [field, labelText] of [['name', 'Name'], ['email', 'Email']]) {
         const input = embed.querySelector<HTMLInputElement>(`input[name="fields[${field}]"]`);
         if (!input) continue;
@@ -120,13 +138,16 @@ import Partnership from './Partnership.astro';
     const observer = new MutationObserver(enhanceForm);
     observer.observe(embed, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
     window.addEventListener('pagehide', (event) => {
-      if (!event.persisted) observer.disconnect();
+      if (!event.persisted) {
+        observer.disconnect();
+        window.clearTimeout(loadingTimeout);
+      }
     });
   }
 </script>
 
 <style>
-  .follow { padding-block: var(--editorial-space); }
+  .follow { padding-block: var(--editorial-space); background: #d4dbcf; }
   .follow__layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 25rem;
@@ -138,15 +159,19 @@ import Partnership from './Partnership.astro';
     font-size: clamp(2.25rem, 3.7vw, 3.5rem); font-weight: 600;
     letter-spacing: -.025em; line-height: 1.12;
   }
-  .follow header > p { margin: 1.25rem 0 0; max-width: 32rem; color: var(--on-light-2); }
-  .follow__form { min-height: 20rem; }
+  .follow header > p:not(.eyebrow) { margin: 1.25rem 0 0; max-width: 32rem; color: var(--on-light-2); }
+  .follow__form { min-height: 20rem; min-width: 0; }
   .follow__notice {
-    width: 100%; max-width: 400px; margin: 1.25rem auto 0; padding-inline: 20px;
+    width: 100%; max-width: 400px; margin: 1.25rem auto 0;
     color: var(--on-light-2); font-size: .875rem; line-height: 1.6;
   }
   .follow__notice a { color: var(--terrain); text-underline-offset: .18em; }
-  .follow__helper { color: rgba(2,7,4,.62); font-size: .875rem; }
+  .follow__helper { color: var(--on-light-2); font-size: .875rem; }
+  .follow__loading[hidden], .follow__retry[hidden] { display: none; }
+  .follow__retry { border: 0; padding-inline: 0; background: transparent; cursor: pointer; text-decoration: underline; }
+  .follow__loading { margin-bottom: 1rem; }
   .follow :global(.ml-form-embedWrapper) { background: transparent !important; }
+  .follow :global(.ml-form-embedWrapper .ml-form-embedBody) { padding: 0 !important; }
   .follow :global(.ml-form-embedContent) { display: none; }
   #follow :global(.ml-embedded .ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input) {
     font-family: var(--font-body); font-size: 1rem !important; border-radius: 2px !important;
@@ -158,7 +183,7 @@ import Partnership from './Partnership.astro';
   }
   .follow :global(.newsletter-error:empty) { display: none; }
   @media (max-width: 56.25rem) {
-    .follow__layout { grid-template-columns: 1fr; }
-    .follow__form { min-height: 0; max-width: 25rem; }
+    .follow__layout { grid-template-columns: 1fr; gap: 1.75rem; }
+    .follow__form { max-width: 25rem; width: 100%; }
   }
 </style>

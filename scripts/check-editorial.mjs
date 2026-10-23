@@ -50,8 +50,25 @@ for (const [route, html] of pages) {
 }
 const home = pages.get('/');
 assert(home.includes('href="https://www.mja.com.au/journal/2021/214/3/suicide-young-australians-2006-2015-cross-sectional-analysis-national-coronial"'), 'MJA citation links to the verified article');
-assert(!/<iframe\b/i.test(home), 'Donation iframe must not load before consent');
+assert(!/<iframe\b/i.test(home), 'Donations are a direct Raisely link, not an embedded form');
+assert(!home.includes('data-donate-embed'), 'Removed donation loader must not be published');
+assert(!home.includes('raiselysite.com/embed'), 'Only the campaign and signup Raisely destinations are published');
+for (const [route, html] of pages) {
+  for (const [, href, label] of html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)) {
+    if (/\bdonate\b/i.test(label.replace(/<[^>]*>/g, ''))) {
+      assert.equal(href, 'https://the-long-road-home.raiselysite.com/', `${route}: donations go directly to the campaign on Raisely`);
+    }
+  }
+  assert(html.includes('href="/#follow"'), `${route}: email signup remains available in the footer`);
+}
 assert(home.includes('preload="none"'), 'Video must not preload');
+assert.equal((home.match(/<video\b/g) || []).length, 1, 'Homepage has one video player');
+assert(home.indexOf('id="watch"') < home.indexOf('id="community-challenge"'), 'Video is in the opening chapter');
+assert(home.indexOf('id="community-challenge"') < home.indexOf('id="the-run"'), 'Community challenge is immediately after the opening');
+const community = home.slice(home.indexOf('id="community-challenge"'), home.indexOf('id="the-run"'));
+assert(community.indexOf('id="community-title"') < community.indexOf('<img'), 'Community invitation precedes its photograph on mobile');
+assert(home.includes('Join my email list.'), 'Newsletter has an explicit, server-rendered invitation');
+assert(home.indexOf('data-form="q8HCNv"') < home.indexOf('id="partner"'), 'Signup is not separated from its heading by partnership content');
 const challenge = pages.get('/capable-of-more');
 const copyIndex = challenge.indexOf('class="challenge-hero__copy"');
 const photoIndex = challenge.indexOf('class="challenge-hero__photo"');

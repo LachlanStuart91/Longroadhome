@@ -1,7 +1,7 @@
 ---
 import { why, links } from '../data/campaign';
 ---
-<section id="why" class="why surface-light" aria-labelledby="why-title">
+<section id="why" class="why surface-dark" aria-labelledby="why-title">
   <div class="wrap why__layout">
     <figure class="documentary">
       <img src="/images/between-runs.png" width="3354" height="1902"
@@ -20,12 +20,12 @@ import { why, links } from '../data/campaign';
   </div>
 </section>
 <style>
-  .why { padding-block: var(--editorial-space) 2rem; }
+  .why { padding-block: var(--editorial-space); }
   .why__layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
   .why h2 { margin-bottom: 1.75rem; }
-  .why__copy p { color: var(--on-light-2); }
+  .why__copy p, .why figcaption { color: var(--on-dark-2); }
   .why__opening { font-size: 1.125rem; }
-  .why__opening strong { font-weight: 600; color: var(--near); }
+  .why__opening strong { font-weight: 600; color: var(--road); }
   .why .text-link { margin-top: .75rem; }
   @media (max-width: 56.25rem) {
     .why__layout { grid-template-columns: 1fr; }

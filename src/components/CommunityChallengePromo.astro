@@ -3,27 +3,34 @@ import { capableOfMore, links } from '../data/campaign';
 ---
 <section id="community-challenge" class="community surface-light" aria-labelledby="community-title">
   <div class="wrap community__layout">
+    <div class="community__copy">
+      <p class="eyebrow">Your turn · The community challenge</p>
+      <h2 id="community-title" class="display">Capable<br />of More</h2>
+      <p class="community__opening">{capableOfMore.introduction}</p>
+      <p>{capableOfMore.invitation} {capableOfMore.participation}</p>
+      <div class="community__actions">
+        <a class="btn btn--dark" href={links.challengeSignup}>{capableOfMore.cta} <span aria-hidden="true">↗</span></a>
+        <a class="text-link" href={links.communityChallenge}>How it works <span aria-hidden="true">→</span></a>
+      </div>
+      <p class="community__note">Create your fundraising page on Raisely.</p>
+    </div>
     <figure class="documentary">
       <img src="/images/behind-the-scenes.jpeg" width="4032" height="2268"
            alt="Lachlan with three people and their cameras outdoors."
            loading="lazy" decoding="async" />
       <figcaption>Behind the scenes.</figcaption>
     </figure>
-    <div>
-      <p class="eyebrow">The community challenge</p>
-      <h2 id="community-title" class="display">Capable<br />of More</h2>
-      <p class="community__opening">{capableOfMore.introduction}</p>
-      <p>{capableOfMore.invitation} {capableOfMore.participation}</p>
-      <a class="btn btn--dark" href={links.communityChallenge}>Find your challenge <span aria-hidden="true">↗</span></a>
-    </div>
   </div>
 </section>
 <style>
   .community { padding-block: var(--editorial-space); background: var(--gold); }
-  .community__layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
+  .community__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
   .community .eyebrow { color: var(--near); }
-  .community h2 { font-size: clamp(4rem, 6vw, 6rem); line-height: .86; letter-spacing: -.015em; margin-bottom: 1.5rem; }
+  .community h2 { font-size: clamp(5rem, 8.5vw, 8rem); line-height: .86; letter-spacing: -.015em; margin-bottom: 1.5rem; }
   .community__opening { font-weight: 600; font-size: 1.125rem; }
-  .community .btn { margin-top: 1rem; gap: 1.5rem; }
+  .community__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.5rem; margin-top: 1.75rem; }
+  .community .btn { gap: 1rem; white-space: normal; }
+  .community .text-link { color: var(--near); }
+  .community__note { font-size: .875rem; margin: .75rem 0 0; }
   @media (max-width: 56.25rem) { .community__layout { grid-template-columns: 1fr; } .community__layout > div { max-width: 40rem; } }
 </style>
