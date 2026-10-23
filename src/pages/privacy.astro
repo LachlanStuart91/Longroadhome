@@ -13,8 +13,7 @@ import { privacy, providerPolicies, partner, links } from '../data/campaign';
  * is disabled on the signup form. If it is ever turned back on, this page must
  * be updated before that change goes live.
  *
- * No Event structured data is emitted here. That lives in the Long Lunch
- * section, which only exists on the homepage.
+ * No Event structured data is emitted here.
  */
 ---
 <Base
@@ -95,14 +94,13 @@ import { privacy, providerPolicies, partner, links } from '../data/campaign';
         {' '}<a href={providerPolicies.vercel} rel="noopener">Vercel privacy notice</a>.
       </p>
 
-      <h2>Tickets are handled by TryBooking</h2>
+      <h2>Past ticket bookings</h2>
       <p>
-        Tickets to the Long Lunch are sold through TryBooking. When you book, you leave this
-        website and complete the purchase on TryBooking's own site. Payment details are
-        entered and processed through TryBooking, not through this website.
+        Tickets for the completed event were sold through TryBooking. Purchases and payment
+        details were handled on TryBooking's own site, not through this website.
       </p>
       <p>
-        What TryBooking collects when you book, and how it handles that information, is set
+        How TryBooking handles information from those bookings is set
         out in the
         {' '}<a href={providerPolicies.trybooking} rel="noopener">TryBooking privacy policy</a>.
       </p>
@@ -169,11 +167,6 @@ import { privacy, providerPolicies, partner, links } from '../data/campaign';
         own infrastructure and that can change. Rather than guess, I would point you at
         their current privacy policies, linked above, which are the accurate source on where
         and how they handle information.
-      </p>
-      <p>
-        TryBooking is different again. You reach it by choosing to follow a link and leaving
-        this website, and from that point it handles your information as its own service,
-        under its own privacy policy.
       </p>
       <p>
         Raisely provides the donation form on this website, and it and the services its

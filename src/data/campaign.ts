@@ -68,8 +68,8 @@ export const campaign = {
 /* ------------------------------------------------------------------- event */
 
 export const event = {
-  /** Set to false from 23 October 2026 to switch the page to its archive state. */
-  active: true,
+  /** Completed. The event and archive components are no longer rendered. */
+  active: false,
   soldOut: true,
   soldOutHeading: 'The Long Lunch is sold out.',
   soldOutMessage: "Thanks to everyone who's booked a seat.",
@@ -267,7 +267,7 @@ export const references = {
   liftTheLoad: 'https://www.lifttheload.org.au/',
   tenToMen:
     'https://aifs.gov.au/tentomen/insights-report/mental-health-australian-males-depression-suicidality-and-loneliness',
-  mja: 'https://www.mja.com.au/system/files/issues/214_03/mja250876.pdf',
+  mja: 'https://www.mja.com.au/journal/2021/214/3/suicide-young-australians-2006-2015-cross-sectional-analysis-national-coronial',
 } as const;
 
 /** Crisis support destinations, checked against each service's own page. */
@@ -400,9 +400,8 @@ export const donation = {
 /* -------------------------------------------------------- event archive */
 
 /**
- * Shown only when event.active is false. Deliberately claims nothing about
- * attendance, fundraising results or money transfers, because none of that
- * exists yet. Must be reviewed after the lunch before the switch is flipped.
+ * Retained for reference only. The completed lunch was removed from the
+ * public website on 23 October 2026, without an archive notice.
  */
 export const eventArchive = {
   eyebrow: 'Event archive',
@@ -528,7 +527,7 @@ export const privacy = {
   heading: 'Privacy',
   description:
     'How The Long Road Home handles your information, who else is involved, and how to unsubscribe or ask about your details.',
-  updated: 'Last updated 17 September 2026',
+  updated: 'Last updated 23 October 2026',
   owner: 'Lachlan Stuart',
   contactEmail: 'lachie@themanthatcanproject.com',
   intro:

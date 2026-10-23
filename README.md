@@ -103,18 +103,15 @@ request once it is live.
     .pnpm-store/             local package store
     CLAUDE_BUILD_PROMPT.md   local project-management material
 
-## The event switch
+## Completed event
 
-`event.soldOut` in `src/data/campaign.ts` is true. The lunch is a compact sold-out
-notice with expandable guest details, and both structured-data offers are marked
-SoldOut. It is not the campaign's primary action. The header supports donations
-on the homepage and registration on the community page.
+The Long Lunch finished on 22 October 2026. Its section, footer link and Event
+structured data were removed on 23 October, without an archive banner. The old
+components and event data are retained in source but are not rendered, and
+`event.active` is false. Changing that flag alone does not restore the event.
 
-Setting `event.active` to `false` replaces the lunch notice with the archive and
-removes its footer link. Review the archive copy before making that change.
-
-The switch is manual on purpose. It is not driven by the date, and it must not
-be flipped until the archive copy has been reviewed after the lunch.
+The privacy page retains a short note about past TryBooking purchases. The
+header supports donations on the homepage and registration on the community page.
 
 ## Original photographs
 

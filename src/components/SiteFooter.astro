@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import wordmark from '../images/wordmark-long-road-home.png';
-import { links, campaign, event, topBlokes, ui } from '../data/campaign';
+import { links, campaign, topBlokes, ui } from '../data/campaign';
 ---
 <footer class="footer surface-dark">
   <div class="wrap footer__main">
@@ -18,7 +18,6 @@ import { links, campaign, event, topBlokes, ui } from '../data/campaign';
       <nav aria-label="Campaign">
         <p>Campaign</p>
         <ul>
-          {event.active && <li><a href="/#long-lunch">Long Lunch{event.soldOut ? ' (sold out)' : ''}</a></li>}
           <li><a href={links.communityChallenge}>Community Challenge</a></li>
           <li><a href={links.fundraising} target="_blank" rel="noopener noreferrer">{topBlokes.donateLabel}<span class="visually-hidden">, {ui.newTab}</span></a></li>
           <li><a href={links.partnerEmail}>Partnership enquiries</a></li>
