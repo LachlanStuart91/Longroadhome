@@ -9,6 +9,7 @@ const photos = {
   'behind-the-scenes.jpeg': '766971fab12a7354ba62cba5805e18a421c014f38ec7846b6edeaf5be1b272c4',
   'between-runs.png': '90c18af8bda0eb258a797d354ee2d3e55ed92e04966266b42340e3dbf2e940d3',
   'running-together.png': 'c5a8773f71a92ebb8287add5f497a83c952e86607290f0f2be06557b161633cc',
+  'running-desert.png': '503fac8a2a31c7ef0ed79eb08a88acba5940ad8f6381907625b5b8cab4cd1fd8',
 };
 for (const [file, expected] of Object.entries(photos)) {
   for (const root of ['public', 'dist']) {
@@ -64,8 +65,10 @@ for (const [route, html] of pages) {
 assert(home.includes('preload="none"'), 'Video must not preload');
 assert.equal((home.match(/<video\b/g) || []).length, 1, 'Homepage has one video player');
 assert(home.indexOf('id="watch"') < home.indexOf('id="community-challenge"'), 'Video is in the opening chapter');
-assert(home.indexOf('id="community-challenge"') < home.indexOf('id="the-run"'), 'Community challenge is immediately after the opening');
-const community = home.slice(home.indexOf('id="community-challenge"'), home.indexOf('id="the-run"'));
+assert(home.indexOf('id="the-run"') < home.indexOf('id="community-challenge"'), 'Video and route are followed by the community challenge');
+assert(!/Two minutes from me|1 minute 53 seconds/i.test(home), 'Video timing captions are removed');
+assert(home.includes('data-fundraising') && home.includes('data-progress'), 'Public fundraising counter is published');
+const community = home.slice(home.indexOf('id="community-challenge"'), home.indexOf('id="why"'));
 assert(community.indexOf('id="community-title"') < community.indexOf('<img'), 'Community invitation precedes its photograph on mobile');
 assert(home.includes('Join my email list.'), 'Newsletter has an explicit, server-rendered invitation');
 assert(home.indexOf('data-form="q8HCNv"') < home.indexOf('id="partner"'), 'Signup is not separated from its heading by partnership content');
@@ -73,4 +76,4 @@ const challenge = pages.get('/capable-of-more');
 const copyIndex = challenge.indexOf('class="challenge-hero__copy"');
 const photoIndex = challenge.indexOf('class="challenge-hero__photo"');
 assert(copyIndex >= 0 && photoIndex > copyIndex, 'Challenge explanation and signup precede the photo in reading order');
-console.log('ok   all four original photographs are unchanged in source and build');
+console.log('ok   all five original photographs are unchanged in source and build');

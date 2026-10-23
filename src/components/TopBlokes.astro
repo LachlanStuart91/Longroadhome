@@ -1,9 +1,10 @@
 ---
 import { Image } from 'astro:assets';
 import topBlokesLogo from '../images/top-blokes-proud-supporter-logo.png';
-import { campaign, topBlokes, links, ui } from '../data/campaign';
+import { topBlokes, links, ui } from '../data/campaign';
+import FundraisingTotal from './FundraisingTotal.astro';
 ---
-<section id="top-blokes" class="tb surface-light" aria-labelledby="tb-title">
+<section id="top-blokes" class="tb surface-dark" aria-labelledby="tb-title">
   <div class="wrap">
     <div class="tb__layout">
       <div class="tb__story">
@@ -14,9 +15,10 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
         <a class="text-link" href={links.topBlokes}>{topBlokes.aboutLabel} <span aria-hidden="true">↗</span></a>
       </div>
       <section id="donate" class="tb__donate" aria-labelledby="donate-title">
-        <h3 id="donate-title" class="tb__amount">{campaign.fundraisingTarget}<span>{topBlokes.targetLabel}</span></h3>
-        <p>Help me get there. Donations through the campaign's Raisely page go directly to Top Blokes Foundation.</p>
-        <a class="btn btn--dark" href={links.fundraising}>Donate on Raisely <span aria-hidden="true">↗</span></a>
+        <h3 id="donate-title" class="visually-hidden">Help fund the mentoring</h3>
+        <FundraisingTotal />
+        <p class="tb__appeal">Help me get there. Your donation through my Raisely campaign page goes directly to Top Blokes Foundation.</p>
+        <a class="btn btn--gold" href={links.fundraising}>Donate to Top Blokes <span aria-hidden="true">↗</span></a>
         <Image class="tb__logo" src={topBlokesLogo} alt="Proud supporter of Top Blokes Foundation"
                widths={[180,360]} sizes="150px" format="png" loading="lazy" />
       </section>
@@ -46,25 +48,24 @@ import { campaign, topBlokes, links, ui } from '../data/campaign';
   </div>
 </section>
 <style>
-  .tb { padding-block: var(--editorial-space); background: #faf9f5; }
+  .tb { padding-block: var(--editorial-space); }
   .tb__layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(2.5rem, 8vw, 7rem); align-items: start; }
-  .tb__story > p { color: var(--on-light-2); }
-  .tb__story .eyebrow { color: var(--terrain); }
+  .tb__story > p { color: var(--on-dark-2); }
+  .tb__story .eyebrow { color: var(--gold); }
   .tb__reason { margin-top: 1.75rem; font-size: 1.125rem; }
-  .tb__amount { font-family: var(--font-display); font-weight: 400; font-size: clamp(4rem, 6vw, 6rem); line-height: 1; color: var(--terrain); margin: 0 0 1.5rem; }
-  .tb__amount span { display: block; font: 400 .875rem/1.5 var(--font-body); margin-top: .5rem; color: var(--on-light-2); }
-  .tb__donate > p { font-size: 1rem; color: var(--on-light-2); }
+  .tb__donate > p { font-size: 1rem; color: var(--on-dark-2); }
+  .tb__appeal { margin-top: 1.5rem; }
   .tb__donate .btn { gap: 1rem; margin-top: .5rem; white-space: normal; }
-  .tb__logo { width: 9.5rem; height: auto; margin-top: 2rem; }
+  .tb__logo { width: 10rem; height: auto; margin-top: 2rem; padding: .75rem; background: #faf9f5; }
   .tb__evidence { margin-top: 2.5rem; max-width: 65rem; }
-  .tb__evidence summary { width: fit-content; padding-block: .5rem; color: var(--terrain); font-size: .9375rem; cursor: pointer; }
+  .tb__evidence summary { width: fit-content; padding-block: .5rem; color: var(--on-dark-1); font-size: .9375rem; cursor: pointer; }
   .tb__evidence summary:hover { text-decoration: underline; text-underline-offset: .2em; }
   .tb__evidence-content { padding-top: 1rem; }
   .tb__evidence dl { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 0 0 1.5rem; }
   .tb__evidence dt { font-weight: 600; font-size: 1.125rem; }
-  .tb__evidence dd { margin: .5rem 0 0; color: var(--on-light-2); }
-  .tb__sources, .tb__support { max-width: none; color: var(--on-light-2); font-size: .875rem; }
-  .tb__evidence a { color: var(--terrain); text-underline-offset: .2em; }
+  .tb__evidence dd { margin: .5rem 0 0; color: var(--on-dark-2); }
+  .tb__sources, .tb__support { max-width: none; color: var(--on-dark-2); font-size: .875rem; }
+  .tb__evidence a { color: var(--on-dark-1); text-underline-offset: .2em; }
   .tb__support a[href^='tel:'] { white-space: nowrap; }
   @media (max-width: 56.25rem) { .tb__layout { grid-template-columns: 1fr; } }
   @media (max-width: 38rem) { .tb__evidence dl { grid-template-columns: 1fr; } }

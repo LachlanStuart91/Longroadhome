@@ -1,6 +1,7 @@
 # The Long Road Home
 
-Campaign website for The Long Road Home. Static Astro site, no server runtime.
+Campaign website for The Long Road Home. Static Astro pages with one read-only
+Vercel function for public fundraising totals.
 
 The build produces three public routes:
 
@@ -29,18 +30,38 @@ To use the project runtime in a shell:
     npm run preview   serve the built output
     npm run check     astro check, types and template diagnostics
     npm run generate:qr  regenerate the challenge signup QR asset
-    npm run verify       decode and verify the QR, run astro check, then the
-                         production build and built-output structural check
+    npm run verify       test the fundraising API, verify the QR, run astro check,
+                         build, and check the output and editorial safeguards
 
 `npm run verify` is the gate. The structural check runs over every built page and
 fails if anything appears between the doctype and `<html>`, or after `</html>`.
-The editorial check verifies internal anchors and assets, sold-out ticket
-actions, em-dash-free output, donation opt-in and original photograph hashes.
+The editorial check verifies internal anchors and assets, completed-event
+removal, em-dash-free output, direct Raisely links and original photograph hashes.
 
 Use Astro's dev or preview server, not Python's plain HTTP server. The public
 links use clean URLs such as `/capable-of-more`, while the static build contains
 `.html` files. Astro preview and Vercel resolve these correctly; Python's server
 does not. Use `npm run preview -- --host 127.0.0.1 --port 4321` for the built site.
+To include the fundraising endpoint, also run `node scripts/preview-with-api.mjs`
+and open `http://127.0.0.1:4322`. Plain Astro preview does not run Vercel functions.
+
+## Fundraising total
+
+`api/fundraising.js` is a Vercel Node function. It reads only the public campaign
+endpoint at `https://api.raisely.com/v3/campaigns/the-long-road-home` and validates
+the campaign identity, AUD currency and integer cent values. It returns only
+`raisedCents` (from `grandTotal`), `goalCents`, currency, checked time and the campaign
+link, not donor records.
+No API key is required, and visitor headers/cookies are not forwarded to Raisely.
+
+Successful responses use a 60-second shared cache with 60 seconds of stale-while-
+revalidate. The homepage requests an update each minute while visible. This is
+not an instantaneous donation feed. Failures show an honest unavailable/stale
+message and leave the Raisely link usable; there is no hard-coded raised total.
+The progress bar caps at 100% while the amount can exceed the goal.
+
+`npm run check:fundraising` covers identity/amount validation, zero and over-goal
+totals, cache headers, upstream/network failures, HEAD and rejected write methods.
 
 ## Structure
 
@@ -115,10 +136,11 @@ header supports donations on the homepage and registration on the community page
 
 ## Original photographs
 
-The four photographs supplied on 22 October 2026 live in `public/images/`.
+The four photographs supplied on 22 October and the desert running photo supplied
+on 23 October 2026 live in `public/images/`.
 They are copied without editing, recompression, cropping or colour changes.
 Plain image elements preserve their natural proportions, with no overlays or
-filters. Three are lazy-loaded on the homepage; the opening image loads eagerly.
-The originals total about 26 MB. Any smaller replacement exports need the
+filters. Below-fold photographs load lazily; the opening image loads eagerly.
+The original uploads are large. Any smaller replacement exports need the
 owner's approval, and the integrity hashes must then be updated deliberately.
 Logo processing is separate from the photographic assets.

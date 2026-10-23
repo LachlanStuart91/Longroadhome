@@ -1,6 +1,5 @@
 ---
 import { campaign, links } from '../data/campaign';
-import VideoMessage from './VideoMessage.astro';
 ---
 <section id="hero" class="hero surface-dark" aria-labelledby="hero-title">
   <div class="wrap hero__layout">
@@ -9,11 +8,15 @@ import VideoMessage from './VideoMessage.astro';
       <h1 id="hero-title" class="display">The Long<br />Road <span>Home</span></h1>
       <p class="hero__opening">{campaign.headline}</p>
     </div>
-    <div class="hero__video"><VideoMessage /></div>
+    <figure class="hero__photo">
+      <img src="/images/running-desert.png" width="3392" height="1894"
+           alt="Lachlan running along a road through an open, dry landscape."
+           loading="eager" fetchpriority="high" decoding="async" />
+    </figure>
     <div class="hero__copy">
       <p class="hero__intro">{campaign.supporting}</p>
       <div class="hero__actions">
-        <a class="btn btn--gold" href={links.fundraising}>Donate on Raisely <span aria-hidden="true">↗</span></a>
+        <a class="btn btn--gold" href={links.fundraising}>Donate to Top Blokes <span aria-hidden="true">↗</span></a>
         <a class="text-link" href="#follow">Join my email list <span aria-hidden="true">↓</span></a>
       </div>
       <p class="hero__date">Planned start · {campaign.plannedStart}</p>
@@ -21,8 +24,8 @@ import VideoMessage from './VideoMessage.astro';
   </div>
 </section>
 <style>
-  .hero { padding-block: clamp(3.5rem, 7vw, 6.5rem) clamp(3rem, 6vw, 5rem); }
-  .hero__layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-areas: 'heading video' 'copy video'; column-gap: clamp(2.5rem, 5vw, 5rem); align-items: center; }
+  .hero { padding-block: clamp(2rem, 3vw, 3rem) clamp(2.5rem, 4vw, 4rem); }
+  .hero__layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-areas: 'heading photo' 'copy photo'; column-gap: clamp(2.5rem, 5vw, 5rem); align-items: center; }
   .hero__heading { grid-area: heading; }
   .hero__copy { grid-area: copy; }
   .hero h1 { font-size: clamp(5rem, 8.4vw, 8.4rem); line-height: .85; letter-spacing: -.015em; }
@@ -32,14 +35,15 @@ import VideoMessage from './VideoMessage.astro';
   .hero__actions { display: flex; flex-wrap: wrap; gap: 1.25rem 1.5rem; align-items: center; margin-top: 1.75rem; }
   .hero__actions .text-link { font-size: .875rem; }
   .hero__date { margin: 2rem 0 0; font-size: .875rem; color: var(--on-dark-2); }
-  .hero__video { grid-area: video; min-width: 0; }
+  .hero__photo { grid-area: photo; min-width: 0; margin: 0; }
+  .hero__photo img { width: 100%; height: auto; }
   @media (max-width: 56.25rem) {
-    .hero { padding-block: 2.5rem 3rem; }
-    .hero__layout { grid-template-columns: 1fr; grid-template-areas: 'heading' 'video' 'copy'; gap: 1.75rem; }
+    .hero { padding-block: 1.75rem 2.5rem; }
+    .hero__layout { grid-template-columns: 1fr; grid-template-areas: 'heading' 'photo' 'copy'; gap: 1.5rem; }
     .hero__opening { margin-bottom: 0; }
     .hero h1 { font-size: clamp(5rem, 13vw, 7.5rem); }
     .hero__intro { max-width: 42rem; }
-    .hero__video { max-width: 48rem; }
+    .hero__photo { max-width: 48rem; }
     .hero__date { margin-top: 1.25rem; }
   }
   @media (max-width: 27rem) {

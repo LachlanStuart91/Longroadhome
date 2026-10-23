@@ -15,7 +15,8 @@
     "check": "astro check",
     "generate:qr": "node scripts/generate-qr.mjs",
     "check:qr": "node scripts/generate-qr.mjs --check",
-    "verify": "npm run check:qr && npm run check && npm run build && npm run check:output && npm run check:editorial",
+    "verify": "npm run check:fundraising && npm run check:qr && npm run check && npm run build && npm run check:output && npm run check:editorial",
+    "check:fundraising": "node --test scripts/fundraising.test.mjs",
     "check:output": "node scripts/check-output.mjs",
     "check:editorial": "node scripts/check-editorial.mjs"
   },

@@ -7,18 +7,18 @@ import { capableOfMore, links, topBlokes } from '../data/campaign';
   <section class="challenge-hero surface-dark" aria-labelledby="challenge-title">
     <div class="wrap challenge-hero__layout">
       <div class="challenge-hero__heading">
-        <p class="eyebrow">The community challenge</p>
+        <p class="eyebrow">The Capable of More Challenge</p>
         <h1 id="challenge-title" class="display">Capable<br /><span>of More</span></h1>
       </div>
       <div class="challenge-hero__copy">
-        <p class="challenge-hero__opening">{capableOfMore.introduction}</p>
-        <p class="challenge-hero__invitation">{capableOfMore.invitation}</p>
+        <p class="challenge-hero__opening">{capableOfMore.hook}</p>
+        <p class="challenge-hero__invitation">{capableOfMore.challengeInvitation}</p>
         <a class="btn btn--gold" href={links.challengeSignup}>{capableOfMore.cta}</a>
         <p class="challenge-hero__note">Your fundraising page is hosted by Raisely.</p>
       </div>
       <figure class="challenge-hero__photo">
-        <img src="/images/behind-the-scenes.jpeg" width="4032" height="2268"
-             alt="Lachlan with three people and their cameras outdoors."
+        <img src="/images/running-together.png" width="3388" height="1884"
+             alt="Lachlan running alongside another runner beside the water."
              loading="eager" fetchpriority="high" decoding="async" />
         <figcaption>{capableOfMore.participation}</figcaption>
       </figure>
@@ -72,7 +72,7 @@ import { capableOfMore, links, topBlokes } from '../data/campaign';
   </section>
 </Base>
 <style>
-  .challenge-hero { padding-block: clamp(3.5rem, 7vw, 6.5rem); }
+  .challenge-hero { padding-block: clamp(2rem, 4vw, 4rem); }
   .challenge-hero__layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); grid-template-areas: 'heading photo' 'copy photo'; column-gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
   .challenge-hero__heading { grid-area: heading; }
   .challenge-hero__copy { grid-area: copy; }

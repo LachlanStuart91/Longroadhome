@@ -8,12 +8,9 @@ import { video } from '../data/campaign';
     <source src="/video/the-long-road-home-message.mp4" type="video/mp4" />
     <p>{video.fallback} <a href="/video/the-long-road-home-message.mp4" download>{video.fallbackLink}</a>.</p>
   </video>
-  <figcaption><span>{video.heading}</span><span>{video.helper}</span></figcaption>
 </figure>
 <style>
   .watch { margin: 0; min-width: 0; }
   .watch video { display: block; width: 100%; height: auto; background: #000; }
-  .watch figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .4rem 1rem; margin-top: .8rem; color: var(--on-dark-2); font-size: .875rem; }
-  .watch figcaption span:first-child { color: var(--road); }
-  .watch a { color: var(--gold); }
+  .watch a { color: var(--terrain); }
 </style>

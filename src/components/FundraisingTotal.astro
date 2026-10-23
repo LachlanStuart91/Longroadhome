@@ -1,0 +1,88 @@
+---
+import { campaign, links } from '../data/campaign';
+---
+<div class="fundraising" data-fundraising data-state="loading">
+  <p class="fundraising__label">Raised for Top Blokes</p>
+  <a class="fundraising__amount" href={links.fundraising} data-total>See the total on Raisely <span aria-hidden="true">↗</span></a>
+  <p class="fundraising__goal">of our <span data-goal>{campaign.fundraisingTarget}</span> goal <span class="fundraising__currency">AUD</span></p>
+  <progress data-progress max="100" value="0" aria-label="Progress towards our fundraising goal" hidden></progress>
+  <p class="fundraising__status" data-status role="status">Latest campaign total on Raisely.</p>
+  <p class="fundraising__checked" data-checked hidden>Checked <time data-time></time>. Refreshes every minute.</p>
+  <noscript><p class="fundraising__status">View the current total on Raisely using the link above.</p></noscript>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-fundraising]');
+  if (root) {
+    const total = root.querySelector<HTMLAnchorElement>('[data-total]')!;
+    const goal = root.querySelector<HTMLElement>('[data-goal]')!;
+    const progress = root.querySelector<HTMLProgressElement>('[data-progress]')!;
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const checked = root.querySelector<HTMLElement>('[data-checked]')!;
+    const time = root.querySelector<HTMLTimeElement>('[data-time]')!;
+    const money = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
+    let pending = false;
+    let hasTotal = false;
+    let lastAttempt = 0;
+
+    async function refresh() {
+      if (pending || document.hidden) return;
+      pending = true;
+      lastAttempt = Date.now();
+      if (!hasTotal) status.textContent = 'Checking the campaign total…';
+      try {
+        const response = await fetch('/api/fundraising', { signal: AbortSignal.timeout(8000), credentials: 'omit' });
+        if (!response.ok) throw new Error('Total unavailable');
+        const data = await response.json();
+        const timestamp = Date.parse(data.updatedAt);
+        if (data.currency !== 'AUD' || !Number.isSafeInteger(data.raisedCents) || data.raisedCents < 0 ||
+            !Number.isSafeInteger(data.goalCents) || data.goalCents <= 0 || !Number.isFinite(timestamp)) {
+          throw new Error('Invalid total');
+        }
+        total.textContent = money.format(data.raisedCents / 100);
+        total.setAttribute('aria-label', `${total.textContent} raised. View the campaign on Raisely.`);
+        goal.textContent = money.format(data.goalCents / 100);
+        progress.value = Math.min(100, data.raisedCents / data.goalCents * 100);
+        progress.setAttribute('aria-valuetext', `${total.textContent} raised of ${goal.textContent}`);
+        progress.hidden = false;
+        time.dateTime = data.updatedAt;
+        time.textContent = new Date(timestamp).toLocaleString('en-AU', {
+          day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
+        });
+        checked.hidden = false;
+        hasTotal = true;
+        const stale = Date.now() - timestamp > 5 * 60_000;
+        root!.dataset.state = stale ? 'stale' : 'ready';
+        status.textContent = stale ? 'Showing the last available total. Check Raisely for the latest.' : 'Campaign total from Raisely.';
+      } catch {
+        root!.dataset.state = hasTotal ? 'stale' : 'unavailable';
+        status.textContent = hasTotal
+          ? 'Updates are temporarily unavailable. Showing the last checked total.'
+          : 'The total is temporarily unavailable here. Check Raisely using the link above.';
+      } finally {
+        pending = false;
+      }
+    }
+    void refresh();
+    window.setInterval(() => { void refresh(); }, 60_000);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && Date.now() - lastAttempt >= 60_000) void refresh();
+    });
+  }
+</script>
+
+<style>
+  .fundraising__label { margin-bottom: .6rem; font-size: 1rem; }
+  .fundraising__amount { display: inline-block; max-width: 100%; color: var(--gold); font: 600 1.5rem/1.3 var(--font-support); text-decoration-thickness: 1px; text-underline-offset: .12em; }
+  [data-state='ready'] .fundraising__amount,
+  [data-state='stale'] .fundraising__amount { font: 400 clamp(4rem, 7.5vw, 7rem)/1 var(--font-display); text-decoration: none; overflow-wrap: anywhere; }
+  .fundraising__amount:hover { text-decoration: underline; }
+  .fundraising__goal { margin: .65rem 0 1.25rem; color: var(--on-dark-2); }
+  .fundraising__currency { font-size: .75rem; margin-left: .35rem; }
+  progress { display: block; appearance: none; width: 100%; height: .5rem; border: 0; border-radius: 0; background: #364437; color: var(--gold); margin-bottom: .875rem; }
+  progress::-webkit-progress-bar { background: #364437; }
+  progress::-webkit-progress-value { background: var(--gold); }
+  progress::-moz-progress-bar { background: var(--gold); }
+  [hidden] { display: none; }
+  .fundraising__status, .fundraising__checked { color: var(--on-dark-2); font-size: .875rem; line-height: 1.5; margin-bottom: .4rem; }
+</style>

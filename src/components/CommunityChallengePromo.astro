@@ -4,10 +4,13 @@ import { capableOfMore, links } from '../data/campaign';
 <section id="community-challenge" class="community surface-light" aria-labelledby="community-title">
   <div class="wrap community__layout">
     <div class="community__copy">
-      <p class="eyebrow">Your turn · The community challenge</p>
-      <h2 id="community-title" class="display">Capable<br />of More</h2>
-      <p class="community__opening">{capableOfMore.introduction}</p>
-      <p>{capableOfMore.invitation} {capableOfMore.participation}</p>
+      <p class="eyebrow">Now it's your turn</p>
+      <h2 id="community-title" class="display">Capable<br />of More<span class="community__challenge">The challenge</span></h2>
+      <p class="community__opening">{capableOfMore.hook}</p>
+      <p>{capableOfMore.challengeInvitation}</p>
+      <ul class="community__sports" aria-label="Choose your activity">
+        {capableOfMore.movementTypes.map(activity => <li>{activity}</li>)}
+      </ul>
       <div class="community__actions">
         <a class="btn btn--dark" href={links.challengeSignup}>{capableOfMore.cta} <span aria-hidden="true">↗</span></a>
         <a class="text-link" href={links.communityChallenge}>How it works <span aria-hidden="true">→</span></a>
@@ -15,10 +18,10 @@ import { capableOfMore, links } from '../data/campaign';
       <p class="community__note">Create your fundraising page on Raisely.</p>
     </div>
     <figure class="documentary">
-      <img src="/images/behind-the-scenes.jpeg" width="4032" height="2268"
-           alt="Lachlan with three people and their cameras outdoors."
+      <img src="/images/running-together.png" width="3388" height="1884"
+           alt="Lachlan running alongside another runner beside the water."
            loading="lazy" decoding="async" />
-      <figcaption>Behind the scenes.</figcaption>
+      <figcaption>{capableOfMore.participation}</figcaption>
     </figure>
   </div>
 </section>
@@ -27,7 +30,9 @@ import { capableOfMore, links } from '../data/campaign';
   .community__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
   .community .eyebrow { color: var(--near); }
   .community h2 { font-size: clamp(5rem, 8.5vw, 8rem); line-height: .86; letter-spacing: -.015em; margin-bottom: 1.5rem; }
-  .community__opening { font-weight: 600; font-size: 1.125rem; }
+  .community__challenge { display: block; font: 600 1.25rem/1.4 var(--font-support); letter-spacing: .12em; margin-top: 1rem; }
+  .community__opening { font-weight: 600; font-size: 1.25rem; line-height: 1.45; }
+  .community__sports { display: flex; flex-wrap: wrap; gap: .35rem 1.5rem; list-style: none; padding: 0; margin: 1.5rem 0; font: 400 1.75rem/1.2 var(--font-display); }
   .community__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.5rem; margin-top: 1.75rem; }
   .community .btn { gap: 1rem; white-space: normal; }
   .community .text-link { color: var(--near); }

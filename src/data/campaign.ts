@@ -32,7 +32,7 @@ export const campaign = {
   participant: 'Lachlan Stuart',
   headline: "I'm running home across Australia.",
   supporting:
-    `In March 2027, I'm planning to run from ${startPlace} in ${startRegion} to ${finishPlace}, ${finishRegion}, with a goal of raising $500,000 for Top Blokes Foundation.`,
+    "In March 2027, I'm taking on approximately 4,000 km to raise $500,000 for Top Blokes Foundation.",
   startPlace,
   startRegion,
   finishPlace,
@@ -144,10 +144,7 @@ export const hero = {
  */
 export const video = {
   eyebrow: 'Watch',
-  heading: 'Two minutes from me',
   intro: 'The short version of what I am taking on, and why.',
-  /** Verified against the encoded file: 112.76s, captions burned in. */
-  helper: '1 minute 53 seconds. Captions are on screen.',
   /** The accessible name for the player itself. */
   label: 'Video: a message from Lachlan Stuart about The Long Road Home',
   /** Shown only if the browser cannot play the file at all. */
@@ -184,6 +181,8 @@ export const capableOfMore = {
   navLabel: 'Community Challenge',
   tagline: 'Your challenge. Your way. A difference worth making.',
   introduction: "I'm running across Australia. You don't have to.",
+  hook: "What's the challenge you keep putting off?",
+  challengeInvitation: 'Pick a distance that means something to you. Walk, run, swim or ride it, and raise funds for Top Blokes along the way.',
   invitation:
     'Pick a walk, run, swim or ride that stretches you, and use it to raise funds for Top Blokes Foundation.',
   participation:
