@@ -33,26 +33,95 @@ import Partnership from './Partnership.astro';
 </script>
 
 <script>
-  // Enhance the supplied form locally. Submission, validation and consent
-  // remain owned by MailerLite; no account settings or field values change.
+  // Add accessible client-side feedback to the supplied form. Valid submissions,
+  // provider validation and double opt-in remain owned by MailerLite.
   const embed = document.querySelector<HTMLElement>('.ml-embedded[data-form="q8HCNv"]');
   if (embed) {
-    const addLabels = () => {
+    const enhancedEmails = new WeakMap<HTMLInputElement, () => void>();
+
+    const enhanceEmail = (input: HTMLInputElement) => {
+      const existing = enhancedEmails.get(input);
+      if (existing) {
+        existing();
+        return;
+      }
+
+      const group = input.closest('.ml-field-group');
+      // Reflect the provider's existing required rule in native validation.
+      // Name remains optional; do not change the provider's submission handler.
+      input.required = input.getAttribute('aria-required') === 'true'
+        || !!group?.classList.contains('ml-validate-required');
+
+      const error = document.createElement('p');
+      error.id = `${input.id}-error`;
+      error.className = 'newsletter-error';
+      error.setAttribute('role', 'alert');
+      error.setAttribute('aria-atomic', 'true');
+      input.after(error);
+      const descriptions = new Set((input.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean));
+      descriptions.add(error.id);
+      input.setAttribute('aria-describedby', [...descriptions].join(' '));
+
+      let attempted = false;
+      const showError = (invalid: boolean) => {
+        const message = !invalid ? '' : input.value.trim()
+          ? 'Please enter a valid email address.'
+          : 'Please enter your email address.';
+        if (error.textContent !== message) error.textContent = message;
+        input.setAttribute('aria-invalid', String(invalid));
+        if (invalid) input.setAttribute('aria-errormessage', error.id);
+        else input.removeAttribute('aria-errormessage');
+      };
+
+      input.addEventListener('invalid', (event) => {
+        // Keep the error visible in the page instead of a temporary browser popup.
+        // Cancelling this event does not permit an invalid form submission.
+        event.preventDefault();
+        attempted = true;
+        showError(true);
+        input.focus();
+      });
+      input.addEventListener('input', () => {
+        if (!attempted) return;
+        const invalid = !input.validity.valid;
+        if (!invalid) group?.classList.remove('ml-error');
+        showError(invalid);
+      });
+
+      // MailerLite may reject values beyond the browser's own email rules.
+      // Surface those errors too, including after asynchronous form rendering.
+      const syncProviderError = () => {
+        if (!group?.classList.contains('ml-error')) return;
+        const newlyInvalid = !error.textContent;
+        attempted = true;
+        showError(true);
+        if (newlyInvalid) input.focus();
+      };
+      enhancedEmails.set(input, syncProviderError);
+      syncProviderError();
+    };
+
+    const enhanceForm = () => {
       for (const [field, labelText] of [['name', 'Name'], ['email', 'Email']]) {
         const input = embed.querySelector<HTMLInputElement>(`input[name="fields[${field}]"]`);
-        if (!input || input.labels?.length) continue;
+        if (!input) continue;
         input.id ||= `journey-${field}`;
-        const label = document.createElement('label');
-        label.htmlFor = input.id;
-        label.textContent = labelText;
-        input.before(label);
-        input.setAttribute('aria-label', labelText);
+        if (!input.labels?.length) {
+          const label = document.createElement('label');
+          label.htmlFor = input.id;
+          label.textContent = labelText;
+          input.before(label);
+          input.setAttribute('aria-label', labelText);
+        }
+        if (field === 'email') enhanceEmail(input);
       }
     };
-    addLabels();
-    const observer = new MutationObserver(addLabels);
-    observer.observe(embed, { childList: true, subtree: true });
-    window.addEventListener('pagehide', () => observer.disconnect(), { once: true });
+    enhanceForm();
+    const observer = new MutationObserver(enhanceForm);
+    observer.observe(embed, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    window.addEventListener('pagehide', (event) => {
+      if (!event.persisted) observer.disconnect();
+    });
   }
 </script>
 
@@ -83,6 +152,11 @@ import Partnership from './Partnership.astro';
     font-family: var(--font-body); font-size: 1rem !important; border-radius: 2px !important;
   }
   .follow :global(.ml-field-group label) { color: var(--near) !important; }
+  .follow :global(.ml-field-group .newsletter-error) {
+    margin: .5rem 0 0; color: #8a2424;
+    font: 400 .875rem/1.5 var(--font-body);
+  }
+  .follow :global(.newsletter-error:empty) { display: none; }
   @media (max-width: 56.25rem) {
     .follow__layout { grid-template-columns: 1fr; }
     .follow__form { min-height: 0; max-width: 25rem; }

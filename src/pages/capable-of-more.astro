@@ -10,18 +10,18 @@ import { capableOfMore, links, topBlokes } from '../data/campaign';
         <p class="eyebrow">The community challenge</p>
         <h1 id="challenge-title" class="display">Capable<br /><span>of More</span></h1>
       </div>
-      <figure class="challenge-hero__photo">
-        <img src="/images/behind-the-scenes.jpeg" width="4032" height="2268"
-             alt="Lachlan with three people and their cameras outdoors."
-             loading="eager" fetchpriority="high" decoding="async" />
-        <figcaption>{capableOfMore.participation}</figcaption>
-      </figure>
       <div class="challenge-hero__copy">
         <p class="challenge-hero__opening">{capableOfMore.introduction}</p>
         <p class="challenge-hero__invitation">{capableOfMore.invitation}</p>
         <a class="btn btn--gold" href={links.challengeSignup}>{capableOfMore.cta}</a>
         <p class="challenge-hero__note">Your fundraising page is hosted by Raisely.</p>
       </div>
+      <figure class="challenge-hero__photo">
+        <img src="/images/behind-the-scenes.jpeg" width="4032" height="2268"
+             alt="Lachlan with three people and their cameras outdoors."
+             loading="eager" fetchpriority="high" decoding="async" />
+        <figcaption>{capableOfMore.participation}</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -110,7 +110,7 @@ import { capableOfMore, links, topBlokes } from '../data/campaign';
   .signup__qr img { width: 100%; height: auto; padding: .55rem; background: #fff; margin-bottom: .65rem; }
   @media (max-width: 56.25rem) {
     .challenge-hero__layout, .take-part__layout, .impact__layout { grid-template-columns: 1fr; }
-    .challenge-hero__layout { grid-template-areas: 'heading' 'photo' 'copy'; gap: 2rem; }
+    .challenge-hero__layout { grid-template-areas: 'heading' 'copy' 'photo'; gap: 2rem; }
     .challenge-hero__opening { margin-top: 0; }
     .challenge-hero h1 { font-size: clamp(5rem, 13vw, 7.5rem); }
     .challenge-hero__invitation { max-width: 39rem; }

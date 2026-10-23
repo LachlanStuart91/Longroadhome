@@ -52,4 +52,8 @@ const home = pages.get('/');
 assert(home.includes('href="https://www.mja.com.au/journal/2021/214/3/suicide-young-australians-2006-2015-cross-sectional-analysis-national-coronial"'), 'MJA citation links to the verified article');
 assert(!/<iframe\b/i.test(home), 'Donation iframe must not load before consent');
 assert(home.includes('preload="none"'), 'Video must not preload');
+const challenge = pages.get('/capable-of-more');
+const copyIndex = challenge.indexOf('class="challenge-hero__copy"');
+const photoIndex = challenge.indexOf('class="challenge-hero__photo"');
+assert(copyIndex >= 0 && photoIndex > copyIndex, 'Challenge explanation and signup precede the photo in reading order');
 console.log('ok   all four original photographs are unchanged in source and build');
