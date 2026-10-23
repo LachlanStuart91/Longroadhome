@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Photograph from '../components/Photograph.astro';
 import { capableOfMore, links, topBlokes } from '../data/campaign';
 ---
 <Base title={capableOfMore.pageTitle} description={capableOfMore.pageDescription}
@@ -13,13 +14,14 @@ import { capableOfMore, links, topBlokes } from '../data/campaign';
       <div class="challenge-hero__copy">
         <p class="challenge-hero__opening">{capableOfMore.hook}</p>
         <p class="challenge-hero__invitation">{capableOfMore.challengeInvitation}</p>
+        <p class="challenge-hero__invitation">{capableOfMore.timing}</p>
         <a class="btn btn--gold" href={links.challengeSignup}>{capableOfMore.cta}</a>
         <p class="challenge-hero__note">Your fundraising page is hosted by Raisely.</p>
       </div>
       <figure class="challenge-hero__photo">
-        <img src="/images/running-together.png" width="3388" height="1884"
+        <Photograph photo="running-together" priority
              alt="Lachlan running alongside another runner beside the water."
-             loading="eager" fetchpriority="high" decoding="async" />
+             sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) calc(100vw - 5rem), (max-width: 75rem) 54vw, 39rem" />
         <figcaption>{capableOfMore.participation}</figcaption>
       </figure>
     </div>

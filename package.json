@@ -9,16 +9,20 @@
     "npm": ">=9.6.5"
   },
   "scripts": {
+    "predev": "npm run generate:photos",
     "dev": "astro dev",
+    "prebuild": "npm run generate:photos",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
     "generate:qr": "node scripts/generate-qr.mjs",
     "check:qr": "node scripts/generate-qr.mjs --check",
-    "verify": "npm run check:fundraising && npm run check:qr && npm run check && npm run build && npm run check:output && npm run check:editorial",
+    "verify": "npm run check:fundraising && npm run check:qr && npm run check && npm run build && npm run check:output && npm run check:editorial && npm run check:photos",
     "check:fundraising": "node --test scripts/fundraising.test.mjs",
     "check:output": "node scripts/check-output.mjs",
-    "check:editorial": "node scripts/check-editorial.mjs"
+    "check:editorial": "node scripts/check-editorial.mjs",
+    "generate:photos": "node scripts/generate-photos.mjs",
+    "check:photos": "node scripts/check-photos.mjs"
   },
   "dependencies": {
     "astro": "^7.3.1"
@@ -31,6 +35,7 @@
     "jsqr": "^1.4.0",
     "pngjs": "^5.0.0",
     "qrcode": "^1.5.4",
+    "sharp": "0.35.4",
     "typescript": "^6.0.3"
   }
 }

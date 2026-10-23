@@ -1,0 +1,20 @@
+---
+import { photographs, photoWidths, photoUrl } from '../../lib/photographs.js';
+
+interface Props {
+  photo: keyof typeof photographs;
+  alt: string;
+  sizes: string;
+  priority?: boolean;
+}
+const { photo, alt, sizes, priority = false } = Astro.props;
+const original = photographs[photo];
+---
+<img src={photoUrl(photo, 960)}
+     srcset={photoWidths.map(width => `${photoUrl(photo, width)} ${width}w`).join(', ')}
+     sizes={sizes} width={original.width} height={original.height} alt={alt}
+     loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : undefined}
+     decoding="async" />
+<style>
+  img { display: block; width: 100%; height: auto; }
+</style>

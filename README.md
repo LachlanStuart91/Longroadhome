@@ -31,7 +31,8 @@ To use the project runtime in a shell:
     npm run check     astro check, types and template diagnostics
     npm run generate:qr  regenerate the challenge signup QR asset
     npm run verify       test the fundraising API, verify the QR, run astro check,
-                         build, and check the output and editorial safeguards
+                         build, and check output, editorial and photo safeguards
+    npm run generate:photos  create responsive WebP copies from original photos
 
 `npm run verify` is the gate. The structural check runs over every built page and
 fails if anything appears between the doctype and `<html>`, or after `</html>`.
@@ -137,10 +138,19 @@ header supports donations on the homepage and registration on the community page
 ## Original photographs
 
 The four photographs supplied on 22 October and the desert running photo supplied
-on 23 October 2026 live in `public/images/`.
-They are copied without editing, recompression, cropping or colour changes.
-Plain image elements preserve their natural proportions, with no overlays or
-filters. Below-fold photographs load lazily; the opening image loads eagerly.
-The original uploads are large. Any smaller replacement exports need the
-owner's approval, and the integrity hashes must then be updated deliberately.
-Logo processing is separate from the photographic assets.
+on 23 October 2026 live in `public/images/`. All five originals remain byte-for-byte
+unchanged and are checked against their original integrity hashes.
+
+On 24 October the owner approved smaller web delivery copies. `generate:photos`
+runs before development and production builds, using pinned Sharp to generate
+480, 768, 960, 1280, 1600 and 2400px WebP copies of the four displayed photos.
+These generated files live in ignored `public/images/web/` and are rebuilt on
+Vercel, not committed. Only width resizing and quality-85 encoding are applied:
+no cropping, filters, retouching or colour adjustments. The complete composition
+and natural proportions remain intact. `Photograph.astro` supplies `srcset`,
+layout-specific `sizes` and explicit dimensions so browsers choose the delivery
+size. Below-fold photographs load lazily; each opening image loads eagerly.
+
+`check:photos` verifies all generated dimensions, file-size budgets, responsive
+markup and challenge timing. The separate editorial checks continue to verify
+the original photograph hashes. Logo and approved social-card assets are unchanged.

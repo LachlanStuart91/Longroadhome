@@ -1,12 +1,13 @@
 ---
 import { why, links } from '../data/campaign';
+import Photograph from './Photograph.astro';
 ---
 <section id="why" class="why surface-dark" aria-labelledby="why-title">
   <div class="wrap why__layout">
     <figure class="documentary">
-      <img src="/images/between-runs.png" width="3354" height="1902"
+      <Photograph photo="between-runs"
            alt="Lachlan sitting beside the camper with his running shoes off."
-           loading="lazy" decoding="async" />
+           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) calc(100vw - 5rem), (max-width: 75rem) 54vw, 39rem" />
       <figcaption>A moment off my feet.</figcaption>
     </figure>
     <div class="why__copy">

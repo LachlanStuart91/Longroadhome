@@ -1,6 +1,7 @@
 # build output
 dist/
 .astro/
+public/images/web/
 
 # dependencies
 node_modules/

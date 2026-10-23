@@ -1,5 +1,6 @@
 ---
 import { trackRecord, links } from '../data/campaign';
+import Photograph from './Photograph.astro';
 ---
 <section id="track-record" class="track surface-light" aria-labelledby="track-title">
   <div class="wrap track__layout">
@@ -11,9 +12,9 @@ import { trackRecord, links } from '../data/campaign';
       <a class="text-link" href={links.statesOfMind}>The story at States of Mind <span aria-hidden="true">↗</span></a>
     </div>
     <figure class="documentary">
-      <img src="/images/on-the-road.jpeg" width="3374" height="1914"
+      <Photograph photo="on-the-road"
            alt="Lachlan beside the camper, with a dog looking through its door window."
-           loading="lazy" decoding="async" />
+           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 75rem) calc(100vw - 5rem), 70rem" />
       <figcaption>Life around the running.</figcaption>
     </figure>
   </div>

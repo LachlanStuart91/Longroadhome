@@ -183,6 +183,8 @@ export const capableOfMore = {
   introduction: "I'm running across Australia. You don't have to.",
   hook: "What's the challenge you keep putting off?",
   challengeInvitation: 'Pick a distance that means something to you. Walk, run, swim or ride it, and raise funds for Top Blokes along the way.',
+  /** Fundraising and training can begin now; joining the March start is optional. */
+  timing: `Start fundraising today and share your training as you build up. You can start your challenge alongside me on ${campaign.plannedStart}.`,
   invitation:
     'Pick a walk, run, swim or ride that stretches you, and use it to raise funds for Top Blokes Foundation.',
   participation:
@@ -199,15 +201,15 @@ export const capableOfMore = {
     },
     {
       title: 'Create your fundraising page',
-      body: 'Sign up, set your fundraising goal and tell people why you’re getting involved.',
+      body: 'Sign up today, set your fundraising goal and tell people why you’re getting involved.',
     },
     {
       title: 'Get people behind you',
-      body: 'Share your personal fundraising link so friends, family and workmates can support you.',
+      body: 'Share your fundraising link and document your training so friends, family and workmates can follow the build-up and support you.',
     },
     {
       title: 'Get moving',
-      body: 'Take on your challenge and share your progress along the way.',
+      body: `You can start alongside me on ${campaign.plannedStart}. Take on your challenge and keep sharing your progress.`,
     },
   ],
   currentCampaign: {

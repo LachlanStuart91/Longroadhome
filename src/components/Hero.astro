@@ -1,5 +1,6 @@
 ---
 import { campaign, links } from '../data/campaign';
+import Photograph from './Photograph.astro';
 ---
 <section id="hero" class="hero surface-dark" aria-labelledby="hero-title">
   <div class="wrap hero__layout">
@@ -9,9 +10,9 @@ import { campaign, links } from '../data/campaign';
       <p class="hero__opening">{campaign.headline}</p>
     </div>
     <figure class="hero__photo">
-      <img src="/images/running-desert.png" width="3392" height="1894"
+      <Photograph photo="running-desert" priority
            alt="Lachlan running along a road through an open, dry landscape."
-           loading="eager" fetchpriority="high" decoding="async" />
+           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) 48rem, (max-width: 75rem) 52vw, 36rem" />
     </figure>
     <div class="hero__copy">
       <p class="hero__intro">{campaign.supporting}</p>
