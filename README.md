@@ -135,6 +135,32 @@ components and event data are retained in source but are not rendered, and
 The privacy page retains a short note about past TryBooking purchases. The
 header supports donations on the homepage and registration on the community page.
 
+## Proposed route overview
+
+The homepage includes the owner-supplied GPX overview, requested on 27 October
+2026. It is explicitly **proposed**, not an approved navigational course. Keep
+the public distance at approximately 4,400 km (provisional), the exact endpoints
+unconfirmed, and do not infer a finish date from the track.
+
+`src/data/proposed-route.json` contains display geometry and elevation samples
+derived from the supplied GPX, plus its SHA-256 and calculation method. Its
+coordinate-summed distance is approximately 4,421.4 km. The original file is not
+modified, copied into public assets or offered as a download. Elevation is a
+route-file estimate; no cumulative ascent claim is made.
+
+`scripts/import-route.mjs /absolute/path/to/approved-input.gpx` rebuilds the
+display data after a newly supplied route has been reviewed. Update the source
+name/date and regression expectations deliberately for a replacement route.
+The overview uses 75 m drawing simplification; elevation sampling retains
+bucket endpoints, peaks and troughs. Neither changes the original file.
+
+The public-domain Natural Earth coastline is stored locally in
+`src/data/australia-coastline.json`. D3's projection runs only at build time;
+the deployed map and elevation are server-rendered SVG, with a small native
+slider enhancement. The website loads no external maps, fonts or D3 scripts.
+The map and chart remain visible without JavaScript. `npm run check:route`
+checks provenance, valid coordinates, continuity, sampling and interpolation.
+
 ## Original photographs
 
 The four photographs supplied on 22 October and the desert running photo supplied

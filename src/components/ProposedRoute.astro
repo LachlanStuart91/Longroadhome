@@ -1,0 +1,211 @@
+---
+import { geoConicConformal, geoPath } from 'd3-geo';
+import type { Feature, MultiPolygon, LineString } from 'geojson';
+import { campaign, proposedRoute as copy } from '../data/campaign';
+import route from '../data/proposed-route.json';
+import coastline from '../data/australia-coastline.json';
+
+// Projection happens only at build time. The page needs no map service, tiles,
+// remote fonts or D3 runtime, and does not expose a downloadable GPX.
+const mapWidth = 1000, mapHeight = 780;
+const land = coastline.feature as Feature<MultiPolygon>;
+const projection = geoConicConformal().parallels([-18, -36]).rotate([-134, 0])
+  .fitExtent([[20, 28], [980, 752]], land);
+const path = geoPath(projection).digits(2);
+const project = (lon: number, lat: number) => projection([lon, lat])!;
+const start = project(...route.route.coordinates[0] as [number, number]);
+const finish = project(...route.route.coordinates.at(-1)! as [number, number]);
+const distance = route.stats.distanceKm;
+const minElevation = Math.min(-10, route.stats.minimumElevation - 10);
+const maxElevation = Math.ceil((route.stats.maximumElevation + 30) / 100) * 100;
+const profileHeight = 180;
+const x = (km: number) => km / distance * 1000;
+const y = (metres: number) => (maxElevation - metres) / (maxElevation - minElevation) * profileHeight;
+const profileLine = route.profile.map((point, i) => `${i ? 'L' : 'M'}${x(point[0]).toFixed(2)},${y(point[1]).toFixed(2)}`).join('');
+const profileArea = `${profileLine}L1000,${y(0).toFixed(2)}L0,${y(0).toFixed(2)}Z`;
+const profileData = route.profile.map(point => {
+  const position = project(point[2], point[3]);
+  return [point[0], point[1], +position[0].toFixed(2), +position[1].toFixed(2)];
+});
+const markerStyle = (point: number[]) => `left:${point[0] / mapWidth * 100}%;top:${point[1] / mapHeight * 100}%;`;
+const serialized = JSON.stringify({ points: profileData, distance, minElevation, maxElevation }).replaceAll('<', '\\u003c');
+---
+<section id="proposed-route" class="route surface-dark" aria-labelledby="route-title" data-route>
+  <div class="wrap route__overview">
+    <header class="route__intro">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h2 id="route-title" class="display">{copy.heading}<br /><span>{copy.headingAccent}</span></h2>
+      <p class="route__places">{campaign.startPlace}, WA <span aria-hidden="true">→</span> {campaign.finishPlace}, QLD</p>
+      <p class="route__distance">{campaign.planningDistance}</p>
+      <p class="route__note">{copy.note}</p>
+    </header>
+    <figure class="route__figure">
+      <div class="route__map">
+        <svg viewBox={`0 0 ${mapWidth} ${mapHeight}`} role="img" aria-labelledby="route-map-title route-map-description">
+          <title id="route-map-title">Proposed route from {campaign.start} to {campaign.finish}</title>
+          <desc id="route-map-description">Overview based on the supplied GPX. The route and exact start and finish points remain subject to change. Not for navigation.</desc>
+          <path class="route__land" d={path(land)!} />
+          <path class="route__line" d={path(route.route as LineString)!} />
+        </svg>
+        <span class="route__pin route__pin--start" style={markerStyle(start)} aria-hidden="true"></span>
+        <span class="route__place route__place--start" style={markerStyle(start)} aria-hidden="true"><strong>{campaign.startPlace}</strong><span>{campaign.startRegion}</span></span>
+        <span class="route__pin" style={markerStyle(finish)} aria-hidden="true"></span>
+        <span class="route__place route__place--finish" style={markerStyle(finish)} aria-hidden="true"><strong>{campaign.finishPlace}</strong><span>{campaign.finishRegion}</span></span>
+        <span class="route__active" data-map-point hidden aria-hidden="true"></span>
+      </div>
+      <figcaption class="visually-hidden">The gold line follows the proposed GPX route across Australia. The coastline is generalised.</figcaption>
+    </figure>
+  </div>
+
+  <div class="route__elevation surface-light">
+    <div class="wrap">
+      <header class="route__profile-heading">
+        <h3>{copy.elevationHeading}</h3>
+        <p>{copy.elevationDescription}</p>
+      </header>
+      <div class="route__chart" data-route-chart>
+        <p class="route__axis-y">Elevation (m)</p>
+        <div class="route__plot" data-route-plot>
+          {[0, 300, 600].map(value => <span class="route__y-tick" style={`top:${y(value) / profileHeight * 100}%`} aria-hidden="true">{value}</span>)}
+          <svg viewBox={`0 0 1000 ${profileHeight}`} preserveAspectRatio="none" role="img" aria-labelledby="route-elevation-title route-elevation-description">
+            <title id="route-elevation-title">Elevation along the proposed route</title>
+            <desc id="route-elevation-description">About {Math.round(distance).toLocaleString('en-AU')} km from west to east. GPX elevation ranges from approximately {Math.round(route.stats.minimumElevation)} to {Math.round(route.stats.maximumElevation)} metres. These are route-file estimates, not surveyed values.</desc>
+            {[0, 300, 600].map(value => <line class="route__grid" x1="0" x2="1000" y1={y(value)} y2={y(value)} />)}
+            <path class="route__area" d={profileArea} />
+            <path class="route__profile" d={profileLine} />
+          </svg>
+          <span class="route__guide" data-profile-guide hidden aria-hidden="true"></span>
+          <span class="route__profile-point" data-profile-point hidden aria-hidden="true"></span>
+          <div class="route__x-ticks" aria-hidden="true">
+            {[0, 1000, 2000, 3000, 4000].map(value => <span class:list={{'route__minor-tick': value === 1000 || value === 3000}} style={`left:${value / distance * 100}%`}>{value.toLocaleString('en-AU')}</span>)}
+          </div>
+        </div>
+        <p class="route__axis-x">Distance (km)</p>
+      </div>
+      <div class="route__explorer" data-route-explorer hidden>
+        <div class="route__explorer-labels">
+          <label for="route-distance">{copy.exploreLabel}</label>
+          <output for="route-distance" data-route-readout aria-live="off">0 km · {Math.round(route.profile[0][1])} m elevation</output>
+        </div>
+        <input id="route-distance" data-route-distance type="range" min="0" max={distance} step="any" value="0" aria-describedby="route-profile-note" aria-valuetext={`0 kilometres along the route, ${Math.round(route.profile[0][1])} metres elevation`} />
+      </div>
+      <div class="route__sources">
+        <p id="route-profile-note">{copy.elevationNote}</p>
+        <a href={copy.sourceUrl} target="_blank" rel="noopener">{copy.sourceLabel}<span class="visually-hidden">, opens in a new tab</span></a>
+      </div>
+    </div>
+  </div>
+  <script is:inline type="application/json" data-route-profile set:html={serialized} />
+</section>
+
+<script>
+  import { interpolateProfile, type ProfilePoint } from '../lib/route-profile';
+
+  const root = document.querySelector<HTMLElement>('[data-route]');
+  if (root) {
+    const data = JSON.parse(root.querySelector('[data-route-profile]')!.textContent!) as { points: ProfilePoint[]; distance: number; minElevation: number; maxElevation: number };
+    const input = root.querySelector<HTMLInputElement>('[data-route-distance]')!;
+    const plot = root.querySelector<HTMLElement>('[data-route-plot]')!;
+    const guide = root.querySelector<HTMLElement>('[data-profile-guide]')!;
+    const point = root.querySelector<HTMLElement>('[data-profile-point]')!;
+    const mapPoint = root.querySelector<HTMLElement>('[data-map-point]')!;
+    const readout = root.querySelector<HTMLOutputElement>('[data-route-readout]')!;
+    const explorer = root.querySelector<HTMLElement>('[data-route-explorer]')!;
+    explorer.hidden = false;
+    const show = (distance: number) => {
+      const p = interpolateProfile(data.points, Math.max(0, Math.min(data.distance, distance)));
+      const percent = p[0] / data.distance * 100;
+      guide.style.left = `${percent}%`;
+      point.style.left = `${percent}%`;
+      point.style.top = `${(data.maxElevation - p[1]) / (data.maxElevation - data.minElevation) * 100}%`;
+      mapPoint.style.left = `${p[2] / 1000 * 100}%`;
+      mapPoint.style.top = `${p[3] / 780 * 100}%`;
+      guide.hidden = point.hidden = mapPoint.hidden = false;
+      input.value = String(p[0]);
+      input.setAttribute('aria-valuetext', `${Math.round(p[0]).toLocaleString('en-AU')} kilometres along the route, ${Math.round(p[1])} metres elevation`);
+      readout.textContent = `${Math.round(p[0]).toLocaleString('en-AU')} km · ${Math.round(p[1])} m elevation`;
+    };
+    // Hover is supplementary. The native slider supports touch, keyboard and AT.
+    input.addEventListener('input', () => show(input.valueAsNumber));
+    input.addEventListener('focus', () => show(input.valueAsNumber));
+    input.addEventListener('keydown', event => {
+      const offsets: Record<string, number> = { ArrowRight: 10, ArrowUp: 10, ArrowLeft: -10, ArrowDown: -10, PageUp: 100, PageDown: -100 };
+      if (event.key in offsets || event.key === 'Home' || event.key === 'End') {
+        event.preventDefault();
+        show(event.key === 'Home' ? 0 : event.key === 'End' ? data.distance : input.valueAsNumber + offsets[event.key]);
+      }
+    });
+    const inspect = (event: PointerEvent) => {
+      const bounds = plot.getBoundingClientRect();
+      if (bounds.width) show((event.clientX - bounds.left) / bounds.width * data.distance);
+    };
+    plot.addEventListener('pointermove', event => { if (event.pointerType === 'mouse') inspect(event); });
+    plot.addEventListener('pointerdown', inspect);
+  }
+</script>
+
+<style>
+  .route { --route-land: #1b3422; padding-top: clamp(2.5rem, 4vw, 4rem); }
+  .route__overview { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: 1rem 3rem; align-items: center; padding-bottom: clamp(2rem, 3vw, 3rem); }
+  .route h2 { font-size: clamp(3.5rem, 5.5vw, 5.5rem); line-height: .94; }
+  .route h2 span { color: var(--gold); }
+  .route__places { font-size: .9375rem; margin: 1.5rem 0; }
+  .route__places span { color: var(--gold); padding-inline: .25rem; }
+  .route__distance { font-size: .9375rem; margin: 0 0 .5rem; }
+  .route__note { color: var(--on-dark-2); font-size: .875rem; max-width: 28ch; margin: 0; }
+  .route__figure { margin: 0; min-width: 0; }
+  .route__map { position: relative; }
+  .route__map > svg { width: 100%; height: auto; overflow: visible; }
+  .route__land { fill: var(--route-land); stroke: #42604b; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .route__line { fill: none; stroke: var(--gold); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .route__pin, .route__active { position: absolute; width: 9px; height: 9px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 2px var(--forest); pointer-events: none; }
+  .route__pin--start { background: var(--road); }
+  .route__place { position: absolute; display: grid; color: var(--road); font-size: .875rem; line-height: 1.4; white-space: nowrap; pointer-events: none; }
+  .route__place > span { color: var(--on-dark-2); font-size: .75rem; }
+  .route__place--start { transform: translate(8px, 16px); }
+  .route__place--finish { transform: translate(calc(-100% - 8px), calc(-100% - 14px)); text-align: right; }
+  .route__active { width: 11px; height: 11px; background: var(--road); }
+  .route__elevation { padding-block: 1.75rem; background: var(--road); color: var(--near); }
+  .route__profile-heading { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .5rem 1.5rem; }
+  .route h3 { font: 400 clamp(2rem, 3vw, 2.5rem)/1.1 var(--font-display); margin: 0; }
+  .route__profile-heading p { margin: 0; font-size: .875rem; color: var(--on-light-2); }
+  .route__chart { margin: 1.25rem 0 1rem; padding-left: 3.5rem; }
+  .route__axis-y, .route__axis-x { font-size: .75rem; margin: 0 0 .5rem; color: var(--on-light-1); max-width: none; }
+  .route__axis-x { text-align: center; margin: 2.2rem 0 0; }
+  .route__plot { position: relative; }
+  .route__plot > svg { width: 100%; height: 11.25rem; overflow: visible; }
+  .route__grid { stroke: #b3bdad; stroke-width: .7; vector-effect: non-scaling-stroke; }
+  .route__area { fill: var(--terrain); opacity: .13; }
+  .route__profile { fill: none; stroke: var(--terrain); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  .route__y-tick { position: absolute; right: calc(100% + .75rem); transform: translateY(-50%); font-size: .75rem; line-height: 1; }
+  .route__x-ticks span { position: absolute; top: calc(100% + .65rem); transform: translateX(-50%); font-size: .75rem; line-height: 1; }
+  .route__x-ticks span:first-child { transform: none; }
+  .route__x-ticks span:last-child { transform: translateX(-100%); }
+  .route__guide { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--near); pointer-events: none; }
+  .route__profile-point { position: absolute; width: 7px; height: 7px; background: var(--near); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+  .route__explorer { margin-left: 3.5rem; }
+  .route__explorer-labels { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .3rem 1rem; font-size: .875rem; }
+  .route__explorer output { font-variant-numeric: tabular-nums; color: var(--on-light-2); }
+  .route__explorer input { display: block; width: 100%; height: 2.75rem; margin: 0; accent-color: var(--terrain); cursor: pointer; }
+  .route__sources { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1.5rem; margin-top: 1rem; font-size: .75rem; line-height: 1.6; color: var(--on-light-2); }
+  .route__sources p { max-width: none; margin: 0; }
+  .route__sources a { color: inherit; text-underline-offset: .2em; }
+  [hidden] { display: none !important; }
+  @media(max-width: 56.25rem) {
+    .route__overview { grid-template-columns: 1fr; gap: .75rem; }
+    .route__intro { max-width: 40rem; }
+    .route__figure { width: 100%; max-width: 42rem; margin-inline: auto; }
+    .route__note { max-width: none; }
+    .route h2 { font-size: clamp(3.5rem, 9vw, 5rem); }
+  }
+  @media(max-width: 38rem) {
+    .route__places { font-size: .875rem; margin-block: 1.25rem; }
+    .route__map .route__line { stroke-width: 2; }
+    .route__place { font-size: .75rem; }
+    .route__place > span { font-size: .6875rem; }
+    .route__minor-tick { display: none; }
+    .route__chart { padding-left: 2.75rem; }
+    .route__explorer { margin-left: 0; }
+    .route__explorer-labels { font-size: .8125rem; }
+  }
+</style>

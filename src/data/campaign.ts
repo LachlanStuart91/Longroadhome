@@ -61,8 +61,8 @@ export const campaign = {
   plannedStart: '22 March 2027',
   fundraisingTarget: '$500,000',
   beneficiary: 'Top Blokes Foundation',
-  /** The route, distance and exact endpoints remain provisional. */
-  detailedRoute: pending('Detailed route still in planning. Do not publish.'),
+  /** A GPX overview is approved for the site; it is not a final navigational course. */
+  detailedRoute: pending('The GPX overview is proposed. Detailed route and exact endpoints remain subject to change.'),
   exactEndpoints: pending(
     'Exact start and finish points in Scarborough and Redcliffe are not yet confirmed.',
   ),
@@ -166,10 +166,23 @@ export const challenge = {
     `There will be a support crew and vehicle. ${routeStatus} I'll share those once they're settled.`,
   ],
   /**
-   * NO ROUTE ARTWORK. The supplied campaign map is not approved as a route map,
-   * so this section is text-first by decision, not by omission. Never draw,
-   * derive or substitute a route, publish a town list, or infer a finish date.
+   * On 27 October 2026, the owner requested the supplied GPX preview be added
+   * to the website. It must remain labelled as proposed, not a final course.
+   * Do not publish an intermediate town list or infer a duration or finish date.
    */
+} as const;
+
+export const proposedRoute = {
+  eyebrow: 'Proposed route',
+  heading: 'Across Australia.',
+  headingAccent: 'On foot.',
+  note: 'Route and exact endpoints subject to change.',
+  elevationHeading: 'The ups and downs.',
+  elevationDescription: 'Elevation along the proposed route',
+  elevationNote: 'Elevation is estimated from the route file. This overview is not for navigation.',
+  exploreLabel: 'Explore the route',
+  sourceLabel: 'Coastline: Natural Earth',
+  sourceUrl: 'https://www.naturalearthdata.com/about/terms-of-use/',
 } as const;
 
 /* ------------------------------------------------ community challenge */
