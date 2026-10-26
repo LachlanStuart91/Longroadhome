@@ -18,13 +18,15 @@ export const isPending = <T>(value: T | Pending): value is Pending =>
 /* ---------------------------------------------------------------- campaign */
 
 const planningQualifier = 'Approximately';
-const planningMetric = '4,000 km';
+const planningMetric = '4,400 km';
+const planningDistance = `${planningQualifier} ${planningMetric} (provisional)`;
+const routeStatus = 'The route, distance and exact start and finish points are still being finalised.';
 const dailyGoalQualifier = 'Goal';
 const dailyGoalMetric = '100 km a day';
 
-const startPlace = 'Scarborough Beach';
+const startPlace = 'Scarborough';
 const startRegion = 'Western Australia';
-const finishPlace = 'Redcliffe Beach';
+const finishPlace = 'Redcliffe';
 const finishRegion = 'Queensland';
 
 export const campaign = {
@@ -32,7 +34,7 @@ export const campaign = {
   participant: 'Lachlan Stuart',
   headline: "I'm running home across Australia.",
   supporting:
-    "In March 2027, I'm taking on approximately 4,000 km to raise $500,000 for Top Blokes Foundation.",
+    `In March 2027, I'm running approximately ${planningMetric} (provisional) from ${startPlace}, ${startRegion} to ${finishPlace}, ${finishRegion}, to raise $500,000 for Top Blokes Foundation.`,
   startPlace,
   startRegion,
   finishPlace,
@@ -50,7 +52,8 @@ export const campaign = {
   planningMetric,
   dailyGoalQualifier,
   dailyGoalMetric,
-  planningDistance: `${planningQualifier} ${planningMetric}`,
+  planningDistance,
+  routeStatus,
   dailyGoal: `${dailyGoalQualifier}: ${dailyGoalMetric}`,
   /** Long form is the hero fact label. Short form is the Challenge fact value. */
   schedule: 'No rest days planned',
@@ -58,10 +61,10 @@ export const campaign = {
   plannedStart: '22 March 2027',
   fundraisingTarget: '$500,000',
   beneficiary: 'Top Blokes Foundation',
-  /** The route between the confirmed beach locations is still in planning. */
+  /** The route, distance and exact endpoints remain provisional. */
   detailedRoute: pending('Detailed route still in planning. Do not publish.'),
   exactEndpoints: pending(
-    'Exact gathering points within Scarborough Beach and Redcliffe Beach are not yet confirmed.',
+    'Exact start and finish points in Scarborough and Redcliffe are not yet confirmed.',
   ),
 } as const;
 
@@ -159,8 +162,8 @@ export const challenge = {
   eyebrow: 'The challenge',
   heading: 'Coast to coast, on foot',
   body: [
-    `I'll start at ${startPlace} in ${startRegion} and finish at ${finishPlace}, ${finishRegion}. Approximately ${planningMetric}, with a goal of 100 km a day and no rest days planned.`,
-    "There will be a support crew and vehicle. The detailed route is still being planned, along with the exact start and finish points, and I won't publish those until they're settled.",
+    `I'll start in ${startPlace}, ${startRegion} and finish in ${finishPlace}, ${finishRegion}. ${planningDistance}, with a goal of ${dailyGoalMetric} and no rest days planned.`,
+    `There will be a support crew and vehicle. ${routeStatus} I'll share those once they're settled.`,
   ],
   /**
    * NO ROUTE ARTWORK. The supplied campaign map is not approved as a route map,
@@ -216,7 +219,7 @@ export const capableOfMore = {
     eyebrow: 'Where it starts',
     heading: 'The Long Road Home',
     body:
-      `In March 2027, I’m running across Australia, from ${startPlace} in ${startRegion} to ${finishPlace} in ${finishRegion}, with the goal of raising ${campaign.fundraisingTarget} for ${campaign.beneficiary}.`,
+      `In March 2027, I’m running approximately ${planningMetric} (provisional) from ${startPlace}, ${startRegion} to ${finishPlace}, ${finishRegion}, with the goal of raising ${campaign.fundraisingTarget} for ${campaign.beneficiary}. ${routeStatus}`,
     invitation: "That’s my challenge. I’m asking you to find yours.",
   },
   impactHeading: 'Do something hard. Help a young man back himself.',
@@ -250,7 +253,7 @@ export const why = {
   /** The paragraphs that follow the opening. body[0] is deliberately absent:
    *  it is composed on the page from `opening` and `question`. */
   body: [
-    "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are and where I've built my business. The run will finish at Redcliffe Beach. That's the reason it's called The Long Road Home.",
+    "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are and where I've built my business. The run is planned to finish in Redcliffe, with the exact point still being finalised. That's the reason it's called The Long Road Home.",
     "I've got a son who watches what I do far more than he listens to what I say. I can't ask him to chase what he wants if I'm not chasing mine.",
     "I'm not doing this because I have it all worked out. I don't. What I've learned is that you pick something hard, you show up, you stack small wins, and you lean on the people around you when it gets difficult.",
   ],
@@ -374,8 +377,8 @@ export const trackRecord = {
   running2025:
     'In 2025 I ran 58 marathons in 58 consecutive days, across all 50 United States in winter and all eight Australian states and territories.',
   distance2025: '2,447 km',
-  /** Supersedes all earlier amounts. The qualifier "over" is required. */
-  raised2025: 'Over $162,000 raised',
+  /** Exact 2025 total confirmed by Lachlan on 26 October 2026. */
+  raised2025: '$162,802 raised',
   raisedContext: 'Covered on foot, 2025',
   statesOfMind: 'States of Mind',
   statesOfMindContext: 'Book and documentary',
@@ -504,11 +507,11 @@ export const meta = {
    */
   title: "Lachlan Stuart's Run Across Australia | The Long Road Home",
   description:
-    `Follow Lachlan Stuart's planned ${planningMetric} run across Australia, starting 22 March 2027, with a $500,000 fundraising goal for Top Blokes Foundation.`,
+    `Lachlan Stuart's run from ${startPlace}, ${startRegion} to ${finishPlace}, ${finishRegion}. ${planningDistance}. Planned start: ${campaign.plannedStart}. Goal: ${campaign.fundraisingTarget} for ${campaign.beneficiary}.`,
   siteName: 'The Long Road Home',
   socialTitle: 'The Long Road Home | Lachlan Stuart',
   socialDescription:
-    `${startPlace} to ${finishPlace}, ${finishRegion}. Approximately ${planningMetric}, planned start 22 March 2027. Fundraising goal of $500,000 for Top Blokes Foundation.`,
+    `${startPlace}, ${startRegion} to ${finishPlace}, ${finishRegion}. ${planningDistance}. Planned start: ${campaign.plannedStart}. Fundraising goal of ${campaign.fundraisingTarget} for ${campaign.beneficiary}.`,
   /**
    * Approved by Lachlan: social card option B, the Deep Terrain Green panel
    * beside the Brisbane photograph. Served from public/ unprocessed so the

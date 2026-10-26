@@ -29,6 +29,10 @@ for (const [route, html] of pages) {
   assert(!/long[- ]lunch/i.test(html), `${route}: completed lunch is not published`);
   assert(!html.includes('https://www.trybooking.com/au/event/1636486'), `${route}: no completed-event ticket links`);
   assert(!html.includes('mja250876.pdf'), `${route}: no broken MJA PDF link`);
+  assert(!/4,000\s*km|Scarborough Beach|Redcliffe Beach|Cottesloe|Manly|\$162,000/.test(html), `${route}: superseded campaign facts are not published`);
+  assert(html.includes('Approximately 4,400 km (provisional)'), `${route}: distance remains approximate and provisional`);
+  assert(html.includes('Planned start 22 March 2027'), `${route}: footer keeps the planned start date`);
+  assert(!/\b(?:40|44)[- ]days?\b/i.test(html), `${route}: no inferred duration or finish date`);
   for (const [, json] of html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
     const schema = JSON.parse(json);
     const nodes = [schema, ...(schema['@graph'] ?? [])];
@@ -50,6 +54,18 @@ for (const [route, html] of pages) {
   console.log(`ok   ${route}: headings, anchors, assets, completed-event removal and punctuation`);
 }
 const home = pages.get('/');
+assert(home.includes('$162,802 raised for Mental Awareness Foundation'), 'Exact 2025 fundraising total remains attributed to Mental Awareness Foundation');
+assert(home.includes('$500,000 for Top Blokes Foundation'), 'Current fundraising goal remains separate from the 2025 total');
+assert(home.includes('A goal of 100 km a day'), 'Daily distance remains a goal');
+for (const route of ['/', '/capable-of-more']) {
+  assert(pages.get(route).includes('The route, distance and exact start and finish points are still being finalised.'), `${route}: planning status is explicit`);
+}
+for (const name of ['description', 'og:description', 'twitter:description']) {
+  const value = home.match(new RegExp(`<meta (?:name|property)="${name}" content="([^"]+)"`))?.[1];
+  assert(value?.includes('4,400 km (provisional)'), `${name}: updated provisional distance`);
+  assert(value?.includes('Scarborough, Western Australia to Redcliffe, Queensland'), `${name}: updated start and finish`);
+  assert(value?.includes('Planned start: 22 March 2027'), `${name}: planned start date`);
+}
 assert(home.includes('href="https://www.mja.com.au/journal/2021/214/3/suicide-young-australians-2006-2015-cross-sectional-analysis-national-coronial"'), 'MJA citation links to the verified article');
 assert(!/<iframe\b/i.test(home), 'Donations are a direct Raisely link, not an embedded form');
 assert(!home.includes('data-donate-embed'), 'Removed donation loader must not be published');
