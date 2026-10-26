@@ -10,6 +10,7 @@ const photos = {
   'between-runs.png': '90c18af8bda0eb258a797d354ee2d3e55ed92e04966266b42340e3dbf2e940d3',
   'running-together.png': 'c5a8773f71a92ebb8287add5f497a83c952e86607290f0f2be06557b161633cc',
   'running-desert.png': '503fac8a2a31c7ef0ed79eb08a88acba5940ad8f6381907625b5b8cab4cd1fd8',
+  'running-woodland.png': '71ec6b66221b0082476f413f606dd08ab571418981e77d5a820efd0e31d5c284',
 };
 for (const [file, expected] of Object.entries(photos)) {
   for (const root of ['public', 'dist']) {
@@ -92,4 +93,4 @@ const challenge = pages.get('/capable-of-more');
 const copyIndex = challenge.indexOf('class="challenge-hero__copy"');
 const photoIndex = challenge.indexOf('class="challenge-hero__photo"');
 assert(copyIndex >= 0 && photoIndex > copyIndex, 'Challenge explanation and signup precede the photo in reading order');
-console.log('ok   all five original photographs are unchanged in source and build');
+console.log(`ok   all ${Object.keys(photos).length} original photographs are unchanged in source and build`);

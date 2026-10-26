@@ -35,6 +35,8 @@ for (const page of ['index', 'capable-of-more']) {
     assert(/width="\d+" height="\d+"/.test(tag), `${page}: reserve natural aspect ratio`);
   }
   assert.equal(images.filter(tag => tag.includes('loading="eager"') && tag.includes('fetchpriority="high"')).length, 1);
+  assert(html.includes('/images/web/running-woodland-'), `${page}: approved woodland photo is published`);
+  assert(!html.includes('/images/web/running-together-'), `${page}: water-side photo has been replaced`);
   for (const { file } of Object.values(photographs)) assert(!html.includes(`src="/images/${file}"`), `${page}: no full-resolution photo downloads`);
   assert(html.includes('Start fundraising today and share your training as you build up.'), `${page}: fundraising can start now`);
   assert(html.includes('You can start your challenge alongside me on 22 March 2027.'), `${page}: optional March start is clear`);
