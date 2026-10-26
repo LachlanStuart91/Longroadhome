@@ -85,6 +85,9 @@ assert(home.indexOf('id="watch"') < home.indexOf('id="community-challenge"'), 'V
 assert(home.indexOf('id="the-run"') < home.indexOf('id="community-challenge"'), 'Video and route are followed by the community challenge');
 assert(!/Two minutes from me|1 minute 53 seconds/i.test(home), 'Video timing captions are removed');
 assert(home.includes('data-fundraising') && home.includes('data-progress'), 'Public fundraising counter is published');
+assert(home.includes('data-percentage') && home.includes('data-progress-wrap hidden'), 'Progress is only shown once a real total is available');
+assert(!home.includes('A moment off my feet.'), 'Unwanted story caption is removed');
+assert(/58 marathons\.<br\b[^>]*>58 states\.<br\b[^>]*>58 days\./.test(home), 'Approved track-record headline is retained');
 const community = home.slice(home.indexOf('id="community-challenge"'), home.indexOf('id="why"'));
 assert(community.indexOf('id="community-title"') < community.indexOf('<img'), 'Community invitation precedes its photograph on mobile');
 assert(home.includes('Join my email list.'), 'Newsletter has an explicit, server-rendered invitation');

@@ -3,7 +3,7 @@ import { capableOfMore, links } from '../data/campaign';
 import Photograph from './Photograph.astro';
 ---
 <section id="community-challenge" class="community surface-light" aria-labelledby="community-title">
-  <div class="wrap community__layout">
+  <div class="wrap wrap--wide community__layout">
     <div class="community__copy">
       <p class="eyebrow">Now it's your turn</p>
       <h2 id="community-title" class="display">Capable<br />of More<span class="community__challenge">The challenge</span></h2>
@@ -22,14 +22,15 @@ import Photograph from './Photograph.astro';
     <figure class="documentary">
       <Photograph photo="running-woodland"
            alt="Lachlan running along a paved path between wooded banks."
-           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) calc(100vw - 5rem), (max-width: 75rem) 46vw, 32.5rem" />
+           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) calc(100vw - 5rem), (max-width: 86rem) 56vw, 46rem" />
       <figcaption>{capableOfMore.participation}</figcaption>
     </figure>
   </div>
 </section>
 <style>
   .community { padding-block: var(--editorial-space); background: var(--gold); }
-  .community__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
+  .community__layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(2.5rem, 5vw, 4.5rem); align-items: center; }
+  .community figcaption { text-align: center; text-wrap: balance; padding-inline: 1rem; }
   .community .eyebrow { color: var(--near); }
   .community h2 { font-size: clamp(5rem, 8.5vw, 8rem); line-height: .86; letter-spacing: -.015em; margin-bottom: 1.5rem; }
   .community__challenge { display: block; font: 600 1.25rem/1.4 var(--font-support); letter-spacing: .12em; margin-top: 1rem; }

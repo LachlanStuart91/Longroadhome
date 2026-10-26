@@ -3,7 +3,7 @@ import { campaign, links } from '../data/campaign';
 import Photograph from './Photograph.astro';
 ---
 <section id="hero" class="hero surface-dark" aria-labelledby="hero-title">
-  <div class="wrap hero__layout">
+  <div class="wrap wrap--wide hero__layout">
     <div class="hero__heading">
       <p class="eyebrow">{campaign.participant}</p>
       <h1 id="hero-title" class="display">The Long<br />Road <span>Home</span></h1>
@@ -12,7 +12,7 @@ import Photograph from './Photograph.astro';
     <figure class="hero__photo">
       <Photograph photo="running-desert" priority
            alt="Lachlan running along a road through an open, dry landscape."
-           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) 48rem, (max-width: 75rem) 52vw, 36rem" />
+           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) 48rem, (max-width: 86rem) 50vw, 42rem" />
     </figure>
     <div class="hero__copy">
       <p class="hero__intro">{campaign.supporting}</p>

@@ -5,7 +5,10 @@ import { campaign, links } from '../data/campaign';
   <p class="fundraising__label">Raised for Top Blokes</p>
   <a class="fundraising__amount" href={links.fundraising} data-total>See the total on Raisely <span aria-hidden="true">↗</span></a>
   <p class="fundraising__goal">of our <span data-goal>{campaign.fundraisingTarget}</span> goal <span class="fundraising__currency">AUD</span></p>
-  <progress data-progress max="100" value="0" aria-label="Progress towards our fundraising goal" hidden></progress>
+  <div class="fundraising__progress" data-progress-wrap hidden>
+    <p class="fundraising__milestone"><span data-percentage></span> of the goal reached</p>
+    <progress data-progress max="100" value="0" aria-label="Progress towards our fundraising goal"></progress>
+  </div>
   <p class="fundraising__status" data-status role="status">Latest campaign total on Raisely.</p>
   <p class="fundraising__checked" data-checked hidden>Checked <time data-time></time>. Refreshes every minute.</p>
   <noscript><p class="fundraising__status">View the current total on Raisely using the link above.</p></noscript>
@@ -17,13 +20,28 @@ import { campaign, links } from '../data/campaign';
     const total = root.querySelector<HTMLAnchorElement>('[data-total]')!;
     const goal = root.querySelector<HTMLElement>('[data-goal]')!;
     const progress = root.querySelector<HTMLProgressElement>('[data-progress]')!;
+    const progressWrap = root.querySelector<HTMLElement>('[data-progress-wrap]')!;
+    const percentage = root.querySelector<HTMLElement>('[data-percentage]')!;
     const status = root.querySelector<HTMLElement>('[data-status]')!;
     const checked = root.querySelector<HTMLElement>('[data-checked]')!;
     const time = root.querySelector<HTMLTimeElement>('[data-time]')!;
     const money = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
+    const percent = new Intl.NumberFormat('en-AU', { style: 'percent', maximumFractionDigits: 1 });
     let pending = false;
     let hasTotal = false;
     let lastAttempt = 0;
+
+    // Reveal the verified value once when it enters view. Never count through
+    // invented totals, loop the animation or override reduced-motion settings.
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          root!.classList.add('is-revealed');
+          observer.disconnect();
+        }
+      }, { threshold: 0.25 });
+      observer.observe(root);
+    }
 
     async function refresh() {
       if (pending || document.hidden) return;
@@ -42,9 +60,12 @@ import { campaign, links } from '../data/campaign';
         total.textContent = money.format(data.raisedCents / 100);
         total.setAttribute('aria-label', `${total.textContent} raised. View the campaign on Raisely.`);
         goal.textContent = money.format(data.goalCents / 100);
-        progress.value = Math.min(100, data.raisedCents / data.goalCents * 100);
+        const ratio = data.raisedCents / data.goalCents;
+        progress.value = Math.min(100, ratio * 100);
         progress.setAttribute('aria-valuetext', `${total.textContent} raised of ${goal.textContent}`);
-        progress.hidden = false;
+        percentage.textContent = percent.format(ratio);
+        progressWrap.hidden = false;
+        root!.classList.toggle('fundraising--long-total', total.textContent.length > 8);
         time.dateTime = data.updatedAt;
         time.textContent = new Date(timestamp).toLocaleString('en-AU', {
           day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
@@ -72,17 +93,29 @@ import { campaign, links } from '../data/campaign';
 </script>
 
 <style>
-  .fundraising__label { margin-bottom: .6rem; font-size: 1rem; }
-  .fundraising__amount { display: inline-block; max-width: 100%; color: var(--gold); font: 600 1.5rem/1.3 var(--font-support); text-decoration-thickness: 1px; text-underline-offset: .12em; }
+  .fundraising { container-type: inline-size; }
+  .fundraising__label { margin-bottom: .75rem; color: var(--terrain); font: 600 .875rem/1.4 var(--font-support); letter-spacing: .1em; text-transform: uppercase; }
+  .fundraising__amount { display: inline-block; max-width: 100%; color: var(--terrain); font: 600 1.5rem/1.3 var(--font-support); text-decoration-thickness: 1px; text-underline-offset: .12em; }
   [data-state='ready'] .fundraising__amount,
-  [data-state='stale'] .fundraising__amount { font: 400 clamp(4rem, 7.5vw, 7rem)/1 var(--font-display); text-decoration: none; overflow-wrap: anywhere; }
+  [data-state='stale'] .fundraising__amount { font: 400 clamp(3.75rem, 28cqi, 9rem)/.95 var(--font-display); letter-spacing: -.015em; text-decoration: none; overflow-wrap: anywhere; }
+  .fundraising--long-total .fundraising__amount { font-size: clamp(2.75rem, 21cqi, 7rem); }
   .fundraising__amount:hover { text-decoration: underline; }
-  .fundraising__goal { margin: .65rem 0 1.25rem; color: var(--on-dark-2); }
+  .fundraising__goal { margin: .8rem 0 1.75rem; color: var(--on-light-2); }
+  .fundraising__goal [data-goal] { color: var(--near); font-weight: 600; }
   .fundraising__currency { font-size: .75rem; margin-left: .35rem; }
-  progress { display: block; appearance: none; width: 100%; height: .5rem; border: 0; border-radius: 0; background: #364437; color: var(--gold); margin-bottom: .875rem; }
-  progress::-webkit-progress-bar { background: #364437; }
-  progress::-webkit-progress-value { background: var(--gold); }
-  progress::-moz-progress-bar { background: var(--gold); }
+  .fundraising__milestone { margin-bottom: .6rem; font-size: .875rem; color: var(--on-light-2); }
+  .fundraising__milestone span { color: var(--terrain); font-weight: 600; }
+  progress { display: block; appearance: none; width: 100%; height: 1rem; border: 0; border-radius: 0; background: #dfdfd2; color: var(--terrain); margin-bottom: 1rem; overflow: hidden; }
+  progress::-webkit-progress-bar { background: #dfdfd2; }
+  progress::-webkit-progress-value { background: var(--terrain); transform-origin: left; }
+  progress::-moz-progress-bar { background: var(--terrain); transform-origin: left; }
   [hidden] { display: none; }
-  .fundraising__status, .fundraising__checked { color: var(--on-dark-2); font-size: .875rem; line-height: 1.5; margin-bottom: .4rem; }
+  .fundraising__status, .fundraising__checked { color: var(--on-light-2); font-size: .875rem; line-height: 1.5; margin-bottom: .4rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    .is-revealed[data-state='ready'] .fundraising__amount { animation: total-reveal .65s ease-out both; }
+    .is-revealed[data-state='ready'] progress::-webkit-progress-value { animation: progress-reveal .9s ease-out both; }
+    .is-revealed[data-state='ready'] progress::-moz-progress-bar { animation: progress-reveal .9s ease-out both; }
+  }
+  @keyframes total-reveal { from { opacity: .45; transform: translateY(.3rem); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes progress-reveal { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 </style>

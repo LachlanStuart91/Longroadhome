@@ -107,6 +107,7 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 
 /* ------------------------------------------------------------- layout */
 .wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+.wrap--wide { max-width: 86rem; }
 
 section[id], figure[id] { scroll-margin-top: var(--header-h); }
 .editorial-title {

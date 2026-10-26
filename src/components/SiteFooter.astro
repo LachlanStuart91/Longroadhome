@@ -7,7 +7,7 @@ import { links, campaign, topBlokes, ui } from '../data/campaign';
   <div class="wrap footer__main">
     <div>
       <Image class="footer__mark" src={wordmark} alt="The Long Road Home"
-             width={460} height={230} widths={[230, 460]} sizes="230px" loading="lazy" />
+             width={560} height={280} widths={[280, 560]} sizes="280px" format="png" loading="lazy" />
       <p class="footer__summary">
         {campaign.planningDistance} from {campaign.start} to {campaign.finish}.
         Planned start {campaign.plannedStart}. Raising {campaign.fundraisingTarget} for {campaign.beneficiary}.
@@ -52,7 +52,7 @@ import { links, campaign, topBlokes, ui } from '../data/campaign';
     grid-template-columns: minmax(0, 1.2fr) minmax(22rem, .8fr);
     gap: clamp(3rem, 10vw, 10rem);
   }
-  .footer__mark { display: block; width: 11rem; max-width: 100%; height: auto; }
+  .footer__mark { display: block; width: 17.5rem; max-width: 100%; height: auto; }
   .footer__summary { margin-top: .75rem; max-width: 29rem; color: var(--on-dark-2); font-size: .875rem; }
   .footer__links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
   .footer nav > p {

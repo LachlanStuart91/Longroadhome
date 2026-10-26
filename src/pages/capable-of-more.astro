@@ -6,7 +6,7 @@ import { capableOfMore, links, topBlokes } from '../data/campaign';
 <Base title={capableOfMore.pageTitle} description={capableOfMore.pageDescription}
       socialTitle={capableOfMore.name} socialDescription={capableOfMore.pageDescription}>
   <section class="challenge-hero surface-dark" aria-labelledby="challenge-title">
-    <div class="wrap challenge-hero__layout">
+    <div class="wrap wrap--wide challenge-hero__layout">
       <div class="challenge-hero__heading">
         <p class="eyebrow">The Capable of More Challenge</p>
         <h1 id="challenge-title" class="display">Capable<br /><span>of More</span></h1>
@@ -21,7 +21,7 @@ import { capableOfMore, links, topBlokes } from '../data/campaign';
       <figure class="challenge-hero__photo">
         <Photograph photo="running-woodland" priority
              alt="Lachlan running along a paved path between wooded banks."
-             sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) calc(100vw - 5rem), (max-width: 75rem) 54vw, 39rem" />
+             sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) calc(100vw - 5rem), (max-width: 86rem) 56vw, 46rem" />
         <figcaption>{capableOfMore.participation}</figcaption>
       </figure>
     </div>
@@ -86,7 +86,7 @@ import { capableOfMore, links, topBlokes } from '../data/campaign';
   .challenge-hero__note { margin: 1rem 0 0; font-size: .875rem; color: var(--on-dark-2); }
   .challenge-hero__photo { grid-area: photo; margin: 0; }
   .challenge-hero__photo img { width: 100%; height: auto; }
-  .challenge-hero__photo figcaption { margin-top: .8rem; font-size: .875rem; color: var(--on-dark-2); }
+  .challenge-hero__photo figcaption { margin-top: .8rem; padding-inline: 1rem; font-size: .875rem; color: var(--on-dark-2); text-align: center; text-wrap: balance; }
   .take-part { padding-block: var(--editorial-space); }
   .take-part__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(3rem, 8vw, 7rem); }
   .take-part blockquote { margin: 2rem 0 1rem; max-width: 32rem; font-size: 1.25rem; line-height: 1.6; }

@@ -3,16 +3,15 @@ import { why, links } from '../data/campaign';
 import Photograph from './Photograph.astro';
 ---
 <section id="why" class="why surface-dark" aria-labelledby="why-title">
-  <div class="wrap why__layout">
+  <div class="wrap wrap--wide why__layout">
+    <h2 id="why-title" class="editorial-title">Why I'm running home.</h2>
+    <p class="why__opening">{why.opening} <strong>{why.question}</strong></p>
     <figure class="documentary">
       <Photograph photo="between-runs"
            alt="Lachlan sitting beside the camper with his running shoes off."
-           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) calc(100vw - 5rem), (max-width: 75rem) 54vw, 39rem" />
-      <figcaption>A moment off my feet.</figcaption>
+           sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 68.75rem) calc(100vw - 5rem), (max-width: 86rem) 57vw, 46rem" />
     </figure>
     <div class="why__copy">
-      <h2 id="why-title" class="editorial-title">Why I'm running home.</h2>
-      <p class="why__opening">{why.opening} <strong>{why.question}</strong></p>
       <p>I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are, and where I've built my business.</p>
       <p>{why.body[1]}</p>
       <p>I don't have it all worked out. What I've learned is to show up, stack small wins and lean on the people around me when it gets difficult.</p>
@@ -22,14 +21,15 @@ import Photograph from './Photograph.astro';
 </section>
 <style>
   .why { padding-block: var(--editorial-space); }
-  .why__layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
-  .why h2 { margin-bottom: 1.75rem; }
-  .why__copy p, .why figcaption { color: var(--on-dark-2); }
-  .why__opening { font-size: 1.125rem; }
+  .why__layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .85fr); column-gap: clamp(2.5rem, 5vw, 4.5rem); row-gap: 2.5rem; align-items: center; }
+  .why h2 { max-width: 15ch; }
+  .why__copy p, .why__opening { color: var(--on-dark-2); }
+  .why__opening { font-size: 1.125rem; margin: 0; }
   .why__opening strong { font-weight: 600; color: var(--road); }
   .why .text-link { margin-top: .75rem; }
-  @media (max-width: 56.25rem) {
-    .why__layout { grid-template-columns: 1fr; }
+  @media (max-width: 68.75rem) {
+    .why__layout { grid-template-columns: 1fr; row-gap: 1.75rem; }
+    .why h2 { max-width: none; }
     .why__copy { max-width: 42rem; }
   }
 </style>
