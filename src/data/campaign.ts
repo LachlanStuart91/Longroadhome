@@ -24,9 +24,9 @@ const routeStatus = 'The route, distance and exact start and finish points are s
 const dailyGoalQualifier = 'Goal';
 const dailyGoalMetric = '100 km a day';
 
-const startPlace = 'Scarborough';
+const startPlace = 'Scarborough Beach';
 const startRegion = 'Western Australia';
-const finishPlace = 'Redcliffe';
+const finishPlace = 'Scarborough Beach';
 const finishRegion = 'Queensland';
 
 export const campaign = {
@@ -64,7 +64,7 @@ export const campaign = {
   /** A GPX overview is approved for the site; it is not a final navigational course. */
   detailedRoute: pending('The GPX overview is proposed. Detailed route and exact endpoints remain subject to change.'),
   exactEndpoints: pending(
-    'Exact start and finish points in Scarborough and Redcliffe are not yet confirmed.',
+    'Exact start and finish points at Scarborough Beach in Western Australia and Queensland are not yet confirmed.',
   ),
 } as const;
 
@@ -266,7 +266,7 @@ export const why = {
   /** The paragraphs that follow the opening. body[0] is deliberately absent:
    *  it is composed on the page from `opening` and `question`. */
   body: [
-    "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are and where I've built my business. The run is planned to finish in Redcliffe, with the exact point still being finalised. That's the reason it's called The Long Road Home.",
+    "I grew up in Toowoomba. Brisbane has been home since 2014. It's where my wife and our young family are and where I've built my business. The run is planned to finish at Scarborough Beach in Queensland, with the exact point still being finalised. That's the reason it's called The Long Road Home.",
     "I've got a son who watches what I do far more than he listens to what I say. I can't ask him to chase what he wants if I'm not chasing mine.",
     "I'm not doing this because I have it all worked out. I don't. What I've learned is that you pick something hard, you show up, you stack small wins, and you lean on the people around you when it gets difficult.",
   ],

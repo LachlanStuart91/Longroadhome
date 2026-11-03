@@ -30,7 +30,7 @@ for (const [route, html] of pages) {
   assert(!/long[- ]lunch/i.test(html), `${route}: completed lunch is not published`);
   assert(!html.includes('https://www.trybooking.com/au/event/1636486'), `${route}: no completed-event ticket links`);
   assert(!html.includes('mja250876.pdf'), `${route}: no broken MJA PDF link`);
-  assert(!/4,000\s*km|Scarborough Beach|Redcliffe Beach|Cottesloe|Manly|\$162,000/.test(html), `${route}: superseded campaign facts are not published`);
+  assert(!/4,000\s*km|\bRedcliffe\b|Cottesloe|Manly|\$162,000/.test(html), `${route}: superseded campaign facts are not published`);
   assert(html.includes('Approximately 4,400 km (provisional)'), `${route}: distance remains approximate and provisional`);
   assert(html.includes('Planned start 22 March 2027'), `${route}: footer keeps the planned start date`);
   assert(!/\b(?:40|44)[- ]days?\b/i.test(html), `${route}: no inferred duration or finish date`);
@@ -64,7 +64,7 @@ for (const route of ['/', '/capable-of-more']) {
 for (const name of ['description', 'og:description', 'twitter:description']) {
   const value = home.match(new RegExp(`<meta (?:name|property)="${name}" content="([^"]+)"`))?.[1];
   assert(value?.includes('4,400 km (provisional)'), `${name}: updated provisional distance`);
-  assert(value?.includes('Scarborough, Western Australia to Redcliffe, Queensland'), `${name}: updated start and finish`);
+  assert(value?.includes('Scarborough Beach, Western Australia to Scarborough Beach, Queensland'), `${name}: updated start and finish`);
   assert(value?.includes('Planned start: 22 March 2027'), `${name}: planned start date`);
 }
 assert(home.includes('href="https://www.mja.com.au/journal/2021/214/3/suicide-young-australians-2006-2015-cross-sectional-analysis-national-coronial"'), 'MJA citation links to the verified article');
