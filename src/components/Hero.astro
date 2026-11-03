@@ -1,13 +1,16 @@
 ---
 import { campaign, links } from '../data/campaign';
 import Photograph from './Photograph.astro';
+
+const purpose = 'I’m running across Australia so more boys have someone who believes in them and the chance to discover what they’re capable of.';
+const fundraisingPurpose = `That’s why I’m raising ${campaign.fundraisingTarget} for the ${campaign.beneficiary}.`;
 ---
 <section id="hero" class="hero surface-dark" aria-labelledby="hero-title">
   <div class="wrap wrap--wide hero__layout">
     <div class="hero__heading">
       <p class="eyebrow">{campaign.participant}</p>
       <h1 id="hero-title" class="display">The Long<br />Road <span>Home</span></h1>
-      <p class="hero__opening">{campaign.headline}</p>
+      <p class="hero__opening">{purpose}</p>
     </div>
     <figure class="hero__photo">
       <Photograph photo="running-desert" priority
@@ -15,7 +18,7 @@ import Photograph from './Photograph.astro';
            sizes="(max-width: 47.5rem) calc(100vw - 2.5rem), (max-width: 56.25rem) 48rem, (max-width: 86rem) 50vw, 42rem" />
     </figure>
     <div class="hero__copy">
-      <p class="hero__intro">{campaign.supporting}</p>
+      <p class="hero__intro">{fundraisingPurpose}</p>
       <div class="hero__actions">
         <a class="btn btn--gold" href={links.fundraising}>Donate to Top Blokes <span aria-hidden="true">↗</span></a>
         <a class="text-link" href="#follow">Join my email list <span aria-hidden="true">↓</span></a>
@@ -31,8 +34,8 @@ import Photograph from './Photograph.astro';
   .hero__copy { grid-area: copy; }
   .hero h1 { font-size: clamp(5rem, 8.4vw, 8.4rem); line-height: .85; letter-spacing: -.015em; }
   .hero h1 span { color: var(--gold); }
-  .hero__opening { margin: 1.75rem 0 1rem; font-size: clamp(1.15rem, 1.8vw, 1.4rem); line-height: 1.45; }
-  .hero__intro { color: var(--on-dark-2); max-width: 34rem; }
+  .hero__opening { margin: 1.75rem 0 1rem; max-width: 34rem; font-size: clamp(1.15rem, 1.8vw, 1.4rem); line-height: 1.45; text-wrap: balance; }
+  .hero__intro { color: var(--on-dark-1); max-width: 34rem; border-left: 3px solid var(--gold); padding-left: 1rem; font-weight: 600; }
   .hero__actions { display: flex; flex-wrap: wrap; gap: 1.25rem 1.5rem; align-items: center; margin-top: 1.75rem; }
   .hero__actions .text-link { font-size: .875rem; }
   .hero__date { margin: 2rem 0 0; font-size: .875rem; color: var(--on-dark-2); }
